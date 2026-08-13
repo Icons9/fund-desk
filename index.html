@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fund Desk — Private Markets Intelligence</title>
+<style>
+:root{--navy:#0C2340;--navy2:#16345A;--gold:#C5A059;--goldlt:#E6CD8E;--ink:#2E3440;--body:#4A5568;--mut:#9AA1AC;--line:#E5E1D5;--bg:#F7F5F1;--card:#FFFFFF;}
+*{box-sizing:border-box;}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);margin:0;}
+a{color:#1B3A6B;text-decoration:none;} a:hover{text-decoration:underline;}
+.app{display:flex;min-height:100vh;}
+.side{width:224px;background:var(--navy);color:#fff;padding:18px 0;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.brand{padding:0 18px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:10px;}
+.brand .t{font-family:Georgia,serif;font-size:19px;font-weight:700;color:#fff;}
+.brand .s{font-size:10.5px;color:var(--goldlt);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.nav{list-style:none;margin:0;padding:0;}
+.nav li{padding:9px 18px;font-size:13px;color:#D7E0EE;cursor:pointer;border-left:3px solid transparent;}
+.nav li:hover{background:rgba(255,255,255,.06);}
+.nav li.on{background:rgba(255,255,255,.08);border-left-color:var(--gold);color:#fff;font-weight:600;}
+.nav .grp{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);padding:12px 18px 4px;cursor:default;}
+.nav .grp:hover{background:none;}
+.main{flex:1;padding:22px 28px;min-width:0;}
+.htop{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+h1{font-family:Georgia,serif;color:var(--navy);font-size:22px;margin:0;}
+.upd{font-size:11.5px;color:var(--mut);}
+.sub{color:#6B7280;font-size:13px;margin:2px 0 16px;}
+h2.sec{font-family:Georgia,serif;font-size:16px;color:var(--navy);border-bottom:2px solid var(--gold);padding-bottom:5px;margin:20px 0 12px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+.card h3{font-family:Georgia,serif;font-size:14px;color:var(--navy);margin:0 0 2px;border-bottom:2px solid var(--gold);padding-bottom:5px;}
+.tag{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.item{padding:8px 0;border-bottom:1px solid #F0EDE6;}
+.item:last-child{border-bottom:none;}
+.item a{font-size:13px;line-height:1.32;display:block;font-weight:600;}
+.item .sn{color:var(--body);font-size:11.8px;line-height:1.4;margin-top:2px;}
+.item .d{color:var(--mut);font-size:10.5px;margin-top:2px;}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12.5px;}
+th{background:var(--navy);color:#fff;text-align:left;padding:7px 10px;font-size:11.5px;}
+td{padding:6px 10px;border-bottom:1px solid #F0EDE6;vertical-align:top;}
+tr:nth-child(even) td{background:#FBFAF7;}
+.newslink{display:inline-block;background:#F3F0EA;color:var(--navy)!important;border-radius:5px;padding:1px 7px;font-size:11px;font-weight:600;}
+.note{font-size:11px;color:var(--mut);font-style:italic;margin:6px 0 0;}
+.search{width:300px;max-width:100%;padding:7px 11px;border:1px solid #D8D2C6;border-radius:7px;font-size:13px;margin:0 0 10px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px;}
+.chip{background:#fff;border:1px solid var(--gold);color:var(--navy);border-radius:16px;padding:4px 12px;font-size:12px;font-weight:600;}
+.chip:hover{background:#F3F0EA;text-decoration:none;}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 22px;margin-top:8px;}
+.lgrid .g{font-size:10.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin:6px 0 2px;}
+.lgrid a{font-size:12.5px;}
+.pg{display:none;}
+.pg.show{display:block;}
+.tvcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;margin-bottom:14px;}
+.pin{cursor:pointer;font-size:15px;color:#C9C2B4;user-select:none;}
+.pin.onp{color:var(--gold);}
+.stat{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:0 10px 10px 0;}
+.stat .n{font-family:Georgia,serif;font-size:20px;font-weight:700;color:var(--navy);}
+.stat .l{font-size:11px;color:var(--mut);}
+.foot{margin-top:26px;font-size:11px;color:var(--mut);font-style:italic;border-top:1px solid var(--line);padding-top:10px;}
+.menubtn{display:none;}
+@media(max-width:860px){
+ .side{position:fixed;left:-230px;z-index:50;transition:left .2s;}
+ .side.open{left:0;}
+ .menubtn{display:inline-block;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:14px;margin-bottom:10px;cursor:pointer;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="side" id="side">
+ <div class="brand"><div class="t">Fund Desk</div><div class="s">Private-markets intelligence</div></div>
+ <ul class="nav" id="nav">
+  <li data-pg="home" class="on">Dashboard</li>
+  <li class="grp">News</li>
+  <li data-pg="news">Industry headlines</li>
+  <li data-pg="india">India desk</li>
+  <li data-pg="eu">EU · Monaco · London</li>
+  <li data-pg="gcc">GCC · Dubai</li>
+ <li data-pg="mar">Maritime</li>
+ <li data-pg="hcdt">Healthcare · Deeptech</li>
+  <li class="grp">Markets</li>
+  <li data-pg="mkt">Live markets</li>
+  <li class="grp">Directories</li>
+  <li data-pg="gl15">Managers — global</li>
+  <li data-pg="in10">Managers — India</li>
+  <li data-pg="fo">Family offices</li>
+  <li class="grp">Intelligence</li>
+  <li data-pg="tech">Technology</li>
+  <li data-pg="people">People</li>
+  <li data-pg="ma">M&A & trends</li>
+  <li data-pg="anlz">Landscape analysis</li>
+  <li class="grp">Reference</li>
+  <li data-pg="lib">Library</li>
+ </ul>
+</nav>
+<main class="main">
+<button class="menubtn" onclick="document.getElementById('side').classList.toggle('open')">☰ Menu</button>
+
+<!-- DASHBOARD -->
+<section class="pg show" id="home">
+ <div class="htop"><h1>Dashboard</h1><span class="upd" id="upd-dash">News curated 5 Aug 2026 · markets stream live</span></div>
+ <p class="sub">Your private-markets desk: headlines, live markets, and the manager & investor directories — in one place.</p>
+ <div class="tvcard">
+  <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {"symbols":[{"proName":"BSE:SENSEX","title":"SENSEX"},{"proName":"NSEIX:NIFTY1!","title":"GIFT NIFTY (futures)"},{"proName":"OANDA:SPX500USD","title":"S&P 500"},{"proName":"OANDA:US30USD","title":"Dow"},{"proName":"OANDA:NAS100USD","title":"Nasdaq 100"},{"proName":"XETR:DAX","title":"DAX"},{"proName":"OANDA:UK100GBP","title":"FTSE 100"},{"proName":"FX:EURUSD","title":"EUR/USD"},{"proName":"FX_IDC:USDINR","title":"USD/INR"}],"showSymbolLogo":true,"colorTheme":"light","isTransparent":true,"displayMode":"adaptive","locale":"en"}
+  </script></div>
+ </div>
+ <div id="stats"></div>
+ <h2 class="sec">Today's reading</h2>
+ <div class="grid" id="digest"></div>
+</section>
+
+<!-- NEWS -->
+<section class="pg" id="news">
+ <div class="htop"><h1>Industry headlines</h1><span class="upd" id="upd-news">Curated 5 Aug 2026 — each card links to the live site</span></div>
+ <div class="grid" id="feeds"></div>
+</section>
+
+<!-- INDIA -->
+<section class="pg" id="india">
+ <div class="htop"><h1>India desk</h1></div>
+ <div class="chips">
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=India%20private%20equity">India private equity</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=India%20private%20credit%20AIF">India private credit</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=GIFT%20City%20IFSC%20fund">GIFT City / IFSC</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=NRI%20investment%20fund">NRI investment</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=SEBI%20AIF%20regulation">SEBI / AIF rules</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=SENSEX%20NIFTY%20today">Markets today</a>
+ </div>
+ <div class="grid" id="gIndia"></div>
+ <div class="lgrid" style="margin-top:14px;">
+  <div><div class="g">Sources</div>
+  <a href="https://www.vccircle.com" target="_blank">VCCircle</a><br>
+  <a href="https://economictimes.indiatimes.com/markets" target="_blank">ET Markets</a><br>
+  <a href="https://ivca.in" target="_blank">IVCA</a><br>
+  <a href="https://ifsca.gov.in" target="_blank">IFSCA (GIFT City)</a></div>
+ </div>
+</section>
+
+<!-- EU -->
+<section class="pg" id="eu">
+ <div class="htop"><h1>EU · Monaco · London</h1></div>
+ <div class="chips">
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=Luxembourg%20investment%20funds">Luxembourg funds</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=Monaco%20finance%20wealth">Monaco finance</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=London%20private%20equity">London PE</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=AIFMD%20regulation">AIFMD</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=European%20private%20credit">EU private credit</a>
+ </div>
+ <div class="grid" id="gEU"></div>
+ <div class="lgrid" style="margin-top:14px;">
+  <div><div class="g">Sources</div>
+  <a href="https://www.alfi.lu" target="_blank">ALFI</a><br>
+  <a href="https://www.cssf.lu/en/" target="_blank">CSSF</a><br>
+  <a href="https://ccaf.mc/en/" target="_blank">CCAF (Monaco)</a><br>
+  <a href="https://www.monaco-tribune.com/en/" target="_blank">Monaco Tribune</a><br>
+  <a href="https://www.esma.europa.eu" target="_blank">ESMA</a></div>
+ </div>
+</section>
+
+<!-- GCC -->
+<section class="pg" id="gcc">
+ <div class="htop"><h1>GCC · Dubai</h1></div>
+ <div class="chips">
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=Dubai%20family%20office">Dubai family offices</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=GCC%20sovereign%20wealth%20fund">GCC sovereign wealth</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=DIFC%20funds">DIFC</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=ADGM%20asset%20management">ADGM</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=Saudi%20PIF%20investment">Saudi PIF</a>
+ </div>
+ <div class="grid" id="gGCC"></div>
+ <div class="lgrid" style="margin-top:14px;">
+  <div><div class="g">Sources</div>
+  <a href="https://www.agbi.com" target="_blank">AGBI</a><br>
+  <a href="https://www.zawya.com" target="_blank">Zawya</a><br>
+  <a href="https://www.difc.ae" target="_blank">DIFC</a><br>
+  <a href="https://www.adgm.com" target="_blank">ADGM</a></div>
+ </div>
+</section>
+
+<!-- MARITIME -->
+<section class="pg" id="mar">
+ <div class="htop"><h1>Maritime desk</h1><span class="upd">Thesis pillar 1 — shipping, ports, offshore & maritime finance</span></div>
+ <div class="chips">
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=shipping%20finance">Shipping finance</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=vessel%20sale%20and%20purchase">Vessel S&amp;P</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=ship%20leasing%20maritime%20credit">Ship leasing &amp; credit</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=ports%20terminals%20investment">Ports &amp; terminals</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=offshore%20energy%20vessels">Offshore energy</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=maritime%20decarbonisation%20green%20shipping">Decarbonisation</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=India%20shipping%20shipyard">India maritime</a>
+ </div>
+ <div class="grid" id="gMar"></div>
+ <div class="lgrid" style="margin-top:14px;">
+  <div><div class="g">Trade press</div>
+  <a href="https://www.tradewindsnews.com" target="_blank">TradeWinds</a><br>
+  <a href="https://www.lloydslist.com" target="_blank">Lloyd's List</a><br>
+  <a href="https://splash247.com" target="_blank">Splash 247</a><br>
+  <a href="https://gcaptain.com" target="_blank">gCaptain</a></div>
+  <div><div class="g">Finance &amp; data</div>
+  <a href="https://www.marinemoney.com" target="_blank">Marine Money</a><br>
+  <a href="https://www.clarksons.com/research/" target="_blank">Clarksons Research</a><br>
+  <a href="https://www.drewry.co.uk" target="_blank">Drewry</a><br>
+  <a href="https://www.veson.com/vesselsvalue/" target="_blank">VesselsValue</a></div>
+  <div><div class="g">Institutions</div>
+  <a href="https://www.imo.org" target="_blank">IMO</a><br>
+  <a href="https://www.bimco.org" target="_blank">BIMCO</a><br>
+  <a href="https://www.intertanko.com" target="_blank">Intertanko</a></div>
+ </div>
+</section>
+
+<!-- HEALTHCARE & DEEPTECH -->
+<section class="pg" id="hcdt">
+ <div class="htop"><h1>Healthcare · Deeptech desk</h1><span class="upd">Thesis pillar 2 — biotech, medtech, pharma services &amp; frontier tech</span></div>
+ <div class="chips">
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=biotech%20venture%20funding">Biotech funding</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=pharma%20M%26A">Pharma M&amp;A</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=medtech%20devices%20funding">Medtech</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=healthcare%20private%20equity">Healthcare PE</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=AI%20drug%20discovery">AI drug discovery</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=deeptech%20startup%20funding%20Europe">Deeptech Europe</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=India%20pharma%20biotech%20CDMO">India pharma / CDMO</a>
+ </div>
+ <div class="grid" id="gHDT"></div>
+ <div class="lgrid" style="margin-top:14px;">
+  <div><div class="g">Biopharma press</div>
+  <a href="https://endpts.com" target="_blank">Endpoints News</a><br>
+  <a href="https://www.fiercebiotech.com" target="_blank">Fierce Biotech</a><br>
+  <a href="https://www.biopharmadive.com" target="_blank">BioPharma Dive</a><br>
+  <a href="https://www.medtechdive.com" target="_blank">MedTech Dive</a></div>
+  <div><div class="g">Analysis &amp; data</div>
+  <a href="https://www.evaluate.com/vantage/" target="_blank">Evaluate Vantage</a><br>
+  <a href="https://www.nature.com/nbt/" target="_blank">Nature Biotechnology</a><br>
+  <a href="https://www.biospectrumindia.com" target="_blank">BioSpectrum India</a></div>
+  <div><div class="g">Deeptech</div>
+  <a href="https://sifted.eu/sector/deep-tech" target="_blank">Sifted — Deep tech</a><br>
+  <a href="https://dealroom.co" target="_blank">Dealroom</a><br>
+  <a href="https://www.eib.org" target="_blank">EIB (EU tech capital)</a></div>
+ </div>
+</section>
+
+<!-- MARKETS -->
+<section class="pg" id="mkt">
+ <div class="htop"><h1>Live markets</h1><span class="upd">Streaming via TradingView (index CFD proxies where exchanges restrict free data)</span></div>
+ <div class="tvcard" style="height:520px;">
+  <div class="tradingview-widget-container" style="height:100%;"><div class="tradingview-widget-container__widget" style="height:100%;"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+  {"colorTheme":"light","dateRange":"1D","showChart":true,"locale":"en","width":"100%","height":"100%","isTransparent":true,"showSymbolLogo":true,
+  "tabs":[
+   {"title":"Indices","symbols":[{"s":"BSE:SENSEX","d":"SENSEX"},{"s":"NSEIX:NIFTY1!","d":"GIFT NIFTY (futures)"},{"s":"OANDA:SPX500USD","d":"S&P 500"},{"s":"OANDA:US30USD","d":"Dow Jones"},{"s":"OANDA:NAS100USD","d":"Nasdaq 100"},{"s":"XETR:DAX","d":"DAX"},{"s":"OANDA:UK100GBP","d":"FTSE 100"},{"s":"OANDA:FR40EUR","d":"CAC 40"}]},
+   {"title":"Mega-caps","symbols":[{"s":"NASDAQ:NVDA","d":"NVIDIA"},{"s":"NASDAQ:MSFT","d":"Microsoft"},{"s":"NASDAQ:AAPL","d":"Apple"},{"s":"NASDAQ:GOOGL","d":"Alphabet"},{"s":"NASDAQ:AMZN","d":"Amazon"},{"s":"NASDAQ:META","d":"Meta"},{"s":"NYSE:TSM","d":"TSMC"},{"s":"NASDAQ:AVGO","d":"Broadcom"},{"s":"TADAWUL:2222","d":"Saudi Aramco"}]},
+   {"title":"India","symbols":[{"s":"BSE:RELIANCE","d":"Reliance"},{"s":"BSE:TCS","d":"TCS"},{"s":"BSE:HDFCBANK","d":"HDFC Bank"},{"s":"BSE:INFY","d":"Infosys"},{"s":"BSE:ICICIBANK","d":"ICICI Bank"},{"s":"BSE:BHARTIARTL","d":"Bharti Airtel"}]},
+   {"title":"FX","symbols":[{"s":"FX:EURUSD","d":"EUR / USD"},{"s":"FX_IDC:USDINR","d":"USD / INR"},{"s":"FX:GBPUSD","d":"GBP / USD"},{"s":"FX_IDC:EURINR","d":"EUR / INR"},{"s":"FX_IDC:USDAED","d":"USD / AED"}]}
+  ]}
+  </script></div>
+ </div>
+ <div class="grid">
+  <div class="tvcard" style="height:380px;">
+   <div class="tradingview-widget-container" style="height:100%;"><div class="tradingview-widget-container__widget" style="height:100%;"></div>
+   <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+   {"symbols":[["SENSEX|1M"]],"chartOnly":false,"width":"100%","height":"100%","locale":"en","colorTheme":"light","isTransparent":true,"autosize":true,"chartType":"area"}
+   </script></div>
+  </div>
+  <div class="tvcard" style="height:380px;">
+   <div class="tradingview-widget-container" style="height:100%;"><div class="tradingview-widget-container__widget" style="height:100%;"></div>
+   <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+   {"symbols":[["OANDA:SPX500USD|1M"]],"chartOnly":false,"width":"100%","height":"100%","locale":"en","colorTheme":"light","isTransparent":true,"autosize":true,"chartType":"area"}
+   </script></div>
+  </div>
+ </div>
+ <h2 class="sec">Fund NAVs & backup quote links</h2>
+ <div class="lgrid">
+  <div><div class="g">India mutual funds</div>
+  <a href="https://www.amfiindia.com/net-asset-value" target="_blank">AMFI — official daily NAVs</a><br>
+  <a href="https://www.valueresearchonline.com/funds/" target="_blank">Value Research</a></div>
+  <div><div class="g">Global funds & ETFs</div>
+  <a href="https://www.morningstar.com" target="_blank">Morningstar</a><br>
+  <a href="https://www.ft.com/funds" target="_blank">FT Funds</a></div>
+  <div><div class="g">Direct quotes (backup)</div>
+  <a href="https://www.google.com/finance/quote/SENSEX:INDEXBOM" target="_blank">SENSEX — Google Finance</a><br>
+  <a href="https://www.google.com/finance/quote/NIFTY_50:INDEXNSE" target="_blank">NIFTY 50 — Google Finance</a><br>
+  <a href="https://www.google.com/finance/quote/.INX:INDEXSP" target="_blank">S&P 500 — Google Finance</a></div>
+ </div>
+ <p class="note">Private funds (incl. a RAIF) have no public NAV — the administrator computes it quarterly and reports to LPs. Where an exchange restricts free redistribution (NSE, NYSE indices), the app uses liquid CFD proxies that track the index closely; exact official levels are one click away under backup links.</p>
+</section>
+
+<!-- GLOBAL 15 -->
+<section class="pg" id="gl15">
+ <div class="htop"><h1>Top managers — worldwide</h1></div>
+ <table><thead><tr><th>#</th><th>Manager</th><th>HQ</th><th>AUM (approx.)</th><th>Focus</th><th>Links</th></tr></thead><tbody id="tglobal"></tbody></table>
+ <p class="note">AUM approximate latest-reported; changes quarterly.</p>
+</section>
+
+<!-- INDIA 10 -->
+<section class="pg" id="in10">
+ <div class="htop"><h1>Top managers — India</h1></div>
+ <table><thead><tr><th>#</th><th>Manager</th><th>HQ</th><th>AUM (approx.)</th><th>Focus</th><th>Links</th></tr></thead><tbody id="tindia"></tbody></table>
+ <p class="note">A mix of PE, credit and growth managers; AUM approximate.</p>
+</section>
+
+<!-- FAMILY OFFICES -->
+<section class="pg" id="fo">
+ <div class="htop"><h1>Family offices — directory</h1><span class="upd">★ pin the ones you're targeting — pins are saved on this device</span></div>
+ <input class="search" id="fosearch" placeholder="Search by name, family, region…">
+ <table><thead><tr><th></th><th>Family office</th><th>Family / wealth source</th><th>HQ</th><th>Est. scale*</th><th>Links</th></tr></thead><tbody id="tfo"></tbody></table>
+ <p class="note">*Indicative estimates from public rankings; family offices rarely disclose. “News” opens a live search.</p>
+</section>
+
+<!-- TECHNOLOGY -->
+<section class="pg" id="tech">
+ <div class="htop"><h1>Technology — the fund-management stack</h1><span class="upd">Who supplies what, and what the market actually uses</span></div>
+ <div class="chips">
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=private%20equity%20technology%20software">PE tech news</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=fund%20administration%20software">Fund-admin software</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=iCapital%20alternative%20investments">iCapital</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=BlackRock%20Aladdin">Aladdin</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=AI%20private%20markets%20fund">AI in private markets</a>
+ </div>
+ <table>
+ <thead><tr><th>Layer</th><th>Leading suppliers</th><th>Most used</th><th>How funds use it</th></tr></thead>
+ <tbody>
+ <tr><td><b>Portfolio & risk</b></td><td>BlackRock Aladdin · Bloomberg AIM/PORT · MSCI</td><td>Aladdin (institutional standard)</td><td>Position keeping, risk analytics, exposure and compliance monitoring across portfolios.</td></tr>
+ <tr><td><b>Fund accounting & administration</b></td><td>SS&C (Geneva, GlobeOp) · FIS Investran · Allvue · Temenos Multifonds</td><td>SS&C and FIS Investran in PE/credit</td><td>NAV calculation, capital accounts, waterfalls, drawdowns/distributions — usually run by the fund administrator.</td></tr>
+ <tr><td><b>Alternatives portfolio monitoring</b></td><td>eFront (BlackRock) · iLevel (S&P) · Chronograph · Cobalt</td><td>eFront across LPs & GPs</td><td>Collecting portfolio-company KPIs, valuations, look-through reporting to LPs.</td></tr>
+ <tr><td><b>Deal CRM & pipeline</b></td><td>DealCloud (Intapp) · Salesforce · Dynamo · Affinity</td><td>DealCloud in PE</td><td>Tracking deals, intermediaries, LP relationships and fundraising pipelines.</td></tr>
+ <tr><td><b>Data rooms & sub-docs</b></td><td>Intralinks · Datasite · iDeals · Anduin · Passthrough</td><td>Intralinks/Datasite for deals; Passthrough for subscriptions</td><td>Due-diligence document sharing; digital subscription and KYC workflows for LP onboarding.</td></tr>
+ <tr><td><b>Cap tables & valuations</b></td><td>Carta · 73 Strings · Kroll (services)</td><td>Carta (VC/PE cap tables)</td><td>Ownership records, 409A/fair-value marks; AI-assisted valuation workflows are the newest wave.</td></tr>
+ <tr><td><b>Wealth distribution / feeders</b></td><td>iCapital · Moonfare · Titanbay</td><td>iCapital (dominant globally)</td><td>Feeder platforms giving private banks & advisers access to funds at low minimums — key for UHNW distribution.</td></tr>
+ <tr><td><b>Document AI & ops automation</b></td><td>Canoe Intelligence · Ontra · Hazeltree</td><td>Canoe for LP doc ingestion; Ontra for legal automation</td><td>Auto-reading capital notices and statements; automating NDAs and routine legal workflows; treasury management.</td></tr>
+ <tr><td><b>Market & fund data</b></td><td>Preqin (BlackRock) · PitchBook (Morningstar) · MSCI-Burgiss · With Intelligence</td><td>Preqin & PitchBook</td><td>Fundraising intelligence, benchmarks, LP/GP contact data, track-record verification.</td></tr>
+ </tbody></table>
+ <p class="note">Pattern worth noting: BlackRock now owns Aladdin + eFront + Preqin — data and software are becoming strategic assets of the largest managers. For a small manager like ours, the practical starter stack is: administrator-provided accounting + DealCloud-or-Affinity CRM + Passthrough onboarding + Canoe for LP docs + a feeder platform for distribution.</p>
+ <div class="lgrid" style="margin-top:12px;">
+  <div><div class="g">Tech press for funds</div>
+  <a href="https://www.thedrawdown.com" target="_blank">The Drawdown — PE ops & tech</a><br>
+  <a href="https://www.privatefundscfo.com" target="_blank">Private Funds CFO</a><br>
+  <a href="https://www.fintechfutures.com" target="_blank">FinTech Futures</a></div>
+ </div>
+</section>
+
+<!-- PEOPLE -->
+<section class="pg" id="people">
+ <div class="htop"><h1>People — the industry's leading figures</h1><span class="upd">Links open live searches: their latest interviews, podcasts & profiles</span></div>
+ <div class="chips" id="pplfilters">
+  <span class="chip" data-f="all" style="cursor:pointer;background:#0C2340;color:#fff;">All</span>
+  <span class="chip" data-f="Global" style="cursor:pointer;">Global</span>
+  <span class="chip" data-f="India" style="cursor:pointer;">India</span>
+  <span class="chip" data-f="EU" style="cursor:pointer;">Europe</span>
+  <span class="chip" data-f="Tech" style="cursor:pointer;">Tech leaders</span>
+ </div>
+ <input class="search" id="pplsearch" placeholder="Search name, firm, role…">
+ <table><thead><tr><th>Name</th><th>Role · Firm</th><th>Region</th><th>Find them</th></tr></thead><tbody id="tppl"></tbody></table>
+ <p class="note">Buttons open live searches (LinkedIn, YouTube interviews, podcasts, news) so results are always current — no stale profile links. Includes founders, C-suite and the MD/Partner dealmaker tier. Roles as widely reported; titles change frequently.</p>
+</section>
+
+<!-- M&A -->
+<section class="pg" id="ma">
+ <div class="htop"><h1>M&A — consolidation in asset & fund management</h1><span class="upd">Landmark deals + desk analysis</span></div>
+ <div class="chips">
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=asset%20management%20acquisition">AM M&A news</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=private%20equity%20firm%20acquires">PE firm deals</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=GP%20stakes%20minority%20investment%20manager">GP-stakes deals</a>
+  <a class="chip" target="_blank" href="https://news.google.com/search?q=fund%20manager%20merger">Manager mergers</a>
+ </div>
+ <h2 class="sec">Landmark manager M&A (recent years)</h2>
+ <div class="grid" id="madeals"></div>
+ <h2 class="sec">Desk analysis — what's driving consolidation</h2>
+ <div class="grid" id="matrends"></div>
+ <p class="note">Deal figures as widely reported at announcement; verify before citing externally. Analysis reflects this desk's own read of the market.</p>
+</section>
+
+<!-- ANALYSIS -->
+<section class="pg" id="anlz">
+ <div class="htop"><h1>Landscape analysis — seven jurisdictions</h1><span class="upd">Desk synthesis · researched Aug 2026 · full report in the data room</span></div>
+ <p class="sub" style="margin-bottom:8px;">Assessed on ten parameters: AUM & growth · fundraising & dry powder · LP composition · regulation · tax · politics · people dynamics · returns/DPI · fund-services infrastructure · openness to first-time managers.</p>
+ <h2 class="sec">Executive summary</h2>
+ <div class="card" style="max-width:980px;font-size:13px;line-height:1.65;color:#2E3440;">
+ <p><b>The question this analysis answers.</b> We examined the private-markets landscape across seven jurisdictions — the USA, the EU, Luxembourg, Monaco, India, the GCC and China — through one consistent framework of ten parameters: market size and growth, fundraising climate, LP composition, regulation, tax, politics, people dynamics, returns and DPI, fund-services infrastructure, and openness to first-time managers. The purpose was not description but decision: to stress-test every assumption our venture rests on, and to say where the evidence should change our behaviour.</p>
+ <p><b>The single most important finding</b> is that the global industry has split into two viable positions — very large and very specialist — with the middle collapsing. In 2025 the ten largest funds absorbed roughly 46% of all capital raised, while first-time managers in North America collected just $7.2bn, down about a third, and Europe's ~95 debut managers shared roughly $7.5bn. Yet within that brutal market, specialist first-timers kept closing, often oversubscribed. The implication for us is not motivational but structural: a small, sharply specialised, anchor-led fund is the only configuration of our idea that the market currently funds. Any drift toward mid-size generalism is a drift toward the one position the data shows dying on every continent.</p>
+ <p><b>The second finding is about cash.</b> Across the West, distributions have run at roughly 8–10% of NAV for three years — half the historical norm — leaving LPs locked in and skeptical; the gap has been patched by a record continuation-vehicle and secondaries market rather than by real exits. India shows the same disease differently: a spectacular IPO year in 2025, but older fund vintages that returned only 0.5–0.8x of capital, teaching Indian LPs to distrust paper IRR. The consequence is that the next fundraising cycle everywhere belongs to strategies that pay cash early. This is a direct tailwind for our credit-anchored design, and it argues for re-weighting our pitch language from terminal IRR toward yield, income and early DPI.</p>
+ <p><b>The third finding is that our chosen geography is where the growth is.</b> The traditional LP base — Western pensions and endowments — is at or above allocation targets and shrinking as a marginal buyer. The growing pools are insurance balance sheets, sovereign wealth, family offices and, progressively, retail wealth platforms. Two of those four are precisely our base: Indian family offices have grown from roughly 45 to 300 since 2018 and now anchor most new domestic vintages, while the Gulf hosts nearly 1,300 family-related entities in DIFC alone and the UAE was again the world's leading destination for migrating millionaires — with Indians the largest cohort. Our diaspora-first thesis is, on the evidence, aimed at the fastest-compounding LP demography in the world.</p>
+ <p><b>Regionally,</b> the USA functions as our leading indicator rather than our market: what begins there — retail 401(k) access, insurance-fed credit platforms, continuation-vehicle liquidity — reaches Europe and India two to three years later. Europe is our asset market, and its numbers strengthened our thesis materially: a record €147bn raised in 2025 and, most strikingly, 46% of global private-credit fundraising captured by Europe as Basel IV pushed banks out of mid-market lending. AIFMD II takes effect in April 2026, before our launch, which means we build under settled rules rather than shifting ones. Luxembourg validated itself with alternatives growing ~20% in a year to €3.1tn; its only warnings are operational — compliance-talent scarcity and rising service costs, which we should pre-empt by locking provider quotes early. Monaco's story is timing: with its FATF action plan substantially complete, grey-list exit is plausible within two to three quarters, which converts our already-chosen deferral of the Monaco company from caution into strategy. India delivered the strongest growth signals of the seven — AIF commitments up 25% to ~₹17tn, a record $12.4bn of private credit deployed, GIFT City functioning at scale with more than $5bn of foreign inflows — alongside the clearest warnings: exit dependence on a cooling IPO window, currency drag, and a professionalising spin-out wave that is simultaneously our competitor set and our Fund-Manager recruiting pool. The GCC emerged as arguably our most important LP geography: sovereign capital is pivoting domestic and demanding localisation, but family capital is abundant, mobile and concentrated in Dubai — and it negotiates for exactly the things our loyalty architecture already offers, above all co-investment. China, finally, is closed to managers of our size — USD fundraising has collapsed to a decade low — and matters to us only through the rotation of global Asia allocations toward India, which quietly works in our favour.</p>
+ <p><b>Re-testing our assumptions,</b> every structural choice survived: the Luxembourg RAIF wrapper, the credit anchor, the dual maritime and healthcare/deeptech specialisation, the deferred Monaco entity, the GIFT City rail, and the diaspora LP focus. Three assumptions, however, should be held loosely. The €5–25m first close is achievable but only anchor-led — the cornerstone LPs are not an accelerant, they are the raise itself. The India feeder should be built against documented demand, not in advance of it, because the 2025 IFSCA regime added real compliance cost. And our return language should lead with income rather than IRR, because that is what every region's LPs now buy. We should also respect one risk we cannot diversify: the first genuine private-credit default cycle, which European regulators now openly anticipate — our conservative underwriting standards are not a marketing point but the condition of survival.</p>
+ <p><b>What we should do</b> reduces to five moves. Stay the course on structure and thesis, but sharpen execution around anchors and DPI-first messaging. Add a deliberate Gulf rhythm now — regular Dubai presence, DIFC relationships, co-invest-rich terms. Time-box the GIFT City feeder to evidence of demand. Design fund terms so a future wealth-channel or ELTIF-compatible sleeve is possible without committing to one. And keep a watching brief on London's 2028 regime as a possible Fund II distribution hedge. The overall conclusion is unusual for a landscape review: the environment is harsher than headlines suggest for new managers in general, yet almost every specific bet this venture has made sits on the right side of the industry's divergences. The task is not to change the plan; it is to execute it with the discipline the data demands.</p>
+ <div class="d" style="margin-top:6px;">~1,000 words · desk synthesis, Aug 2026 · full evidence and sources in Landscape_Analysis.docx</div>
+ </div>
+ <div class="grid" id="anlzcards"></div>
+ <h2 class="sec">Divergences that matter</h2>
+ <div class="grid" id="anlzdiv"></div>
+ <h2 class="sec">Strategic options for the venture</h2>
+ <div class="grid" id="anlzopt"></div>
+ <p class="note">Condensed from the full report (Landscape_Analysis.docx): per-region deep dives, assumption re-testing, and sources. Figures latest reported 2025–26; estimates flagged there.</p>
+</section>
+
+<!-- LIBRARY -->
+<section class="pg" id="lib">
+ <div class="htop"><h1>Library</h1></div>
+ <div class="lgrid">
+  <div><div class="g">Standards & LP world</div>
+  <a href="https://ilpa.org" target="_blank">ILPA — model LPA, DDQ, principles</a><br>
+  <a href="https://www.institutionalinvestor.com" target="_blank">Institutional Investor</a><br>
+  <a href="https://www.preqin.com/insights" target="_blank">Preqin Insights</a><br>
+  <a href="https://pitchbook.com/news" target="_blank">PitchBook News</a></div>
+  <div><div class="g">Jurisdictions</div>
+  <a href="https://www.alfi.lu" target="_blank">ALFI — Luxembourg</a><br>
+  <a href="https://www.cssf.lu/en/" target="_blank">CSSF</a><br>
+  <a href="https://ccaf.mc/en/" target="_blank">CCAF (Monaco)</a><br>
+  <a href="https://ifsca.gov.in" target="_blank">IFSCA (GIFT City)</a></div>
+  <div><div class="g">India</div>
+  <a href="https://ivca.in" target="_blank">IVCA</a><br>
+  <a href="https://www.vccircle.com" target="_blank">VCCircle</a><br>
+  <a href="https://www.giftgujarat.in" target="_blank">GIFT City</a></div>
+  <div><div class="g">Education & emerging managers</div>
+  <a href="https://www.investopedia.com" target="_blank">Investopedia</a><br>
+  <a href="https://caia.org" target="_blank">CAIA</a><br>
+  <a href="https://carta.com/learn/" target="_blank">Carta</a><br>
+  <a href="https://govclab.com" target="_blank">VC Lab</a><br>
+  <a href="https://www.lexology.com" target="_blank">Lexology</a></div>
+ </div>
+</section>
+
+<p class="foot">Fund Desk · curated news as of 5 Aug 2026 · markets stream live via TradingView embeds · headlines belong to their publishers · figures indicative. Built for internal / partner use.</p>
+</main>
+</div>
+
+<script>
+const gn=q=>'https://news.google.com/search?q='+encodeURIComponent('"'+q+'"');
+const CURATED_AT='5 Aug 2026';
+const SRC=[
+ {name:"Private Equity International",tag:"Industry news",url:"https://www.privateequityinternational.com/news-analysis/",items:[
+  {t:"When stratospheric net worth meets LP-GP alignment",u:"https://www.privateequityinternational.com/when-stratospheric-net-worth-meets-lp-gp-alignment/",d:"23 Jul 2026",s:"What happens to incentives when carry is a rounding error in an executive's wealth."},
+  {t:"Side Letter: Secondaries déjà vu",u:"https://www.privateequityinternational.com/side-letter-secondaries-deja-vu/",d:"23 Jul 2026",s:"Secondaries volumes break another record; Europe builds a war chest."},
+  {t:"At London Investor Council: 'We're risk-on, but you'd better earn it'",u:"https://www.privateequityinternational.com/at-london-investor-council-members-say-were-risk-on-but-youd-better-earn-it/",d:"23 Jul 2026",s:"LPs want clearly differentiated strategies — AI, defence and liquidity in focus."},
+  {t:"Private equity allocations stabilise in H1 2026",u:"https://www.privateequityinternational.com/download-private-equity-allocations-stabilise-in-h1-2026/",d:"22 Jul 2026",s:"Most investors kept allocations unchanged in the first half."},
+  {t:"Alaska Permanent latest to mull PE benchmark review",u:"https://www.privateequityinternational.com/alaska-permanent-latest-to-mull-pe-benchmark-review/",d:"22 Jul 2026",s:"Benchmark questions over debt and energy exposure."},
+  {t:"AI secondaries firm Clipway collects $6.4bn for debut fund",u:"https://www.privateequityinternational.com/ai-secondaries-firm-clipway-collects-6-4bn-for-debut-fund/",d:"21 Jul 2026",s:"A debut vehicle launched at $4bn target closes well above it."}]},
+ {name:"Private Debt Investor",tag:"Private credit",url:"https://www.privatedebtinvestor.com/news-analysis/",items:[
+  {t:"Manulife | Comvest closes direct lending fund on $5.4bn",u:"https://www.privatedebtinvestor.com/manulife-i-comvest-closes-direct-lending-fund-on-5-4bn/",d:"4 Aug 2026",s:"Seventh vintage of the senior-debt fund finishes far above target."},
+  {t:"LGT Capital Partners launches debut credit secondaries strategy",u:"https://www.privatedebtinvestor.com/lgt-capital-partners-launches-debut-credit-secondaries-strategy/",d:"4 Aug 2026",s:"Swiss manager moves into credit secondaries, senior-lending emphasis."},
+  {t:"Loan Note: Goldman's Asia move; Neuberger aerospace initiative",u:"https://www.privatedebtinvestor.com/loan-note-goldman-sachs-key-asia-move-neuberger-aerospace-initiative/",d:"3 Aug 2026",s:"Senior APAC hire; a Neuberger unit teams with a Dubai firm on aviation credit."},
+  {t:"Bridgepoint €5bn fundraise finds strong appetite for Europe",u:"https://www.privatedebtinvestor.com/bridgepoint-e5bn-fundraise-finds-strong-appetite-for-europe/",d:"3 Aug 2026",s:"European direct lending closes ahead of target with APAC and Gulf interest."},
+  {t:"Ares posts strong fundraising, deployment in Q2",u:"https://www.privatedebtinvestor.com/ares-posts-strong-fundraising-deployment-in-q2-despite-bdc-withdrawals/",d:"31 Jul 2026",s:"A record quarter: ~$36bn raised, similar deployed."},
+  {t:"GTCR closes debut capital solutions fund",u:"https://www.privatedebtinvestor.com/gtcr-closes-debut-capital-solutions-fund-as-gps-seize-on-hybrid-strategies/",d:"30 Jul 2026",s:"Hybrid capital aimed at PE liquidity problems."}]},
+ {name:"Secondaries Investor",tag:"Secondaries",url:"https://www.secondariesinvestor.com/",items:[
+  {t:"Adams Street doubles fund size with latest flagship secondaries raise",u:"https://www.secondariesinvestor.com/adams-street-doubles-fund-size-with-latest-flagship-secondaries-raise/",d:"5 Aug 2026",s:"Flagship closes at twice its predecessor."},
+  {t:"KKR and Arctos mull GP-led strategy launch",u:"https://www.secondariesinvestor.com/kkr-and-arctos-mull-gp-led-strategy-launch/",d:"4 Aug 2026",s:"Two heavyweights weigh dedicated GP-led pushes."},
+  {t:"US investors push Blue Earth impact secondaries strategy forward",u:"https://www.secondariesinvestor.com/us-investors-push-blue-earth-impact-secondaries-strategy-forward/",d:"4 Aug 2026",s:"Impact secondaries gather US LP backing."},
+  {t:"CVC aims for Q3 close for 6th secondaries fund",u:"https://www.secondariesinvestor.com/cvc-aims-for-q3-close-for-6th-secondaries-fund/",d:"30 Jul 2026",s:"Sixth vintage nears the line."},
+  {t:"Blackstone crosses $14bn mark for latest flagship raise",u:"https://www.secondariesinvestor.com/blackstone-crosses-14bn-mark-for-latest-flagship-raise/",d:"23 Jul 2026",s:"Flagship secondaries fund keeps compounding."}]},
+ {name:"New Private Markets",tag:"Impact & wealth",url:"https://www.newprivatemarkets.com/",items:[
+  {t:"PE impact head Unnithan leaves Nuveen",u:"https://www.newprivatemarkets.com/pe-impact-head-unnithan-leaves-nuveen/",d:"4 Aug 2026",s:"Senior departure in impact private equity."},
+  {t:"BpfBOUW furthers €2bn impact ambition with Dutch housing mandate",u:"https://www.newprivatemarkets.com/bpfbouw-furthers-e2bn-impact-ambition-with-dutch-housing-mandate/",d:"4 Aug 2026",s:"Dutch pension deepens housing-impact allocation."},
+  {t:"The infrastructure transition will stall unless we solve the 'missing middle'",u:"https://www.newprivatemarkets.com/the-infrastructure-transition-will-stall-unless-we-solve-the-missing-middle/",d:"4 Aug 2026",s:"Opinion: mid-size transition projects lack capital."},
+  {t:"Rockefeller Foundation identifies 'key impact risks' in fund investments",u:"https://www.newprivatemarkets.com/rockefeller-foundation-identifies-key-impact-risks-in-fund-investments/",d:"3 Aug 2026",s:"An LP framework for impact risk in funds."},
+  {t:"'Unequivocally' more difficult: impact managers on fundraising now",u:"https://www.newprivatemarkets.com/unequivocally-more-difficult-impact-managers-on-fundraising-in-times-of-trump/",d:"Jul 2026",s:"Impact GPs describe a tougher raise."}]},
+ {name:"Venture Capital Journal",tag:"Venture",url:"https://www.venturecapitaljournal.com/",items:[
+  {t:"StepStone's VC secondaries fund tops $1bn as LP interest grows",u:"https://www.venturecapitaljournal.com/stepstones-vc-secondaries-fund-tops-1bn-as-lp-interest-grows/",d:"early Aug 2026",s:"Venture secondaries keep drawing LP capital."},
+  {t:"EQT generates liquidity for LPs in debut venture fund with first multi-asset CV",u:"https://www.venturecapitaljournal.com/eqt-generates-liquidity-for-lps-in-debut-venture-fund-with-first-multi-asset-cv/",d:"early Aug 2026",s:"A continuation vehicle brings DPI to a debut venture fund."},
+  {t:"Family office GreenBear reducing PE and VC exposure, favors SMAs",u:"https://www.venturecapitaljournal.com/family-office-greenbear-reducing-pe-exposure-favours-smas/",d:"4 Aug 2026",s:"A family office reshapes its private-markets mix."},
+  {t:"Jump Capital aims to speed AI adoption",u:"https://www.venturecapitaljournal.com/jump-capital-aims-to-speed-ai-adoption/",d:"4 Aug 2026",s:"Thesis: applied-AI adoption over model-building."},
+  {t:"Nest launches first venture sleeve with Schroders Capital",u:"https://www.venturecapitaljournal.com/nest-launches-first-venture-sleeve-with-schroders-capital/",d:"Jul 2026",s:"UK DC pension money reaches venture."}]},
+ {name:"CSSF — Luxembourg regulator",tag:"Regulation",url:"https://www.cssf.lu/en/news/",items:[
+  {t:"Management notifications with an EU passport for Luxembourg IFMs — AIFMD II changes",u:"https://www.cssf.lu/en/2026/07/communication-regarding-management-notifications-and-de-notifications-with-a-european-passport-for-luxembourg-domiciled-ifms-changes-introduced-by-the-aifmd-ii/",d:"30 Jul 2026",s:"New activities and functions for ManCos as AIFMD II is transposed."},
+  {t:"CSSF launches webpage on notifying material operations (CRD VI)",u:"https://www.cssf.lu/en/2026/08/the-cssf-launches-a-dedicated-webpage-to-clarify-the-process-to-notify-and-assess-notifying-material-operations/",d:"3 Aug 2026",s:"Clarifies new notification duties."},
+  {t:"ESMA Common Supervisory Action: risk management of ManCos & AIFMs",u:"https://www.cssf.lu/en/2026/07/launch-of-the-esma-common-supervisory-action-on-the-risk-management-function-of-ucits-management-companies-and-alternative-investment-fund-managers/",d:"27 Jul 2026",s:"EU-wide review of fund managers' risk function."},
+  {t:"CSSF FAQ on SFDR — updated (version 5)",u:"https://www.cssf.lu/en/Document/cssf-faq-sustainable-finance-disclosure-regulation-sfdr/",d:"21 Jul 2026",s:"Sustainability-disclosure clarifications."},
+  {t:"AIFM Reporting dashboard — December 2025",u:"https://www.cssf.lu/en/Document/aifm-reporting-dashboard-december-2025/",d:"15 Jul 2026",s:"Latest AIFMD reporting statistics."}]},
+ {name:"ESMA & EU regulatory watch",tag:"Regulation",url:"https://www.esma.europa.eu/press-news/esma-news",items:[
+  {t:"ESMA CSA on risk management of UCITS ManCos & AIFMs",u:"https://www.cssf.lu/en/2026/07/launch-of-the-esma-common-supervisory-action-on-the-risk-management-function-of-ucits-management-companies-and-alternative-investment-fund-managers/",d:"27 Jul 2026",s:"EU-wide supervisory exercise launched 3 July."},
+  {t:"ESMA supervisory briefing: triangular passporting under MiFID II",u:"https://www.cssf.lu/en/2026/07/esma-supervisory-briefing-on-triangular-passporting-within-the-framework-of-the-mifid-ii/",d:"17 Jul 2026",s:"Guidance on cross-border branch/tied-agent passporting."},
+  {t:"ESMA consultation: simplifying EU Taxonomy disclosures",u:"https://www.cssf.lu/en/Document/public-consultation-by-esma-until-12-august-2026-on-simplifying-eu-taxonomy-disclosure-framework/",d:"6 Jul 2026",s:"Open until 12 Aug 2026 — reporting-burden reduction."},
+  {t:"ESMA newsroom — all announcements",u:"https://www.esma.europa.eu/press-news/esma-news",d:"live",s:"Open the ESMA newsroom for the latest items."}]},
+];
+const GEO={
+ gIndia:{name:'Asia-Pacific & India — curated picks',tag:'India & Asia',items:[
+  SRC[1].items[2],
+  {t:"KPS Asia unit eyes Japan take-privates, carve-outs",u:"https://www.privateequityinternational.com/kps-asia-unit-eyes-japan-take-privates-carve-outs/",d:"20 Jul 2026",s:"Industrials specialist opens its first Asia outpost in Tokyo."},
+  {t:"Asante builds APAC secondaries business with ex-Evercore hire",u:"https://www.secondariesinvestor.com/asante-builds-apac-secondaries-business-with-ex-evercore-hire/",d:"14 Jul 2026",s:"Advisory capacity grows in APAC secondaries."},
+  {t:"China's performance paradox: opportunities and risks for secondaries",u:"https://www.secondariesinvestor.com/chinas-performance-paradox-the-opportunities-and-risks-for-secondaries/",d:"23 Jul 2026",s:"Guest analysis on China exposure."}]},
+ gEU:{name:'Europe — curated picks',tag:'Luxembourg · UK · EU',items:[
+  SRC[1].items[3],
+  SRC[5].items[0],
+  {t:"StepStone leads on Cabot's £140m CV for Premier Modular",u:"https://www.secondariesinvestor.com/stepstone-leads-on-cabots-140m-cv-for-premier-modular/",d:"28 Jul 2026",s:"UK GP-led continuation deal."},
+  {t:"Is UK regulatory scrutiny a competitive disadvantage for secondaries deals?",u:"https://www.secondariesinvestor.com/is-uk-regulatory-scrutiny-a-competitive-disadvantage-for-secondaries-deals/",d:"28 May 2026",s:"Guest view on the UK deal environment."}]},
+ gGCC:{name:'Gulf — curated picks',tag:'GCC & Dubai',items:[
+  {t:"Neuberger unit teams with Dubai firm for aerospace lending",u:"https://www.privatedebtinvestor.com/loan-note-goldman-sachs-key-asia-move-neuberger-aerospace-initiative/",d:"3 Aug 2026",s:"Gulf partnership in asset-backed aviation credit."},
+  {t:"Bridgepoint sees Middle-East appetite in €5bn European credit raise",u:"https://www.privatedebtinvestor.com/bridgepoint-e5bn-fundraise-finds-strong-appetite-for-europe/",d:"3 Aug 2026",s:"GCC allocators feature in a European close."},
+  {t:"AGBI — daily Gulf finance coverage",u:"https://www.agbi.com/banking-finance/",d:"live",s:"Open AGBI's banking & finance desk for today's Gulf stories."}]},
+ gMar:{name:'Maritime — industry updates',tag:'Maritime desk',items:[
+  {t:"TradeWinds — today's shipping headlines",u:"https://www.tradewindsnews.com",d:"live",s:"Global shipping news: S&P, newbuildings, finance, casualties."},
+  {t:"Splash 247 — maritime news wire",u:"https://splash247.com",d:"live",s:"Asia-centric maritime wire: owners, yards, ports, offshore."},
+  {t:"gCaptain — shipping & offshore",u:"https://gcaptain.com",d:"live",s:"Shipping and offshore energy coverage."},
+  {t:"Marine Money — ship finance intelligence",u:"https://www.marinemoney.com",d:"live",s:"Ship finance league tables, leasing, capital markets."},
+  {t:"Shipping finance — latest via Google News",u:"https://news.google.com/search?q=shipping%20finance%20OR%20%22ship%20leasing%22",d:"live",s:"Fresh stories across the maritime capital stack."}]},
+ gHDT:{name:'Healthcare & Deeptech — industry updates',tag:'Healthcare · Deeptech desk',items:[
+  {t:"Endpoints News — biopharma today",u:"https://endpts.com",d:"live",s:"Drug development, venture rounds, pharma strategy."},
+  {t:"Fierce Biotech — R&D and venture wire",u:"https://www.fiercebiotech.com",d:"live",s:"Biotech financing rounds, trial readouts, deals."},
+  {t:"MedTech Dive — devices & diagnostics",u:"https://www.medtechdive.com",d:"live",s:"Medtech funding, approvals and M&A."},
+  {t:"Evaluate Vantage — deal & pipeline analysis",u:"https://www.evaluate.com/vantage/",d:"live",s:"Data-led analysis of pharma/biotech value flows."},
+  {t:"Biotech funding — latest via Google News",u:"https://news.google.com/search?q=biotech%20funding%20OR%20%22medtech%22%20round",d:"live",s:"Fresh financing stories across healthcare and deeptech."}]},
+};
+const GLOBAL=[["Blackstone","New York","~$1.2tn","PE, credit, real assets","https://www.blackstone.com"],["Brookfield Asset Management","Toronto","~$1.0tn","Infra, RE, PE, credit","https://www.brookfield.com"],["Apollo Global Management","New York","~$790bn","Credit, PE, retirement","https://www.apollo.com"],["KKR","New York","~$660bn","PE, infra, credit","https://www.kkr.com"],["Ares Management","Los Angeles","~$490bn","Private credit","https://www.aresmgmt.com"],["The Carlyle Group","Washington DC","~$450bn","PE, credit, solutions","https://www.carlyle.com"],["EQT","Stockholm","~€270bn","PE, infra","https://eqtgroup.com"],["TPG","Fort Worth","~$260bn","PE, growth, impact, credit","https://www.tpg.com"],["CVC Capital Partners","Luxembourg","~€200bn","PE, credit, secondaries","https://www.cvc.com"],["Bain Capital","Boston","~$185bn","PE, credit, ventures","https://www.baincapital.com"],["Thoma Bravo","Chicago","~$184bn","Software buyouts","https://www.thomabravo.com"],["Silver Lake","Menlo Park","~$110bn","Technology PE","https://www.silverlake.com"],["Vista Equity Partners","Austin","~$100bn","Enterprise software PE","https://www.vistaequitypartners.com"],["Advent International","Boston","~$95bn","Global buyouts","https://www.adventinternational.com"],["Warburg Pincus","New York","~$90bn","Growth investing","https://warburgpincus.com"]];
+const INDIA=[["Kotak Alternate Asset Managers","Mumbai","~$18bn","Credit, RE, PE, infra","https://www.kotakalternateassets.com"],["Peak XV Partners","Bengaluru","~$9bn","Venture & growth","https://www.peakxv.com"],["EAAA Alternatives (Edelweiss)","Mumbai","~$7.5bn","Private credit, real assets","https://www.eaaa.in"],["Kedaara Capital","Mumbai","~$6bn","Buyouts & growth","https://www.kedaara.com"],["ChrysCapital","New Delhi","~$5bn+","Growth PE","https://www.chryscapital.com"],["ICICI Venture","Mumbai","~$5bn","PE, RE, special situations","https://www.iciciventure.com"],["NIIF","Mumbai","~$4.9bn","Infrastructure & growth","https://niifindia.in"],["True North","Mumbai","~$3bn","Mid-market PE","https://www.truenorthco.in"],["Multiples Alternate Asset Mgmt","Mumbai","~$3bn","Growth PE","https://www.multiplesequity.com"],["Motilal Oswal Alternates","Mumbai","~$2bn","Growth PE & RE","https://www.motilaloswalalternates.com"]];
+const FO=[["Walton Enterprises / WIT","Walton (Walmart)","Bentonville, US","~$270bn","https://www.waltonfamilyfoundation.org",""],["Bezos Expeditions","Jeff Bezos (Amazon)","Seattle, US","~$100bn+","",""],["Cascade Investment","Bill Gates (Microsoft)","Kirkland, US","~$100bn+","",""],["Ballmer Group","Steve Ballmer (Microsoft)","Bellevue, US","~$100bn+","https://www.ballmergroup.org",""],["Mousse Partners","Wertheimer (Chanel)","New York, US","~$90bn","","Mousse Partners Wertheimer"],["1888 Management / Koch FO","Koch (Koch Industries)","Wichita, US","~$100bn+","","Koch family office"],["Groupe Arnault / Financière Agache","Arnault (LVMH)","Paris, FR","~$150bn+","",""],["Téthys Invest","Bettencourt Meyers (L'Oréal)","Paris, FR","~$80bn+","","Téthys Bettencourt"],["Pontegadea","Amancio Ortega (Inditex/Zara)","A Coruña, ES","~$75bn+","https://www.pontegadea.com",""],["KIRKBI","Kirk Kristiansen (LEGO)","Billund, DK","~$25bn","https://www.kirkbi.com",""],["Exor","Agnelli (Fiat/Ferrari)","Amsterdam, NL","~$35bn","https://www.exor.com",""],["JAB Holding","Reimann (JAB/coffee)","Luxembourg","~$40bn","https://www.jabholco.com",""],["Athos KG","Strüngmann (Hexal/BioNTech)","Munich, DE","~$30bn","","Athos Strüngmann"],["FAM / Wallenberg sphere","Wallenberg (Investor AB)","Stockholm, SE","~$25bn","https://www.fam.se",""],["Interogo / Ikano","Kamprad (IKEA)","Zug, CH / LU","~$30bn","https://www.interogofoundation.com",""],["Tetra Laval / Longbow","Rausing (Tetra Pak)","Pully, CH","~$25bn","","Tetra Laval Rausing"],["Quandt / Aqton","Quandt-Klatten (BMW)","Bad Homburg, DE","~$45bn","","Quandt Klatten BMW"],["Porsche SE","Porsche-Piëch (VW)","Stuttgart, DE","~$40bn","https://www.porsche-se.com",""],["Grosvenor","Duke of Westminster","London, UK","~$20bn","https://www.grosvenor.com",""],["Wittington Investments","Weston (ABF/Primark)","London, UK","~$20bn","","Wittington Investments Weston"],["COFRA / Anthos","Brenninkmeijer (C&A)","Zug, CH","~$30bn","https://www.cofraholding.com",""],["AFM / Mulliez family","Mulliez (Auchan, Decathlon)","Lille, FR","~$45bn","","Mulliez family Auchan"],["Peugeot Invest","Peugeot family","Paris, FR","~$6bn","https://www.peugeot-invest.com",""],["Heineken family / L'Arche Green","Heineken","Amsterdam, NL","~$15bn","","Heineken family holding"],["H51","Hermès family","Paris, FR","~$100bn+","","Hermès family holding"],["Dassault Group","Dassault family","Paris, FR","~$30bn","","Dassault family"],["MSD Capital / DFO","Michael Dell","New York, US","~$70bn","https://www.dfomgmt.com",""],["Soros Fund Management","George Soros","New York, US","~$28bn","https://www.soros.com",""],["Duquesne Family Office","Stanley Druckenmiller","New York, US","~$15bn","","Druckenmiller Duquesne"],["Point72","Steven Cohen","Stamford, US","~$35bn","https://www.point72.com",""],["Iconiq Capital (multi-family)","Tech founders (multi)","San Francisco, US","~$80bn","https://www.iconiqcapital.com",""],["Emerson Collective","Laurene Powell Jobs","Palo Alto, US","~$25bn","https://www.emersoncollective.com",""],["Chan Zuckerberg Initiative","Zuckerberg-Chan (Meta)","Redwood City, US","~$100bn+","https://chanzuckerberg.com",""],["Omidyar Network","Pierre Omidyar (eBay)","Redwood City, US","~$10bn","https://omidyar.com",""],["Declaration Partners","David Rubenstein (Carlyle)","New York, US","~$3bn","https://www.declarationpartners.com",""],["Bessemer Trust (multi-family)","Phipps (Carnegie Steel)","New York, US","~$120bn (MFO)","https://www.bessemertrust.com",""],["Rockefeller Capital Mgmt","Rockefeller","New York, US","~$100bn (MFO)","https://www.rockco.com",""],["Crown family / Henry Crown & Co","Crown (General Dynamics)","Chicago, US","~$15bn","","Henry Crown and Company"],["Pritzker Group","Pritzker (Hyatt)","Chicago, US","~$20bn","https://www.pritzkergroup.com",""],["Waycrosse / Cargill-MacMillan","Cargill family","Minneapolis, US","~$50bn","","Cargill MacMillan family"],["Mars family office","Mars (confectionery)","McLean, US","~$100bn+","","Mars family Mars Incorporated"],["Blue Pool Capital","Joe Tsai (Alibaba)","Hong Kong","~$15bn","","Blue Pool Capital Joe Tsai"],["Horizons Ventures","Li Ka-shing","Hong Kong","~$35bn","https://www.horizonsventures.com",""],["Verlinvest","de Spoelberch/de Mévius (AB InBev)","Brussels, BE","~$3bn","https://www.verlinvest.com",""],["Premji Invest","Azim Premji (Wipro)","Bengaluru, IN","~$10bn","https://www.premjiinvest.com",""],["Catamaran Ventures","Narayana Murthy (Infosys)","Bengaluru, IN","~$2bn","https://www.catamaran.in",""],["Claypond Capital","Ranjan Pai (Manipal)","Bengaluru, IN","~$1.5bn","","Ranjan Pai Claypond"],["Sharrp Ventures","Mariwala (Marico)","Mumbai, IN","~$1bn","","Sharrp Ventures Mariwala"],["Rising Sun Holdings (Poonawalla)","Adar Poonawalla (Serum Institute)","Pune, IN","~$25bn","","Adar Poonawalla Rising Sun Holdings"],["Man Capital","Mansour family","London, UK / Cairo","~$10bn","https://www.mancapital.com",""],["JIMCO (Jameel Investment)","Abdul Latif Jameel family","Jeddah, SA","~$15bn","https://jimco.co",""],["Olayan Group","Olayan family","Riyadh / London","~$40bn","https://www.olayan.com",""]];
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function newsCard(src){
+ return '<div class="card"><div class="tag">'+src.tag+'</div><h3>'+src.name+'</h3>'+src.items.map(o=>
+  '<div class="item"><a href="'+o.u+'" target="_blank" rel="noopener">'+esc(o.t)+'</a>'+(o.s?'<div class="sn">'+esc(o.s)+'</div>':'')+'<div class="d">'+o.d+'</div></div>').join('')+
+  '<div class="item" style="border:none;"><a href="'+src.url+'" target="_blank">Latest from '+src.name.split(' — ')[0]+' →</a></div></div>';
+}
+document.getElementById('feeds').innerHTML=SRC.map(newsCard).join('');
+for(const k in GEO){document.getElementById(k).innerHTML=newsCard({name:GEO[k].name,tag:GEO[k].tag,url:'#',items:GEO[k].items}).replace(/<div class="item" style="border:none;"><a href="#"[^<]*<\/a><\/div>/,'');}
+document.getElementById('digest').innerHTML=[SRC[1],SRC[0],SRC[5]].map(s=>newsCard({name:s.name,tag:s.tag,url:s.url,items:s.items.slice(0,3)})).join('');
+document.getElementById('stats').innerHTML=
+ '<span class="stat"><div class="n">'+SRC.reduce((a,s)=>a+s.items.length,0)+'</div><div class="l">curated articles</div></span>'+
+ '<span class="stat"><div class="n">'+(GLOBAL.length+INDIA.length)+'</div><div class="l">managers tracked</div></span>'+
+ '<span class="stat"><div class="n">'+FO.length+'</div><div class="l">family offices</div></span>'+
+ '<span class="stat"><div class="n">4</div><div class="l">markets tabs live</div></span>';
+
+function mgr(el,data){document.getElementById(el).innerHTML=data.map((r,i)=>{
+ const site=r[4]?'<a href="'+r[4]+'" target="_blank">Site</a> · ':'';
+ return '<tr><td>'+(i+1)+'</td><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td style="white-space:nowrap;">'+r[2]+'</td><td>'+r[3]+'</td><td>'+site+'<a class="newslink" href="'+gn(r[0])+'" target="_blank">News</a></td></tr>';}).join('');}
+mgr('tglobal',GLOBAL);mgr('tindia',INDIA);
+
+let pins=[];try{pins=JSON.parse(localStorage.getItem('fd_pins')||'[]');}catch(e){}
+function savePins(){try{localStorage.setItem('fd_pins',JSON.stringify(pins));}catch(e){}}
+function forows(filter){
+ const q=(filter||'').toLowerCase();
+ const rows=FO.map((r,i)=>({r,i,p:pins.includes(r[0])}))
+  .filter(x=>!q||(x.r[0]+' '+x.r[1]+' '+x.r[2]).toLowerCase().includes(q))
+  .sort((a,b)=>(b.p?1:0)-(a.p?1:0));
+ document.getElementById('tfo').innerHTML=rows.map(x=>{
+  const r=x.r;const site=r[4]?'<a href="'+r[4]+'" target="_blank">Site</a> · ':'';
+  return '<tr><td><span class="pin'+(x.p?' onp':'')+'" data-n="'+esc(r[0])+'">★</span></td><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td style="white-space:nowrap;">'+r[3]+'</td><td>'+site+'<a class="newslink" href="'+gn(r[5]||r[0].split(' / ')[0])+'" target="_blank">News</a></td></tr>';}).join('');
+}
+forows('');
+document.getElementById('tfo').addEventListener('click',e=>{
+ const p=e.target.closest('.pin'); if(!p)return;
+ const n=p.dataset.n;
+ if(pins.includes(n))pins=pins.filter(x=>x!==n); else pins.push(n);
+ savePins(); forows(document.getElementById('fosearch').value);
+});
+document.getElementById('fosearch').addEventListener('input',e=>forows(e.target.value));
+
+const nav=document.getElementById('nav');
+nav.addEventListener('click',e=>{
+ const li=e.target.closest('li[data-pg]'); if(!li)return;
+ document.querySelectorAll('.pg').forEach(x=>x.classList.toggle('show',x.id===li.dataset.pg));
+ document.querySelectorAll('#nav li').forEach(x=>x.classList.toggle('on',x===li));
+ document.getElementById('side').classList.remove('open');
+ try{localStorage.setItem('fd_pg',li.dataset.pg);}catch(e2){}
+ window.scrollTo(0,0);
+});
+try{const t=localStorage.getItem('fd_pg');
+ if(t&&document.getElementById(t)){document.querySelectorAll('.pg').forEach(x=>x.classList.toggle('show',x.id===t));
+ document.querySelectorAll('#nav li').forEach(x=>x.classList.toggle('on',x.dataset.pg===t));}}catch(e){}
+
+/* ---- PEOPLE ---- */
+const PEOPLE=[
+["Larry Fink","Chairman & CEO · BlackRock","Global"],["Stephen Schwarzman","Co-founder & CEO · Blackstone","Global"],["Jon Gray","President & COO · Blackstone","Global"],["Marc Rowan","CEO · Apollo","Global"],["Joe Bae","Co-CEO · KKR","Global"],["Scott Nuttall","Co-CEO · KKR","Global"],["Harvey Schwartz","CEO · Carlyle","Global"],["Bruce Flatt","CEO · Brookfield","Global"],["Michael Arougheti","CEO · Ares","Global"],["Rob Lucas","CEO · CVC","Global"],["Jon Winkelried","CEO · TPG","Global"],["Orlando Bravo","Co-founder · Thoma Bravo","Global"],["Robert F. Smith","Founder & CEO · Vista Equity","Global"],["Egon Durban","Co-CEO · Silver Lake","Global"],["David Rubenstein","Co-founder · Carlyle; interviewer","Global"],["Howard Marks","Co-chairman · Oaktree","Global"],["Ray Dalio","Founder · Bridgewater","Global"],["Ken Griffin","Founder & CEO · Citadel","Global"],["Steve Cohen","Founder · Point72","Global"],["Marc Lipschultz","Co-CEO · Blue Owl","Global"],["Ted Seides","Host · Capital Allocators","Global"],["Nicolai Tangen","CEO · Norges Bank IM (NBIM)","EU"],["Christian Sinding","CEO · EQT","EU"],["Dominique Senequier","Founder & President · Ardian","EU"],["David Layton","CEO · Partners Group","EU"],["Kurt Björklund","Managing Partner · Permira","EU"],["William Jackson","Chairman · Bridgepoint","EU"],["Benoît Durteste","CEO · ICG","EU"],["Valérie Baudson","CEO · Amundi","EU"],["Johannes Huth","Chairman EMEA · KKR","EU"],["Antoine Flamarion","Co-founder · Tikehau Capital","EU"],["Virginie Morgon","ex-CEO · Eurazeo; investor","EU"],["Uday Kotak","Founder · Kotak Mahindra","India"],["Nilesh Shah","MD · Kotak Mahindra AMC","India"],["Radhika Gupta","MD & CEO · Edelweiss MF","India"],["Navneet Munot","MD & CEO · HDFC AMC","India"],["Kalpen Parekh","MD & CEO · DSP MF","India"],["Raamdeo Agrawal","Chairman · Motilal Oswal","India"],["Renuka Ramnath","Founder · Multiples","India"],["Manish Kejriwal","Founder · Kedaara Capital","India"],["Ashish Dhawan","Founder · ChrysCapital; philanthropist","India"],["Sanjay Nayar","Founder · Sorin; ex-KKR India","India"],["Vishal Mahadevia","Head of Asia PE · Warburg Pincus","India"],["Nitin Jain","Founder · Neo Group","India"],["Vineet Sukumar","Founder · Vivriti","India"],["Karthik Reddy","Co-founder · Blume Ventures","India"],["Prashant Khemka","Founder · White Oak Capital","India"],["Bill Stone","Founder & CEO · SS&C Technologies","Tech"],["Lawrence Calcano","CEO · iCapital","Tech"],["Henry Ward","Co-founder & CEO · Carta","Tech"],["Eric Poirier","CEO · Addepar","Tech"],["Rob Goldstein","COO · BlackRock (Aladdin)","Tech"],["Michael Sidgmore","Partner · Broadhaven; host, Alt Goes Mainstream","Tech"],
+["Shailendra Singh","MD & Head · Peak XV Partners","India"],
+["Sakshi Chopra","Managing Director · Peak XV Partners (consumer)","India"],
+["Rajan Anandan","Managing Director · Peak XV Partners","India"],
+["GV Ravishankar","Managing Director · Peak XV Partners","India"],
+["Vani Kola","Managing Director · Kalaari Capital","India"],
+["Avnish Bajaj","Founder & MD · Z47 (Matrix India)","India"],
+["Prashanth Prakash","Partner · Accel India","India"],
+["Shekhar Kirani","Partner · Accel India","India"],
+["Karan Bhagat","Founder & CEO · 360 ONE Wealth","India"],
+["Amit Chandra","Chairman · Bain Capital India","India"],
+["Amit Dixit","Head of Asia PE · Blackstone","India"],
+["Gaurav Trehan","CEO India · KKR","India"],
+["Sandeep Naik","Head India & SE Asia · General Atlantic","India"],
+["Vishakha Mulye","CEO · Aditya Birla Capital","India"],
+["Nithya Easwaran","Managing Director · Multiples","India"],
+["Ruchir Sharma","Chairman · Rockefeller International","Global"],
+["Jenny Johnson","President & CEO · Franklin Templeton","Global"],
+["Robyn Grew","CEO · Man Group","Global"],
+["Marc Nachmann","Global Head, Asset & Wealth Mgmt · Goldman Sachs","Global"],
+["Jean Hynes","CEO · Wellington Management","Global"],
+["David Hunt","President & CEO · PGIM","Global"],
+["John Zito","Co-President · Apollo (credit)","Global"],
+["Khaldoon Al Mubarak","MD & Group CEO · Mubadala","Global"],
+["Philipp Freise","Co-Head European PE · KKR","EU"],
+["Tara Davies","Co-Head EMEA · KKR","EU"],
+["Peter Beske Nielsen","Global Head, Wealth Solutions · EQT","EU"],
+["Véronique Fournier","Head EMEA, Global Wealth · Apollo","EU"],
+["Gabriel Caillaux","Co-President & Head EMEA · General Atlantic","EU"],
+["Anne Glover","Co-founder & CEO · Amadeus Capital","EU"]
+];
+const li=n=>'https://www.linkedin.com/search/results/all/?keywords='+encodeURIComponent(n);
+const yt=n=>'https://www.youtube.com/results?search_query='+encodeURIComponent(n+' interview');
+const pod=n=>'https://www.google.com/search?q='+encodeURIComponent(n+' podcast');
+let pplF='all';
+function pplrows(){
+ const q=(document.getElementById('pplsearch').value||'').toLowerCase();
+ document.getElementById('tppl').innerHTML=PEOPLE
+  .filter(p=>(pplF==='all'||p[2]===pplF)&&(!q||(p[0]+' '+p[1]).toLowerCase().includes(q)))
+  .map(p=>{const n=p[0].split('?')[0].split(' — ')[0];
+   return '<tr><td><b>'+p[0]+'</b></td><td>'+p[1]+'</td><td>'+p[2]+'</td><td>'+
+   '<a class="newslink" href="'+li(n)+'" target="_blank">LinkedIn</a> '+
+   '<a class="newslink" href="'+yt(n)+'" target="_blank">YouTube</a> '+
+   '<a class="newslink" href="'+pod(n)+'" target="_blank">Podcast</a> '+
+   '<a class="newslink" href="'+gn(n)+'" target="_blank">News</a></td></tr>';}).join('');
+}
+pplrows();
+document.getElementById('pplsearch').addEventListener('input',pplrows);
+document.getElementById('pplfilters').addEventListener('click',e=>{
+ const c=e.target.closest('.chip'); if(!c)return;
+ pplF=c.dataset.f;
+ document.querySelectorAll('#pplfilters .chip').forEach(x=>{x.style.background=x===c?'#0C2340':'#fff';x.style.color=x===c?'#fff':'#0C2340';});
+ pplrows();
+});
+
+/* ---- M&A ---- */
+const MADEALS=[
+{t:"BlackRock buys HPS Investment Partners (~$12bn)",d:"2024–25",s:"The world's largest manager buys a private-credit giant — credit is the land-grab."},
+{t:"BlackRock buys Global Infrastructure Partners (~$12.5bn)",d:"2024",s:"Infrastructure scale in one move."},
+{t:"BlackRock buys Preqin (~£2.55bn)",d:"2024",s:"Private-markets data itself becomes the asset."},
+{t:"BNP Paribas acquires AXA Investment Managers (~€5.1bn)",d:"2024–25",s:"European insurer-asset-manager consolidation."},
+{t:"TPG acquires Angelo Gordon (~$2.7bn)",d:"2023",s:"A PE house buys credit & real estate capability."},
+{t:"CVC acquires DIF Capital Partners",d:"2023–24",s:"Infrastructure bolt-on ahead of CVC's IPO."},
+{t:"Ares acquires GCP International (~$3.7bn)",d:"2024–25",s:"Real-assets expansion into Asia and industrial RE."},
+{t:"General Atlantic acquires Actis",d:"2024",s:"Growth-equity firm adds sustainable infrastructure."},
+{t:"Amundi buys Alpha Associates",d:"2024",s:"Europe's largest AM deepens private-markets multi-management."},
+{t:"Wendel acquires majority of Monroe Capital",d:"2024–25",s:"European holding buys US private credit."},
+{t:"Generali & Natixis IM combination talks",d:"2025",s:"A potential €1.9tn European asset-management giant."},
+{t:"Franklin Templeton's alternatives build (Lexington, Benefit Street)",d:"2021–22",s:"Traditional manager buys its way into alternatives."}
+];
+document.getElementById('madeals').innerHTML='<div class="card">'+MADEALS.map(x=>
+ '<div class="item"><a href="https://news.google.com/search?q='+encodeURIComponent('"'+x.t.split('(')[0].trim()+'"')+'" target="_blank">'+x.t+'</a><div class="sn">'+x.s+'</div><div class="d">'+x.d+'</div></div>').join('')+'</div>';
+const MATRENDS=[
+{h:"Private credit is the prize",b:"Nearly every landmark deal (HPS, Angelo Gordon, Monroe) is about buying credit capability. Banks retreated; managers are racing to own the lending economics. Good news for a credit-anchored newcomer: the strategy is where capital wants to be."},
+{h:"Scale or specialise — the middle is dying",b:"Mega-managers consolidate to amortise distribution, data and compliance costs; specialist boutiques thrive on edge. Mid-size generalists get bought or squeezed. Our answer must be specialisation (maritime, healthcare/deeptech, diaspora capital) — not scale."},
+{h:"Data and software are strategic assets",b:"BlackRock owning Aladdin + eFront + Preqin means one firm supplies the industry's operating system and its benchmark data. Expect data advantage to shape fundraising: managers who instrument their portfolios well will raise faster."},
+{h:"The wealth channel is the new LP",b:"iCapital-style feeders, evergreen and semi-liquid funds are opening private markets to advisers and UHNW clients. Distribution partnerships (private banks, platforms) now drive AUM growth as much as institutional sales — directly relevant to our private-bank feeder plans."},
+{h:"GP-stakes instead of outright sale",b:"Minority GP-stake investors (Blue Owl, Petershill, Hunter Point) let founders monetise without losing control — the exit-and-growth route most likely relevant to a manager like ours in 5–7 years."},
+{h:"Insurance capital reshapes managers",b:"Apollo-Athene's model — permanent insurance capital feeding origination — is being copied across the industry. Managers with guaranteed capital bases out-compete pure fundraisers on stability."}
+];
+document.getElementById('matrends').innerHTML=MATRENDS.map(x=>'<div class="card"><h3>'+x.h+'</h3><div class="sn" style="font-size:12.5px;line-height:1.5;margin-top:6px;">'+x.b+'</div></div>').join('');
+
+/* ---- LANDSCAPE ANALYSIS ---- */
+const ANLZ=[
+{r:"USA",v:"The weather-maker — not our battleground, our leading indicator.",pts:["~$8.4tn private-capital AUM; credit >$2tn; top-10 funds took ~46% of all 2025 capital","First-time funds: just $7.2bn raised (-36%) — specialist-or-nothing confirmed","401(k) executive order (Aug 2025) + deregulatory SEC = retail wave building","DPI drought (~8–10% of NAV/yr) patched by record $115bn GP-led secondaries"]},
+{r:"European Union",v:"Our asset market — credit tailwind measured and real.",pts:["Record €147bn raised 2025 (+16%); €1.37tn capital under management","Europe took 46% of global private-credit fundraising (23% in 2024) — Basel IV effect","AIFMD II applies from Apr 2026 — settled before our launch (timing luck)","ELTIF 2.0 ~€34bn (+55%) and the €10tn Savings & Investments Union = future retail lane"]},
+{r:"Luxembourg",v:"Domicile validated — budget for service-cost inflation.",pts:["€6.19tn regulated assets; alternatives +20% in a year to ~€3.1tn","RAIF/SCSp remains the fastest institutional wrapper (weeks to launch)","Hosts ~60% of Europe's ELTIFs — beating Ireland","62% of firms report compliance-talent shortage → lock provider quotes early"]},
+{r:"Monaco",v:"Relationship base, not regulatory base — revisit SAM after FATF exit.",pts:["Niche UHNW wealth centre; a few dozen CCAF-regulated managers","FATF: action plan substantially complete (June 2026) — exit likely late 2026/early 2027","Until exit: enhanced due-diligence optics on Monaco-linked entities","Endorses our Lux-first, Monaco-deferred sequencing"]},
+{r:"India",v:"LP heartland + credit assets + our FM recruiting pool. Sell DPI, not IRR.",pts:["AIF commitments ~₹16.9tn (+25%); private credit record $12.4bn deployed 2025","GIFT City works: ~194 FMEs, >$26bn commitments, >$5bn foreign in FY26","Family offices ~45 → ~300; domestic LPs carried the market through FPI outflows","Old vintages' DPI 0.5–0.8x — Indian LPs distrust paper IRR; spin-out wave = FM talent"]},
+{r:"GCC",v:"LP geography #1 — presence required; co-invest is the currency.",pts:["Sovereign wealth ~$5tn → ~$7tn by 2030; but PIF pivoted ~75/25 domestic","DIFC: 500+ AM firms, 100+ hedge funds, 1,289 family entities; ADGM tripled","UAE = world's top HNWI-migration magnet; Indians the largest cohort","Gulf LPs demand local presence + co-invest (up to ~50%) — matches our loyalty design"]},
+{r:"China",v:"Watch, don't touch — its loss is India's rotation gain.",pts:["USD fundraising collapsed: $350m across 9 funds in H1 2025 (decade low)","State/RMB capital dominates; global GPs cutting China teams","US outbound-investment rules (Jan 2025) restrict tech capital","Exit revival via Hong Kong IPOs — but no entry point for managers our size"]}];
+document.getElementById('anlzcards').innerHTML=ANLZ.map(a=>'<div class="card"><h3>'+a.r+'</h3>'+a.pts.map(x=>'<div class="item"><div class="sn" style="font-size:12px;">'+x+'</div></div>').join('')+'<div class="item" style="border:none;"><div class="sn" style="font-weight:700;color:#0C2340;">'+a.v+'</div></div></div>').join('');
+const ANLZDIV=[
+{h:"Tightening vs loosening",b:"EU tightens managers (AIFMD II) while US/UK/SEBI liberalise investor access. We win both ways: an EU-regulated wrapper sold to investors whose regimes are opening."},
+{h:"Paper vs cash",b:"DPI drought in the West, weak old-vintage DPI in India. Every region's next fundraising cycle belongs to income-producing strategies — our credit anchor."},
+{h:"Old LPs vs new LPs",b:"Pensions/endowments shrink; insurance, sovereigns, family offices and retail platforms grow. Our target base sits entirely in the growth column."},
+{h:"Concentration vs the specialist exception",b:"Mega-funds absorb ~46% of capital, yet specialist first-timers keep closing. The mid-size generalist middle is dying on every continent."},
+{h:"State capital ascendant",b:"PIF domestication, RMB dominance, EU competitiveness funds — states are the swing capital. Cost where agendas diverge; opportunity where they align."}];
+document.getElementById('anlzdiv').innerHTML=ANLZDIV.map(x=>'<div class="card"><h3>'+x.h+'</h3><div class="sn" style="font-size:12.5px;line-height:1.5;margin-top:6px;">'+x.b+'</div></div>').join('');
+const ANLZOPT=[
+{h:"A — Stay the course (core)",b:"Lux RAIF, credit-anchored dual thesis, diaspora-first, Monaco deferred. Every pillar survived the evidence; sharpen (anchor-led close, DPI-first pitch), don't change."},
+{h:"B — Gulf rhythm (add now)",b:"Monthly Dubai presence, DIFC relationships, co-invest-rich terms for Gulf family offices; a DIFC rep arrangement once LOIs justify it."},
+{h:"C — Time-box the GIFT feeder",b:"Build the India rail only against documented, LOI-backed demand — after costing the 2025 IFSCA regime (KMP certification etc.)."},
+{h:"D — Prepare the wealth channel",b:"Design fund terms feeder/ELTIF-compatible (clean classes, NAV discipline) without launching one; revisit at Fund II."},
+{h:"E — London hedge (Fund II)",b:"If the UK's streamlined 2028 regime lands as drafted, a UK marketing presence could cheapen distribution. Watch-item only."}];
+document.getElementById('anlzopt').innerHTML=ANLZOPT.map(x=>'<div class="card"><h3>'+x.h+'</h3><div class="sn" style="font-size:12.5px;line-height:1.5;margin-top:6px;">'+x.b+'</div></div>').join('');
+
+/* ---- LIVE NEWS REFRESH (hosted deployments) ---- */
+const LIVEQ=[
+ [0,'"private equity" fund when:7d','Private equity — wire'],
+ [1,'"private credit" OR "direct lending" when:7d','Private credit — wire'],
+ [2,'"secondaries" "private equity" when:14d','Secondaries — wire'],
+ [3,'"impact investing" fund when:14d','Impact & wealth — wire'],
+ [4,'"venture capital" fund when:7d','Venture — wire'],
+ [5,'Luxembourg CSSF OR AIFMD funds when:30d','Luxembourg & CSSF — wire'],
+ [6,'ESMA funds regulation when:30d','EU regulation — wire']
+];
+const GEOQ={gIndia:'India "private equity" OR "private credit" OR "AIF" when:7d',
+ gEU:'Luxembourg OR London "private equity" OR "private credit" when:7d',
+ gGCC:'Dubai OR "DIFC" OR "sovereign wealth fund" investment when:7d',
+ gMar:'shipping finance OR "ship leasing" OR shipowner OR "vessel sale" when:7d',
+ gHDT:'biotech funding OR medtech OR "AI drug discovery" OR deeptech when:7d'};
+const PROX=[u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),
+ u=>'https://corsproxy.io/?url='+encodeURIComponent(u)];
+const gnrss=q=>'https://news.google.com/rss/search?q='+encodeURIComponent(q)+'&hl=en-US&gl=US&ceid=US:en';
+async function fetchFeed(q){
+ for(const p of PROX){
+  try{
+   const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),12000);
+   const r=await fetch(p(gnrss(q)),{signal:ctl.signal});clearTimeout(tm);
+   if(!r.ok)continue;
+   const doc=new DOMParser().parseFromString(await r.text(),'text/xml');
+   if(doc.querySelector('parsererror'))continue;
+   const items=Array.from(doc.querySelectorAll('item')).slice(0,6).map(function(it){
+    let t=((it.querySelector('title')||{}).textContent||'').trim();
+    const u=((it.querySelector('link')||{}).textContent||'').trim();
+    const sc=it.getElementsByTagName('source')[0];const s2=sc?sc.textContent.trim():'';
+    if(s2&&t.slice(-(s2.length+3))===' - '+s2)t=t.slice(0,t.length-s2.length-3);
+    let d='';const pd=(it.querySelector('pubDate')||{}).textContent;
+    if(pd){const dt=new Date(pd);if(!isNaN(dt))d=dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+    return {t:t,u:u,d:d,s:s2};
+   }).filter(o=>o.t&&o.u);
+   if(items.length>=3)return items;
+  }catch(e){}
+ }
+ return null;
+}
+(async function refreshNews(){
+ if(location.protocol==='file:')return; /* local copies keep the curated set */
+ let ok=0;
+ const jobs=LIVEQ.map(async x=>{const it=await fetchFeed(x[1]);
+   if(it){SRC[x[0]]=Object.assign({},SRC[x[0]],{items:it,name:x[2],url:'https://news.google.com/search?q='+encodeURIComponent(x[1])});ok++;}})
+  .concat(Object.keys(GEOQ).map(async k=>{const it=await fetchFeed(GEOQ[k]);
+   if(it)GEO[k]=Object.assign({},GEO[k],{items:it.slice(0,5)});}));
+ await Promise.all(jobs);
+ if(!ok)return;
+ document.getElementById('feeds').innerHTML=SRC.map(newsCard).join('');
+ for(const k in GEO){document.getElementById(k).innerHTML=newsCard({name:GEO[k].name,tag:GEO[k].tag,url:'#',items:GEO[k].items}).replace(/<div class="item" style="border:none;"><a href="#"[^<]*<\/a><\/div>/,'');}
+ document.getElementById('digest').innerHTML=[SRC[1],SRC[0],SRC[5]].map(s=>newsCard({name:s.name,tag:s.tag,url:s.url,items:s.items.slice(0,3)})).join('');
+ const now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+ const A=document.getElementById('upd-dash');if(A)A.textContent='Headlines refreshed live '+now+' · markets stream live';
+ const B=document.getElementById('upd-news');if(B)B.textContent='Refreshed live '+now+' via Google News · curated fallback of '+CURATED_AT;
+})();
+
+</script>
+</body>
+</html>

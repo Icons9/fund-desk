@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markets — Live Desk</title>
+<style>
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#FAF9F7;color:#2E3440;margin:0;padding:20px 24px;}
+h1{font-family:Georgia,serif;color:#0C2340;font-size:22px;margin:0 0 2px;}
+.sub{color:#6B7280;font-size:12.5px;margin:0 0 14px;}
+h2{font-family:Georgia,serif;font-size:15px;color:#0C2340;border-bottom:2px solid #C5A059;padding-bottom:5px;margin:20px 0 10px;}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;}
+.card{background:#fff;border:1px solid #E5E1D5;border-radius:10px;padding:8px;}
+.note{font-size:11px;color:#9AA1AC;font-style:italic;margin-top:14px;}
+</style>
+</head>
+<body>
+<h1>Markets — Live Desk</h1>
+<p class="sub">Streaming quotes via TradingView. Open this file in your normal browser (double-click it) — data updates live while the page is open.</p>
+
+<div class="card">
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {
+  "symbols": [
+    {"proName":"BSE:SENSEX","title":"SENSEX"},
+    {"proName":"NSEIX:NIFTY1!","title":"GIFT NIFTY (futures)"},
+    {"proName":"OANDA:SPX500USD","title":"S&P 500"},
+    {"proName":"OANDA:US30USD","title":"Dow"},
+    {"proName":"OANDA:NAS100USD","title":"Nasdaq 100"},
+    {"proName":"XETR:DAX","title":"DAX"},
+    {"proName":"OANDA:UK100GBP","title":"FTSE 100"},
+    {"proName":"FX:EURUSD","title":"EUR/USD"},
+    {"proName":"FX_IDC:USDINR","title":"USD/INR"}
+  ],
+  "showSymbolLogo": true,
+  "colorTheme": "light",
+  "isTransparent": true,
+  "displayMode": "adaptive",
+  "locale": "en"
+  }
+  </script>
+</div>
+</div>
+
+<h2>Overview — indices, mega-caps &amp; India</h2>
+<div class="card" style="height:560px;">
+<div class="tradingview-widget-container" style="height:100%;">
+  <div class="tradingview-widget-container__widget" style="height:100%;"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+  {
+  "colorTheme": "light",
+  "dateRange": "1D",
+  "showChart": true,
+  "locale": "en",
+  "width": "100%",
+  "height": "100%",
+  "isTransparent": true,
+  "showSymbolLogo": true,
+  "tabs": [
+    {
+      "title": "Indices",
+      "symbols": [
+        {"s":"BSE:SENSEX","d":"SENSEX"},
+        {"s":"NSEIX:NIFTY1!","d":"GIFT NIFTY (futures)"},
+        {"s":"OANDA:SPX500USD","d":"S&P 500"},
+        {"s":"OANDA:US30USD","d":"Dow Jones"},
+        {"s":"OANDA:NAS100USD","d":"Nasdaq 100"},
+        {"s":"XETR:DAX","d":"DAX"},
+        {"s":"OANDA:UK100GBP","d":"FTSE 100"}
+      ]
+    },
+    {
+      "title": "Mega-caps",
+      "symbols": [
+        {"s":"NASDAQ:NVDA","d":"NVIDIA"},
+        {"s":"NASDAQ:MSFT","d":"Microsoft"},
+        {"s":"NASDAQ:AAPL","d":"Apple"},
+        {"s":"NASDAQ:GOOGL","d":"Alphabet"},
+        {"s":"NASDAQ:AMZN","d":"Amazon"},
+        {"s":"NASDAQ:META","d":"Meta"},
+        {"s":"NYSE:TSM","d":"TSMC"},
+        {"s":"NASDAQ:AVGO","d":"Broadcom"},
+        {"s":"TADAWUL:2222","d":"Saudi Aramco"}
+      ]
+    },
+    {
+      "title": "India",
+      "symbols": [
+        {"s":"BSE:RELIANCE","d":"Reliance"},
+        {"s":"BSE:TCS","d":"TCS"},
+        {"s":"BSE:HDFCBANK","d":"HDFC Bank"},
+        {"s":"BSE:INFY","d":"Infosys"},
+        {"s":"BSE:ICICIBANK","d":"ICICI Bank"},
+        {"s":"BSE:BHARTIARTL","d":"Bharti Airtel"}
+      ]
+    }
+  ]
+  }
+  </script>
+</div>
+</div>
+
+<h2>Focus charts</h2>
+<div class="row">
+<div class="card" style="height:400px;">
+<div class="tradingview-widget-container" style="height:100%;">
+  <div class="tradingview-widget-container__widget" style="height:100%;"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+  {
+  "symbols": [["NSEIX:NIFTY1!|1M"]],
+  "chartOnly": false,
+  "width": "100%",
+  "height": "100%",
+  "locale": "en",
+  "colorTheme": "light",
+  "isTransparent": true,
+  "autosize": true,
+  "chartType": "area"
+  }
+  </script>
+</div>
+</div>
+<div class="card" style="height:400px;">
+<div class="tradingview-widget-container" style="height:100%;">
+  <div class="tradingview-widget-container__widget" style="height:100%;"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+  {
+  "symbols": [["OANDA:SPX500USD|1M"]],
+  "chartOnly": false,
+  "width": "100%",
+  "height": "100%",
+  "locale": "en",
+  "colorTheme": "light",
+  "isTransparent": true,
+  "autosize": true,
+  "chartType": "area"
+  }
+  </script>
+</div>
+</div>
+</div>
+
+<p class="note">Data and widgets by TradingView (free embeds; typically real-time or minimally delayed depending on exchange). This page must be opened in a normal browser with internet access — the in-app reading desk cannot stream prices. For desk-grade data (tick-level, entitled feeds), the paid routes are TradingView Pro, LSEG/Refinitiv Workspace or a Bloomberg Terminal.</p>
+</body>
+</html>
