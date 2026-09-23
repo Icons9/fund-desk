@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Family Office Desk — by Icons &amp; Company</title>
+<style>
+:root{--navy:#0C2340;--gold:#C5A059;--ink:#1D1D1F;--mut:#6E6E73;--bg:#F5F5F7;--card:#FFFFFF;--ok:#1D7A4F;--warn:#B07816;--r:18px;--sh:0 4px 24px rgba(0,0,0,.06);--sh2:0 10px 40px rgba(0,0,0,.10);--ease:cubic-bezier(.4,0,.2,1);}
+*{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);}
+h1{font-size:clamp(26px,6.5vw,34px);font-weight:700;letter-spacing:-.022em;margin:0;}
+h2{font-size:22px;font-weight:600;letter-spacing:-.017em;margin:0 0 14px;}
+h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin:0 0 10px;}
+.sub{color:var(--mut);font-size:14.5px;margin-top:6px;line-height:1.5;}
+#gate{position:fixed;inset:0;background:linear-gradient(160deg,#0C2340 0%,#13294B 55%,#1E3A63 100%);display:flex;align-items:center;justify-content:center;z-index:60;transition:opacity .6s var(--ease);}
+#gate.out{opacity:0;pointer-events:none;}
+.gcard{background:rgba(255,255,255,.92);backdrop-filter:blur(24px) saturate(160%);border-radius:26px;padding:clamp(28px,6vw,46px) clamp(24px,6vw,48px);width:400px;max-width:90vw;text-align:center;box-shadow:var(--sh2);}
+.gmark{font-size:27px;font-weight:700;letter-spacing:-.02em;color:var(--navy);}
+.gmark span{color:var(--gold);}
+.gcard p{color:var(--mut);font-size:14px;margin:10px 0 26px;line-height:1.5;}
+.gin{width:100%;padding:13px 16px;border:1px solid #E3E3E8;border-radius:12px;font-size:15px;margin-bottom:12px;background:#FAFAFC;color:var(--ink);}
+.gbtn{width:100%;padding:14px;background:var(--ink);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .15s var(--ease),background .2s;}
+.gbtn:hover{background:#000;}
+.gbtn:active{transform:scale(.97);}
+.gnote{font-size:11.5px;color:#98989E;margin-top:18px;line-height:1.6;}
+.demo-tag{display:inline-block;background:rgba(197,160,89,.14);color:#8a6a1f;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:1.2px;padding:4px 12px;text-transform:uppercase;margin-top:14px;}
+#app{opacity:0;transition:opacity .7s var(--ease);}
+#app.in{opacity:1;}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(245,245,247,.78);backdrop-filter:blur(22px) saturate(180%);border-bottom:1px solid rgba(0,0,0,.05);}
+.tb{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:0 22px;height:56px;}
+.wordmark{font-weight:700;font-size:16px;letter-spacing:-.01em;color:var(--navy);white-space:nowrap;}
+.wordmark span{color:var(--gold);}
+nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;}
+nav::-webkit-scrollbar{display:none;}
+nav a{padding:7px 13px;border-radius:999px;font-size:13.5px;font-weight:500;color:#3A3A3E;cursor:pointer;white-space:nowrap;transition:background .25s var(--ease),color .25s;text-decoration:none;}
+nav a:hover{background:rgba(0,0,0,.05);}
+nav a.on{background:var(--navy);color:#fff;}
+.tbr{display:flex;align-items:center;gap:10px;}
+.chipbtn{border:none;background:rgba(0,0,0,.05);border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;transition:background .2s;}
+.chipbtn:hover{background:rgba(0,0,0,.09);}
+.bell{position:relative;}
+.bell .dot{position:absolute;top:2px;right:4px;width:7px;height:7px;border-radius:50%;background:#D85A30;}
+.av{width:32px;height:32px;border-radius:50%;background:var(--navy);color:#E6CD8E;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;}
+main{max-width:1080px;margin:0 auto;padding:36px 22px 110px;}
+.pg{display:none;}
+.pg.on{display:block;animation:rise .5s var(--ease);}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){.pg.on{animation:none;}html{scroll-behavior:auto;}}
+.hero{margin-bottom:26px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:14px;margin-bottom:22px;}
+.stat{background:var(--card);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);transition:transform .3s var(--ease),box-shadow .3s var(--ease);}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--sh2);}
+.stat .k{font-size:12px;color:var(--mut);font-weight:500;}
+.stat .v{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-top:6px;}
+.stat .d{font-size:12px;color:var(--mut);margin-top:4px;}
+.row{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:18px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:860px){.row,.grid2{grid-template-columns:1fr;}}
+.card{background:var(--card);border-radius:var(--r);padding:22px 24px;box-shadow:var(--sh);transition:transform .3s var(--ease),box-shadow .3s var(--ease);}
+.card.hoverable:hover{transform:translateY(-3px);box-shadow:var(--sh2);}
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{text-align:left;color:var(--mut);font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;border-bottom:1px solid #EDEDF0;}
+td{padding:11px 10px;border-bottom:1px solid #F3F3F5;vertical-align:top;line-height:1.45;}
+tr:last-child td{border-bottom:none;}
+.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.pill{display:inline-block;border-radius:999px;padding:3px 11px;font-size:11.5px;font-weight:600;}
+.p-ok{background:#E7F3EC;color:var(--ok);}
+.p-warn{background:#FBF3E1;color:var(--warn);}
+.p-mut{background:#F0F0F2;color:var(--mut);}
+.esg{display:inline-block;background:#EFF6F1;color:#1D7A4F;border-radius:6px;font-size:10.5px;font-weight:600;padding:2px 7px;margin-top:4px;}
+.act div{padding:10px 0;border-bottom:1px solid #F3F3F5;font-size:13.5px;line-height:1.45;}
+.act div:last-child{border-bottom:none;}
+.act .t{color:var(--mut);font-size:12px;margin-top:2px;}
+.doc{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #F3F3F5;font-size:14px;}
+.doc:last-child{border-bottom:none;}
+.doc .m{color:var(--mut);font-size:12px;margin-top:2px;}
+.dl{background:rgba(0,0,0,.05);border:none;border-radius:999px;padding:7px 15px;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;transition:background .2s;white-space:nowrap;}
+.dl:hover{background:rgba(0,0,0,.1);}
+.btn{background:var(--navy);color:#fff;border:none;border-radius:999px;padding:12px 22px;font-size:14px;font-weight:600;cursor:pointer;transition:transform .15s var(--ease),opacity .2s;}
+.btn:hover{opacity:.9;}
+.btn:active{transform:scale(.97);}
+.note{font-size:12px;color:var(--mut);line-height:1.55;}
+.banner{background:#FFF6F2;border-radius:14px;padding:14px 18px;font-size:13.5px;color:#8A4020;margin-bottom:18px;line-height:1.5;}
+.wm{position:fixed;bottom:0;left:0;right:0;background:rgba(12,35,64,.92);backdrop-filter:blur(10px);color:#C9D4E4;font-size:11px;text-align:center;padding:8px 12px;z-index:35;}
+.wm b{color:#E6CD8E;}
+.co{background:linear-gradient(135deg,#FFFDF8,#FBF6EA);border-radius:var(--r);padding:24px;box-shadow:var(--sh);}
+.bar{height:8px;border-radius:4px;background:#EDEDF0;overflow:hidden;display:flex;margin:8px 0 4px;}
+.leg{font-size:12px;color:var(--mut);}
+.leg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin:0 5px 0 12px;vertical-align:-1px;}
+#palette{position:fixed;inset:0;background:rgba(0,0,0,.32);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:70;padding-top:14vh;}
+#palette.on{display:flex;}
+.pal{background:rgba(255,255,255,.96);backdrop-filter:blur(24px);border-radius:18px;width:520px;max-width:92vw;box-shadow:var(--sh2);overflow:hidden;}
+.pal input{width:100%;border:none;outline:none;padding:17px 20px;font-size:16px;background:transparent;color:var(--ink);}
+.pal .res{max-height:300px;overflow:auto;border-top:1px solid #EDEDF0;}
+.pal .ri{padding:12px 20px;font-size:14px;cursor:pointer;display:flex;justify-content:space-between;}
+.pal .ri:hover,.pal .ri.sel{background:rgba(12,35,64,.06);}
+.pal .ri .rk{color:var(--mut);font-size:12px;}
+#notif{position:fixed;top:64px;right:max(18px,calc((100vw - 1080px)/2));width:330px;background:rgba(255,255,255,.96);backdrop-filter:blur(24px);border-radius:18px;box-shadow:var(--sh2);z-index:65;display:none;padding:8px 18px;}
+#notif.on{display:block;animation:rise .3s var(--ease);}
+textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px 14px;font-size:14px;font-family:inherit;min-height:84px;resize:vertical;background:#FAFAFC;color:var(--ink);}
+.kbd{background:rgba(0,0,0,.06);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:600;color:var(--mut);}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -6px;padding:0 6px;}
+.tscroll table{min-width:640px;}
+@media(max-width:640px){
+ .tb{flex-wrap:wrap;height:auto;padding:10px 14px;gap:8px;row-gap:8px;}
+ nav{order:3;flex-basis:100%;margin:0 -14px;padding:0 14px;}
+ .tbr{margin-left:auto;}
+ main{padding:24px 14px 120px;}
+ .cards{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;}
+ .stat{padding:14px 16px;}
+ .stat .v{font-size:22px;}
+ .card{padding:18px 16px;border-radius:16px;}
+ #notif{left:12px;right:12px;width:auto;top:104px;}
+ .hero{margin-bottom:20px;}
+ .doc{flex-wrap:wrap;}
+ .wm{font-size:10px;padding:6px 8px;}
+ .co{padding:18px 16px;}
+ .kbd{display:none;}
+}
+@media print{.topbar,.wm,#gate{display:none!important;}.pg{display:block!important;}body{background:#fff;}}
+
+.mode{background:rgba(12,35,64,.08);border-radius:999px;display:flex;padding:3px;}
+.mode button{border:none;background:transparent;border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:600;color:#3A3A3E;cursor:pointer;transition:background .25s,color .25s;}
+.mode button.on{background:var(--navy);color:#fff;}
+.ent{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #F3F3F5;font-size:13.5px;}
+.ent:last-child{border-bottom:none;}
+.ent .ic{width:36px;height:36px;border-radius:10px;background:#EFF2F7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.warnrow{background:#FBF3E1;border-radius:10px;padding:10px 14px;font-size:13px;color:#8a6a1f;margin-top:10px;}
+</style>
+</head>
+<body>
+
+<div id="gate">
+ <div class="gcard">
+  <div class="gmark">Family Office <span>Desk</span></div>
+  <p>by Icons &amp; Company<br>Consolidated wealth · governance · intelligence</p>
+  <input class="gin" value="office@mehta-family.example" readonly>
+  <button class="gbtn" onclick="enter()">Continue with passkey</button>
+  <div class="gnote">Phishing-resistant MFA. Your data never leaves your custodians —<br>this desk displays, it does not hold assets.</div>
+  <div class="demo-tag">Demonstration environment</div>
+ </div>
+</div>
+
+<div id="app">
+<div class="topbar"><div class="tb">
+ <div class="wordmark">FO <span>Desk</span></div>
+ <nav id="nav"></nav>
+ <div class="tbr">
+  <div class="mode"><button id="mSFO" class="on" onclick="setMode('SFO')">Family</button><button id="mMFO" onclick="setMode('MFO')">Advisor</button></div>
+  <button class="chipbtn" id="fx" onclick="toggleFx()">€ EUR</button>
+  <div class="av" id="avatar">MF</div>
+ </div>
+</div></div>
+
+<main>
+
+<section class="pg on" id="ov">
+ <div class="hero"><h1 id="ovh">Good day, Mehta family.</h1>
+ <div class="sub">Single family office · consolidated across 4 custodians · as of 30 Sep 2027 <span style="color:#B07816;">(illustrative)</span></div></div>
+ <div class="cards">
+  <div class="stat"><div class="k">Net worth</div><div class="v ccy" data-m="182.4">€182.40m</div><div class="d">All entities, net of debt</div></div>
+  <div class="stat"><div class="k">Liquid</div><div class="v ccy" data-m="46.2">€46.20m</div><div class="d">Cash, bonds, listed equity</div></div>
+  <div class="stat"><div class="k">Private markets</div><div class="v ccy" data-m="58.7">€58.70m</div><div class="d">Funds + directs · 12 positions</div></div>
+  <div class="stat"><div class="k">Real assets</div><div class="v ccy" data-m="63.1">€63.10m</div><div class="d">Real estate, operating co.</div></div>
+  <div class="stat"><div class="k">YTD change</div><div class="v">+4.8%</div><div class="d">Net of fees · all assets</div></div>
+ </div>
+ <div class="row">
+  <div class="card hoverable"><h3>Allocation</h3>
+   <div class="bar"><span style="width:25%;background:#0C2340;"></span><span style="width:32%;background:#C5A059;"></span><span style="width:35%;background:#7C8DA6;"></span><span style="width:8%;background:#D8D2C6;"></span></div>
+   <div class="leg"><i style="background:#0C2340;"></i>Liquid 25%<i style="background:#C5A059;"></i>Private 32%<i style="background:#7C8DA6;"></i>Real assets 35%<i style="background:#D8D2C6;"></i>Other 8%</div>
+   <div class="warnrow">Liquidity watch: €3.1m of private-fund capital calls expected within 90 days against €8.4m near-cash. Comfortable — no action needed.</div>
+  </div>
+  <div class="card hoverable"><h3>Needs your attention</h3><div class="act">
+   <div><b>Capital call — Healthcare PE Fund I</b><div class="t">€400,000 due 14 Oct 2027 · verified notice in vault</div></div>
+   <div><b>Trust deed review</b><div class="t">Sundar Trust 10-year review due Nov 2027 · counsel briefed</div></div>
+   <div><b>KYC refresh</b><div class="t">Custodian B requests updated documents by 30 Oct</div></div>
+   <div><b>Family council</b><div class="t">Next session 12 Nov 2027 · agenda drafting open</div></div>
+  </div></div>
+ </div>
+</section>
+
+<section class="pg" id="wealth">
+ <div class="hero"><h1>Wealth.</h1><div class="sub">Every position, one view — data pulled read-only from custodians and administrators</div></div>
+ <div class="card"><h3>Holdings</h3>
+  <div class="tscroll"><table>
+  <tr><th>Holding</th><th>Class</th><th>Custody / admin</th><th class="num">Value</th><th class="num">YTD</th><th>Note</th></tr>
+  <tr><td><b>Global equity portfolio</b></td><td>Listed equity</td><td>Custodian A</td><td class="num ccy" data-m="28.4">€28.40m</td><td class="num">+7.2%</td><td>Passive core + 12 active lines</td></tr>
+  <tr><td><b>Bond ladder 2027–33</b></td><td>Fixed income</td><td>Custodian A</td><td class="num ccy" data-m="12.6">€12.60m</td><td class="num">+2.1%</td><td>IG EUR/USD, held to maturity</td></tr>
+  <tr><td><b>Cash &amp; deposits</b></td><td>Cash</td><td>3 banks</td><td class="num ccy" data-m="5.2">€5.20m</td><td class="num">—</td><td>Operating + call buffer</td></tr>
+  <tr><td><b>Healthcare PE Fund I</b></td><td>Private fund</td><td>Lux administrator</td><td class="num ccy" data-m="0.85">€0.85m</td><td class="num">n/m</td><td>Vintage 2027 · TVPI 1.06x</td></tr>
+  <tr><td><b>7 other PE/VC funds</b></td><td>Private funds</td><td>Various admins</td><td class="num ccy" data-m="31.9">€31.90m</td><td class="num">+3.4%</td><td>Vintages 2019–26</td></tr>
+  <tr><td><b>Direct: MedServe India</b></td><td>Direct private</td><td>ShareCo</td><td class="num ccy" data-m="14.5">€14.50m</td><td class="num">+9.0%</td><td>Co-invest, board seat</td></tr>
+  <tr><td><b>Direct: Baltic Logistics</b></td><td>Direct private</td><td>ShareCo</td><td class="num ccy" data-m="11.4">€11.40m</td><td class="num">+1.2%</td><td>Minority, 2024 entry</td></tr>
+  <tr><td><b>Mumbai commercial RE</b></td><td>Real estate</td><td>PropCo IN</td><td class="num ccy" data-m="24.3">€24.30m</td><td class="num">+5.5%</td><td>Two towers, leased</td></tr>
+  <tr><td><b>Lisbon &amp; Nice residences</b></td><td>Real estate</td><td>PropCo EU</td><td class="num ccy" data-m="9.7">€9.70m</td><td class="num">+3.0%</td><td>Family use</td></tr>
+  <tr><td><b>Operating company stake</b></td><td>Operating</td><td>HoldCo</td><td class="num ccy" data-m="29.1">€29.10m</td><td class="num">+6.1%</td><td>Legacy family business, 38%</td></tr>
+  <tr><td><b>Art &amp; collectibles</b></td><td>Other</td><td>Insured vault</td><td class="num ccy" data-m="4.9">€4.90m</td><td class="num">—</td><td>Appraised 2026</td></tr>
+  </table></div>
+  <div class="note" style="margin-top:10px;">Values from custodian/administrator feeds (simulated). The desk aggregates read-only — it cannot move assets.</div>
+ </div>
+</section>
+
+<section class="pg" id="liq">
+ <div class="hero"><h1>Liquidity.</h1><div class="sub">The next 12 months of cash in and out — so nothing surprises you</div></div>
+ <div class="grid2">
+  <div class="card"><h3>Committed outflows</h3>
+   <table><tr><th>Date</th><th>Item</th><th class="num">Amount</th></tr>
+   <tr><td>14 Oct 2027</td><td>Capital call — Healthcare PE Fund I</td><td class="num ccy" data-f="400000">€400,000</td></tr>
+   <tr><td>Nov 2027</td><td>Capital call — Growth Fund IV (est.)</td><td class="num ccy" data-f="750000">€750,000</td></tr>
+   <tr><td>Q1 2028</td><td>Mumbai tower II fit-out, final</td><td class="num ccy" data-f="1100000">€1,100,000</td></tr>
+   <tr><td>Q1 2028</td><td>Philanthropy — committed grants</td><td class="num ccy" data-f="850000">€850,000</td></tr></table>
+  </div>
+  <div class="card"><h3>Expected inflows</h3>
+   <table><tr><th>Date</th><th>Item</th><th class="num">Amount</th></tr>
+   <tr><td>Dec 2027</td><td>Bond maturities</td><td class="num ccy" data-f="2000000">€2,000,000</td></tr>
+   <tr><td>Dec 2027</td><td>Operating co. dividend (est.)</td><td class="num ccy" data-f="1400000">€1,400,000</td></tr>
+   <tr><td>Q1 2028</td><td>PE distribution — Fund 2019 exit (est.)</td><td class="num ccy" data-f="1900000">€1,900,000</td></tr>
+   <tr><td>Ongoing</td><td>RE rental income, quarterly</td><td class="num ccy" data-f="450000">€450,000</td></tr></table>
+   <div class="note" style="margin-top:8px;">Net position over 12 months: comfortably positive. Estimates flagged; verified notices live in the vault.</div>
+  </div>
+ </div>
+</section>
+
+<section class="pg" id="gov">
+ <div class="hero"><h1>Governance.</h1><div class="sub">Structure, people and decisions — the part most families under-invest in</div></div>
+ <div class="grid2">
+  <div class="card hoverable"><h3>Entity structure</h3>
+   <div class="ent"><div class="ic">🏛️</div><div><b>Mehta HoldCo S.à r.l.</b> — Luxembourg<div class="note">Top holding · owns PropCo EU, fund positions</div></div></div>
+   <div class="ent"><div class="ic">🇮🇳</div><div><b>PropCo &amp; ShareCo India</b><div class="note">Mumbai RE, Indian directs · under family trust</div></div></div>
+   <div class="ent"><div class="ic">📜</div><div><b>Sundar Trust</b> — 2017<div class="note">Succession vehicle · 10-yr review Nov 2027</div></div></div>
+   <div class="ent"><div class="ic">💙</div><div><b>Mehta Foundation</b><div class="note">Philanthropy · education &amp; rural health</div></div></div>
+  </div>
+  <div class="card hoverable"><h3>Family &amp; roles</h3>
+   <div class="ent"><div class="av" style="background:#0C2340;">AM</div><div><b>Arjun Mehta</b> · Principal<div class="note">Investment committee chair</div></div></div>
+   <div class="ent"><div class="av" style="background:#3A5378;">PM</div><div><b>Priya Mehta</b> · Principal<div class="note">Foundation chair · council convenor</div></div></div>
+   <div class="ent"><div class="av" style="background:#C5A059;">RM</div><div><b>Rhea Mehta</b> · Next generation<div class="note">Observer, IC · completing stewardship programme</div></div></div>
+   <div class="ent"><div class="av" style="background:#7C8DA6;">VK</div><div><b>V. Krishnan</b> · Head of family office<div class="note">Executes; reports to council quarterly</div></div></div>
+   <div class="note" style="margin-top:10px;">Family council: 12 Nov 2027 · agenda: trust review, next-gen mandate, philanthropy budget 2028.</div>
+  </div>
+ </div>
+</section>
+
+<section class="pg" id="desk">
+ <div class="hero"><h1>Desk.</h1><div class="sub">Markets and intelligence, live — the same wire professional investors read</div></div>
+ <div class="card" style="margin-bottom:16px;">
+  <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {"symbols":[{"proName":"BSE:SENSEX","title":"SENSEX"},{"proName":"OANDA:SPX500USD","title":"S&P 500"},{"proName":"XETR:DAX","title":"DAX"},{"proName":"OANDA:UK100GBP","title":"FTSE 100"},{"proName":"FX:EURUSD","title":"EUR/USD"},{"proName":"FX_IDC:USDINR","title":"USD/INR"}],"showSymbolLogo":true,"colorTheme":"light","isTransparent":true,"displayMode":"adaptive","locale":"en"}
+  </script></div>
+ </div>
+ <div class="grid2">
+  <div class="card hoverable"><h3>Reading for principals</h3><div class="act">
+   <div><b><a href="https://news.google.com/search?q=family%20office%20investment" target="_blank" style="color:#0C2340;text-decoration:none;">Family office wire →</a></b><div class="t">Live search · always current</div></div>
+   <div><b><a href="https://news.google.com/search?q=India%20family%20office%20wealth" target="_blank" style="color:#0C2340;text-decoration:none;">India wealth &amp; FO news →</a></b><div class="t">Succession, GIFT City, regulation</div></div>
+   <div><b><a href="https://news.google.com/search?q=private%20markets%20outlook" target="_blank" style="color:#0C2340;text-decoration:none;">Private markets outlook →</a></b><div class="t">Funds, secondaries, credit</div></div>
+  </div></div>
+  <div class="card hoverable"><h3>Concierge</h3>
+   <p class="note" style="margin:0 0 10px;">A request to your family office team — travel, documents, introductions, anything. Answered same day.</p>
+   <textarea class="msg" id="q" placeholder="How can we help?"></textarea>
+   <div style="margin-top:10px;display:flex;align-items:center;gap:12px;"><button class="btn" onclick="ask()">Send</button><span class="note" id="qmsg"></span></div>
+  </div>
+ </div>
+</section>
+
+<section class="pg" id="docs">
+ <div class="hero"><h1>Vault.</h1><div class="sub">Documents, watermarked · access logged · release rules per family member</div></div>
+ <div class="card">
+  <div class="doc"><div><b>Consolidated statement — Q3 2027</b><div class="m">All custodians · PDF</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Capital call notice — Healthcare PE Fund I</b><div class="m">Verified original · due 14 Oct 2027</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Sundar Trust deed &amp; amendments</b><div class="m">Restricted: principals + counsel</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Family constitution v3</b><div class="m">Adopted 2025 · review 2028</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Insurance schedule 2027</b><div class="m">Property, art, D&amp;O, travel</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Tax pack FY 2027</b><div class="m">Expected Mar 2028</div></div><span class="pill p-mut">Pending</span></div>
+ </div>
+ <div class="card" style="margin-top:16px;"><h3>Security</h3><div class="act">
+  <div><b>We never send new bank details by message.</b><div class="t">Payment instructions change only by verified call-back. This one rule prevents the most common family-office fraud.</div></div>
+  <div><b>Passkey sign-in · per-member permissions</b><div class="t">Next-gen sees education modules, not trust deeds — until the council says so.</div></div>
+  <div><b>Read-only aggregation</b><div class="t">The desk cannot move money at any custodian.</div></div>
+ </div></div>
+</section>
+
+<section class="pg" id="clients">
+ <div class="hero"><h1>Client families.</h1><div class="sub">Advisor cockpit · 6 families · consolidated oversight (illustrative)</div></div>
+ <div class="cards">
+  <div class="stat"><div class="k">Families</div><div class="v">6</div><div class="d">2 onboarding</div></div>
+  <div class="stat"><div class="k">Assets overseen</div><div class="v ccy" data-m="742.0">€742.00m</div><div class="d">Advisory + reporting</div></div>
+  <div class="stat"><div class="k">Open tasks</div><div class="v">14</div><div class="d">3 overdue</div></div>
+  <div class="stat"><div class="k">Q3 reports</div><div class="v">4 / 6</div><div class="d">2 in preparation</div></div>
+ </div>
+ <div class="card"><h3>Book</h3>
+  <div class="tscroll"><table>
+  <tr><th>Family</th><th class="num">Assets</th><th>Relationship lead</th><th>Q3 report</th><th>KYC</th><th>Next milestone</th><th></th></tr>
+  <tr><td><b>Mehta</b></td><td class="num ccy" data-m="182.4">€182.40m</td><td>V. Krishnan</td><td><span class="pill p-ok">Delivered</span></td><td><span class="pill p-warn">Refresh due</span></td><td>Trust review · Nov</td><td><button class="dl" onclick="setMode('SFO')">Open portal →</button></td></tr>
+  <tr><td><b>Kapoor</b></td><td class="num ccy" data-m="128.0">€128.00m</td><td>S. Iyer</td><td><span class="pill p-ok">Delivered</span></td><td><span class="pill p-ok">Current</span></td><td>RE refinancing · Dec</td><td></td></tr>
+  <tr><td><b>Fernandes</b></td><td class="num ccy" data-m="96.5">€96.50m</td><td>S. Iyer</td><td><span class="pill p-warn">In prep</span></td><td><span class="pill p-ok">Current</span></td><td>Exit proceeds plan · Q1</td><td></td></tr>
+  <tr><td><b>Al-Rashid</b></td><td class="num ccy" data-m="154.2">€154.20m</td><td>V. Krishnan</td><td><span class="pill p-ok">Delivered</span></td><td><span class="pill p-ok">Current</span></td><td>DIFC entity setup · Q1</td><td></td></tr>
+  <tr><td><b>Novak</b></td><td class="num ccy" data-m="88.9">€88.90m</td><td>L. Costa</td><td><span class="pill p-warn">In prep</span></td><td><span class="pill p-ok">Current</span></td><td>Next-gen onboarding</td><td></td></tr>
+  <tr><td><b>Chen</b></td><td class="num ccy" data-m="92.0">€92.00m</td><td>L. Costa</td><td><span class="pill p-ok">Delivered</span></td><td><span class="pill p-warn">Refresh due</span></td><td>Philanthropy structure</td><td></td></tr>
+  </table></div>
+  <div class="note" style="margin-top:10px;">"Open portal" shows exactly what that family sees — one system, two lenses, permissioned.</div>
+ </div>
+ <div class="card" style="margin-top:16px;"><h3>Compliance &amp; operations</h3><div class="act">
+  <div><b>2 KYC refreshes due within 30 days</b><div class="t">Mehta (Custodian B), Chen (bank rotation) — packs pre-filled, awaiting signatures.</div></div>
+  <div><b>Q3 reporting</b><div class="t">Fernandes and Novak consolidations in preparation — custodian feeds reconciled, commentary drafting.</div></div>
+  <div><b>Fee schedule review</b><div class="t">Annual review due January — benchmarking pack ready.</div></div>
+ </div></div>
+</section>
+
+</main></div>
+<div class="wm"><b>Demonstration.</b> Illustrative data — fictional families, entities and figures. Private &amp; confidential. Family Office Desk · a service of Icons &amp; Company.</div>
+
+<script>
+function enter(){document.getElementById('gate').classList.add('out');var a=document.getElementById('app');a.classList.add('in');setTimeout(function(){document.getElementById('gate').style.display='none';},650);}
+var MODE='SFO';
+var NAVS={SFO:[['ov','Overview'],['wealth','Wealth'],['liq','Liquidity'],['gov','Governance'],['desk','Desk'],['docs','Vault']],
+          MFO:[['clients','Clients'],['desk','Desk'],['docs','Vault']]};
+function buildNav(active){
+ var n=NAVS[MODE],h='';
+ for(var i=0;i<n.length;i++)h+='<a data-p="'+n[i][0]+'"'+(n[i][0]===active?' class="on"':'')+'>'+n[i][1]+'</a>';
+ document.getElementById('nav').innerHTML=h;
+}
+function go(p){
+ buildNav(p);
+ var pgs=document.querySelectorAll('.pg');for(var j=0;j<pgs.length;j++)pgs[j].classList.remove('on');
+ var el=document.getElementById(p);if(el){void el.offsetWidth;el.classList.add('on');}
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function setMode(m){
+ MODE=m;
+ document.getElementById('mSFO').classList.toggle('on',m==='SFO');
+ document.getElementById('mMFO').classList.toggle('on',m==='MFO');
+ document.getElementById('avatar').textContent=m==='SFO'?'MF':'VK';
+ go(m==='SFO'?'ov':'clients');
+}
+document.getElementById('nav').addEventListener('click',function(e){var a=e.target.closest('a[data-p]');if(a)go(a.getAttribute('data-p'));});
+buildNav('ov');
+
+var FX='EUR',RATE=1.08;
+function fmtM(v){return FX==='EUR'?'€'+v.toFixed(2)+'m':'$'+(v*RATE).toFixed(2)+'m';}
+function fmtF(v){var n=FX==='EUR'?v:Math.round(v*RATE);return (FX==='EUR'?'€':'$')+n.toLocaleString('en-US');}
+function toggleFx(){
+ FX=FX==='EUR'?'USD':'EUR';
+ document.getElementById('fx').textContent=FX==='EUR'?'€ EUR':'$ USD';
+ var els=document.querySelectorAll('.ccy');
+ for(var i=0;i<els.length;i++){var e=els[i];
+  if(e.hasAttribute('data-m'))e.textContent=fmtM(parseFloat(e.getAttribute('data-m')));
+  else if(e.hasAttribute('data-f'))e.textContent=fmtF(parseFloat(e.getAttribute('data-f')));}
+}
+function ask(){
+ var q=document.getElementById('q');
+ if(!q.value.trim()){document.getElementById('qmsg').textContent='Type a request first.';return;}
+ q.value='';document.getElementById('qmsg').textContent='Sent to your family office team. (Demo: no message sent.)';
+}
+var dls=document.querySelectorAll('.dl');
+for(var i=0;i<dls.length;i++){(function(b){if(b.textContent.indexOf('Open portal')>-1)return;b.addEventListener('click',function(){var t=b.textContent;b.textContent='Demo only';setTimeout(function(){b.textContent=t;},1400);});})(dls[i]);}
+</script>
+</body>
+</html>
