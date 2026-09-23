@@ -750,7 +750,13 @@ async function refreshNews(){
  if(failed.length){const retry=failed.splice(0);await new Promise(r=>setTimeout(r,4000));await pool(retry);}
  if(okSrc.length||okGeo.length)saveCache(okSrc,okGeo);
 }
-if(location.protocol!=='file:'){loadCache();refreshNews();}
+function hdrPending(){
+ const A=document.getElementById('upd-dash');if(A)A.textContent='Refreshing headlines - live ... · markets stream live';
+ const B=document.getElementById('upd-news');if(B)B.textContent='Refreshing now via Google News ... · curated fallback of '+CURATED_AT;}
+if(location.protocol!=='file:'){if(!loadCache())hdrPending();refreshNews().then(()=>{
+ const A=document.getElementById('upd-dash');
+ if(A&&A.textContent.indexOf('Refreshing')===0){A.textContent='News curated '+CURATED_AT+' · markets stream live · live refresh unavailable right now';
+  const B=document.getElementById('upd-news');if(B)B.textContent='Curated '+CURATED_AT+' - live refresh unavailable right now';}});}
 
 </script>
 </body>
