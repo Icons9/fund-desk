@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fund I — LP Portal</title>
+<style>
+:root{--navy:#0C2340;--navy2:#13294B;--gold:#C5A059;--goldlt:#E6CD8E;--paper:#FCFBFA;--ink:#1B2536;--mut:#5E6E86;--line:#E5E1D5;--ok:#1D7A4F;--warn:#B07816;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:#F4F2ED;color:var(--ink);}
+h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif;}
+#gate{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:50;}
+.gcard{background:#fff;border-radius:14px;padding:38px 42px;width:380px;text-align:center;}
+.gcard .mark{font-family:Georgia,serif;font-size:26px;color:var(--navy);}
+.gcard .mark span{color:var(--gold);}
+.gcard p{color:var(--mut);font-size:13px;margin:8px 0 22px;}
+.gin{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;margin-bottom:12px;background:#FAF9F6;}
+.gbtn{width:100%;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:14.5px;font-weight:600;cursor:pointer;}
+.gbtn:hover{background:var(--navy2);}
+.gnote{font-size:11px;color:#9AA1AC;margin-top:16px;}
+.demo-tag{display:inline-block;background:#FBF3E1;color:#8a6a1f;border:1px solid var(--gold);border-radius:5px;font-size:10.5px;font-weight:700;letter-spacing:1px;padding:2px 8px;text-transform:uppercase;}
+#app{display:none;}
+.shell{display:flex;min-height:100vh;}
+aside{width:224px;background:var(--navy);color:#fff;flex-shrink:0;padding:22px 0;position:sticky;top:0;height:100vh;}
+.logo{padding:0 20px 18px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px;}
+.logo .l1{font-family:Georgia,serif;font-size:19px;}
+.logo .l1 span{color:var(--gold);}
+.logo .l2{font-size:10px;letter-spacing:2px;color:#9FB0C8;text-transform:uppercase;margin-top:2px;}
+nav ul{list-style:none;margin:0;padding:0;}
+nav li{padding:10px 20px;font-size:13.5px;color:#C9D4E4;cursor:pointer;border-left:3px solid transparent;}
+nav li:hover{background:rgba(255,255,255,.06);color:#fff;}
+nav li.on{background:rgba(255,255,255,.08);color:#fff;border-left-color:var(--gold);}
+.nsec{font-size:10px;letter-spacing:1.5px;color:#7C8DA6;text-transform:uppercase;padding:14px 20px 4px;}
+main{flex:1;padding:26px 34px 90px;max-width:1120px;}
+.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.top h1{margin:0;font-size:24px;color:var(--navy);}
+.top .sub{color:var(--mut);font-size:13px;margin-top:3px;}
+.who{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 14px;}
+.av{width:34px;height:34px;border-radius:50%;background:var(--navy);color:var(--goldlt);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+.who .nm{font-size:13px;font-weight:600;}
+.who .rl{font-size:11px;color:var(--mut);}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+.stat .k{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;}
+.stat .v{font-family:Georgia,serif;font-size:23px;color:var(--navy);margin-top:4px;}
+.stat .d{font-size:11px;color:var(--mut);margin-top:2px;}
+.panelrow{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:16px;}
+@media(max-width:900px){.panelrow{grid-template-columns:1fr;}}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+.card h3{margin:0 0 10px;font-size:15px;color:var(--navy);border-bottom:2px solid var(--gold);padding-bottom:6px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th{text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:6px 8px;border-bottom:1px solid var(--line);}
+td{padding:8px;border-bottom:1px solid #F0EDE6;vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.pill{display:inline-block;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:600;}
+.p-ok{background:#E7F3EC;color:var(--ok);}
+.p-warn{background:#FBF3E1;color:var(--warn);}
+.p-mut{background:#EFEDE7;color:var(--mut);}
+.act{font-size:12.5px;}
+.act .t{color:var(--mut);font-size:11px;}
+.act div{padding:7px 0;border-bottom:1px solid #F0EDE6;}
+.act div:last-child{border-bottom:none;}
+.bar{height:10px;border-radius:5px;background:#EFEDE7;overflow:hidden;display:flex;}
+.doc{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #F0EDE6;font-size:13px;}
+.doc:last-child{border-bottom:none;}
+.doc .m{color:var(--mut);font-size:11px;}
+.dl{background:none;border:1px solid var(--line);border-radius:6px;padding:4px 12px;font-size:12px;color:var(--navy);cursor:pointer;}
+.dl:hover{border-color:var(--gold);}
+.btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy2);}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--navy);}
+.note{font-size:11.5px;color:var(--mut);font-style:italic;}
+.banner{background:#FDF6F4;border:1px solid #E8C9BE;border-left:4px solid #B4552D;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#7A3A1E;margin-bottom:16px;}
+.pg{display:none;}
+.pg.on{display:block;}
+.wm{position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:#C9D4E4;font-size:11px;text-align:center;padding:7px 10px;z-index:40;}
+.wm b{color:var(--goldlt);}
+.co{border:1px solid var(--gold);border-radius:12px;padding:16px 18px;background:#FFFDF8;}
+.svgwrap{width:100%;}
+.leg{font-size:11px;color:var(--mut);margin-top:6px;}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px;vertical-align:-1px;}
+.updates .u{padding:8px 0;border-bottom:1px solid #F0EDE6;font-size:12.5px;}
+.updates .u:last-child{border-bottom:none;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:900px){.grid2{grid-template-columns:1fr;}}
+.intg{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0EDE6;font-size:13px;}
+.intg:last-child{border-bottom:none;}
+</style>
+</head>
+<body>
+
+<div id="gate">
+ <div class="gcard">
+  <div class="mark">Fund <span>I</span> — LP Portal</div>
+  <p>Healthcare private equity · India &amp; EU<br>Limited Partner access</p>
+  <input class="gin" value="a.mehta@meridianfo.example" readonly>
+  <button class="gbtn" onclick="enter()">Continue with passkey</button>
+  <div class="gnote">Protected by phishing-resistant MFA.<br>We will never ask for wire details by email.</div>
+  <div style="margin-top:14px;"><span class="demo-tag">Demonstration environment</span></div>
+ </div>
+</div>
+
+<div id="app"><div class="shell">
+<aside>
+ <div class="logo"><div class="l1">Fund <span>I</span></div><div class="l2">LP Portal · Meridian FO</div></div>
+ <nav><ul id="nav">
+  <li data-p="ov" class="on">Overview</li>
+  <li data-p="inv">My investment</li>
+  <li data-p="pf">Portfolio</li>
+  <div class="nsec">Intelligence</div>
+  <li data-p="desk">Desk &amp; markets</li>
+  <div class="nsec">Services</div>
+  <li data-p="docs">Documents</li>
+  <li data-p="coin">Co-investment</li>
+  <li data-p="sec">Security &amp; contact</li>
+ </ul></nav>
+</aside>
+<main>
+
+<section class="pg on" id="ov">
+ <div class="top"><div><h1>Welcome back, Mr Mehta</h1><div class="sub">Meridian Family Office · Limited Partner since first close · data as of 30 Sep 2027 (illustrative)</div></div>
+ <div class="who"><div class="av">AM</div><div><div class="nm">A. Mehta</div><div class="rl">Meridian Family Office</div></div></div></div>
+ <div class="cards">
+  <div class="stat"><div class="k">Commitment</div><div class="v">€2.00m</div><div class="d">Fund I · vintage 2027</div></div>
+  <div class="stat"><div class="k">Called</div><div class="v">€0.80m</div><div class="d">40% · 2 capital calls</div></div>
+  <div class="stat"><div class="k">Distributed</div><div class="v">€0.00m</div><div class="d">DPI 0.00x — early vintage</div></div>
+  <div class="stat"><div class="k">Your NAV</div><div class="v">€0.85m</div><div class="d">TVPI 1.06x</div></div>
+  <div class="stat"><div class="k">Unfunded</div><div class="v">€1.20m</div><div class="d">No call scheduled</div></div>
+ </div>
+ <div class="panelrow">
+  <div class="card"><h3>Your capital at work</h3>
+   <div class="svgwrap"><svg viewBox="0 0 520 150" width="100%" role="img" aria-label="Capital calls and NAV progression">
+    <line x1="40" y1="120" x2="500" y2="120" stroke="#E5E1D5"/>
+    <rect x="70" y="70" width="46" height="50" fill="#0C2340" rx="3"/><text x="93" y="138" font-size="10" fill="#5E6E86" text-anchor="middle">Call 1 · Feb 27</text><text x="93" y="63" font-size="10" fill="#0C2340" text-anchor="middle">€500k</text>
+    <rect x="180" y="90" width="46" height="30" fill="#0C2340" rx="3"/><text x="203" y="138" font-size="10" fill="#5E6E86" text-anchor="middle">Call 2 · Aug 27</text><text x="203" y="83" font-size="10" fill="#0C2340" text-anchor="middle">€300k</text>
+    <rect x="330" y="35" width="46" height="85" fill="#C5A059" rx="3"/><text x="353" y="138" font-size="10" fill="#5E6E86" text-anchor="middle">NAV · Sep 27</text><text x="353" y="28" font-size="10" fill="#8a6a1f" text-anchor="middle">€845k</text>
+    <rect x="430" y="120" width="46" height="0" fill="#EFEDE7"/><text x="453" y="138" font-size="10" fill="#5E6E86" text-anchor="middle">Distributions</text><text x="453" y="112" font-size="10" fill="#9AA1AC" text-anchor="middle">—</text>
+   </svg></div>
+   <div class="note">All figures from the fund administrator's records (simulated in this demonstration). The portal displays — it never computes.</div>
+  </div>
+  <div class="card"><h3>Recent activity</h3><div class="act">
+   <div><b>Q3 2027 report published</b><div class="t">12 Oct 2027 · quarterly report and your capital-account statement</div></div>
+   <div><b>Capital call No. 2 settled</b><div class="t">28 Aug 2027 · €300,000 received — thank you</div></div>
+   <div><b>New portfolio company</b><div class="t">15 Sep 2027 · SteriLogix (sterilisation services, India)</div></div>
+   <div><b>Co-investment opened</b><div class="t">30 Sep 2027 · Project Asclepius — see Co-investment tab</div></div>
+  </div></div>
+ </div>
+ <div class="card"><h3>Fund I at a glance</h3>
+  <div class="cards" style="margin-bottom:6px;">
+   <div class="stat"><div class="k">Strategy</div><div class="v" style="font-size:16px;">Healthcare</div><div class="d">Value creation, moderate risk · India &amp; EU</div></div>
+   <div class="stat"><div class="k">Target size</div><div class="v">€100m</div><div class="d">First close €20m</div></div>
+   <div class="stat"><div class="k">Commitments</div><div class="v">€38m</div><div class="d">After second close (illustrative)</div></div>
+   <div class="stat"><div class="k">Deployed</div><div class="v">€22.8m</div><div class="d">5 platform investments</div></div>
+  </div>
+ </div>
+</section>
+
+<section class="pg" id="inv">
+ <div class="top"><div><h1>My investment</h1><div class="sub">Capital account · Meridian Family Office · illustrative data</div></div></div>
+ <div class="grid2">
+  <div class="card"><h3>Capital account statement</h3>
+   <table><tr><th>Item</th><th class="num">Amount</th></tr>
+   <tr><td>Commitment</td><td class="num">€2,000,000</td></tr>
+   <tr><td>Contributed (2 calls)</td><td class="num">€800,000</td></tr>
+   <tr><td>Your share of invested capital</td><td class="num">€702,400</td></tr>
+   <tr><td>Your share of fees &amp; expenses</td><td class="num">€97,600</td></tr>
+   <tr><td>Distributions to date</td><td class="num">€0</td></tr>
+   <tr><td><b>Capital account at fair value</b></td><td class="num"><b>€845,000</b></td></tr>
+   <tr><td>Unfunded commitment</td><td class="num">€1,200,000</td></tr></table>
+   <div style="margin-top:10px;"><button class="dl">Download statement (PDF)</button></div>
+  </div>
+  <div class="card"><h3>Cash-flow history</h3>
+   <table><tr><th>Date</th><th>Event</th><th class="num">Amount</th></tr>
+   <tr><td>15 Feb 2027</td><td>Capital call No. 1 (25%)</td><td class="num">€500,000</td></tr>
+   <tr><td>28 Aug 2027</td><td>Capital call No. 2 (15%)</td><td class="num">€300,000</td></tr>
+   <tr><td colspan="3" class="note">Next call: none scheduled. You will receive at least 10 business days' notice.</td></tr></table>
+   <h3 style="margin-top:16px;">Key terms (your class)</h3>
+   <table>
+   <tr><td>Management fee</td><td class="num">1.5% on commitments</td></tr>
+   <tr><td>Preferred return</td><td class="num">8% (European waterfall)</td></tr>
+   <tr><td>Carried interest</td><td class="num">20% after hurdle</td></tr>
+   <tr><td>Minimum ticket</td><td class="num">€500,000</td></tr></table>
+  </div>
+ </div>
+</section>
+
+<section class="pg" id="pf">
+ <div class="top"><div><h1>Portfolio</h1><div class="sub">5 platform investments · €22.8m deployed · updates written by the investment team (illustrative)</div></div></div>
+ <div class="card" style="margin-bottom:14px;"><h3>Allocation</h3>
+  <div class="bar"><span style="width:45%;background:#0C2340;"></span><span style="width:55%;background:#C5A059;"></span></div>
+  <div class="leg"><i style="background:#0C2340;"></i>India 45% <i style="background:#C5A059;"></i>Europe 55%</div>
+ </div>
+ <div class="card"><h3>Companies &amp; quarterly notes</h3>
+  <table><tr><th>Company</th><th>Segment · Location</th><th class="num">Invested</th><th>Status</th><th>This quarter</th></tr>
+  <tr><td><b>Arka Diagnostics</b></td><td>Specialty diagnostics · Pune, IN</td><td class="num">€6.0m</td><td><span class="pill p-ok">Performing</span></td><td>Four new collection centres; revenue +18% QoQ; NABL accreditation renewed.</td></tr>
+  <tr><td><b>Helvia MedTech</b></td><td>Surgical devices CDMO · Munich, DE</td><td class="num">€5.5m</td><td><span class="pill p-ok">Performing</span></td><td>Two OEM contracts signed; capacity expansion on budget for Q1 28.</td></tr>
+  <tr><td><b>CarePath Clinics</b></td><td>Outpatient clinics roll-up · Lisbon, PT</td><td class="num">€4.8m</td><td><span class="pill p-warn">Watch</span></td><td>Integration of two acquired clinics behind plan; new COO started September.</td></tr>
+  <tr><td><b>SteriLogix</b></td><td>Pharma sterilisation services · Ahmedabad, IN</td><td class="num">€3.9m</td><td><span class="pill p-ok">Performing</span></td><td>New investment this quarter; anchor contract with two CDMO groups.</td></tr>
+  <tr><td><b>Lumen Health IT</b></td><td>Claims automation SaaS · Tallinn, EE</td><td class="num">€2.6m</td><td><span class="pill p-ok">Performing</span></td><td>ARR +11% QoQ; first Indian insurer pilot signed — cross-portfolio synergy.</td></tr></table>
+  <div class="note" style="margin-top:8px;">Valuations follow the fund's valuation policy, computed by the administrator and reviewed by the auditor.</div>
+ </div>
+</section>
+
+<section class="pg" id="desk">
+ <div class="top"><div><h1>Desk &amp; markets</h1><div class="sub">The same intelligence desk our team uses — live headlines and markets</div></div></div>
+ <div class="card" style="margin-bottom:14px;">
+  <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {"symbols":[{"proName":"BSE:SENSEX","title":"SENSEX"},{"proName":"OANDA:SPX500USD","title":"S&P 500"},{"proName":"XETR:DAX","title":"DAX"},{"proName":"OANDA:UK100GBP","title":"FTSE 100"},{"proName":"FX:EURUSD","title":"EUR/USD"},{"proName":"FX_IDC:USDINR","title":"USD/INR"}],"showSymbolLogo":true,"colorTheme":"light","isTransparent":true,"displayMode":"adaptive","locale":"en"}
+  </script></div>
+ </div>
+ <div class="grid2">
+  <div class="card"><h3>Fund Desk — full intelligence app</h3>
+   <p style="font-size:13px;">Live industry headlines (self-refreshing), sector desks for healthcare &amp; maritime, manager and family-office directories, people, M&amp;A and our seven-jurisdiction landscape analysis.</p>
+   <a href="https://fund-desk-kda7.onrender.com" target="_blank"><button class="btn">Open Fund Desk →</button></a>
+  </div>
+  <div class="card"><h3>Healthcare wire</h3><div class="act">
+   <div><b><a href="https://news.google.com/search?q=healthcare%20private%20equity" target="_blank" style="color:#1B3A6B;text-decoration:none;">Healthcare private equity — latest →</a></b><div class="t">Live search · always current</div></div>
+   <div><b><a href="https://news.google.com/search?q=India%20hospitals%20diagnostics%20investment" target="_blank" style="color:#1B3A6B;text-decoration:none;">India healthcare deals →</a></b><div class="t">Hospitals, diagnostics, pharma services</div></div>
+   <div><b><a href="https://news.google.com/search?q=European%20medtech%20funding" target="_blank" style="color:#1B3A6B;text-decoration:none;">European medtech →</a></b><div class="t">Devices, CDMO, health IT</div></div>
+  </div></div>
+ </div>
+</section>
+
+<section class="pg" id="docs">
+ <div class="top"><div><h1>Documents</h1><div class="sub">Your document vault · watermarked · access is logged</div></div></div>
+ <div class="card">
+  <div class="doc"><div><b>Quarterly report — Q3 2027</b><div class="m">Published 12 Oct 2027 · PDF · 24 pp</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Capital-account statement — Q3 2027</b><div class="m">Published 12 Oct 2027 · PDF</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Capital call notice No. 2</b><div class="m">14 Aug 2027 · settled 28 Aug 2027</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Limited Partnership Agreement (executed)</b><div class="m">Signature copy · Jan 2027</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Subscription pack &amp; side letter</b><div class="m">Executed · Jan 2027</div></div><button class="dl">Download</button></div>
+  <div class="doc"><div><b>Tax pack FY 2027</b><div class="m">Expected Mar 2028</div></div><span class="pill p-mut">Pending</span></div>
+ </div>
+ <div class="card" style="margin-top:14px;"><h3>Connected systems</h3>
+  <div class="intg"><span>Fund administrator API — NAV, capital accounts, notices</span><span class="pill p-ok">Connected (simulated)</span></div>
+  <div class="intg"><span>Report management / document store</span><span class="pill p-ok">Connected (simulated)</span></div>
+  <div class="intg"><span>E-signature — subscriptions &amp; consents</span><span class="pill p-mut">Planned</span></div>
+  <div class="intg"><span>KYC refresh &amp; investor onboarding</span><span class="pill p-mut">Planned</span></div>
+  <div class="note" style="margin-top:8px;">Every figure shown in this portal traces to the administrator's system of record. The portal never computes NAV.</div>
+ </div>
+</section>
+
+<section class="pg" id="coin">
+ <div class="top"><div><h1>Co-investment</h1><div class="sub">Reserved for Fund I Limited Partners · indicative, subject to documentation</div></div></div>
+ <div class="co">
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline;">
+   <h3 style="margin:0;border:none;padding:0;font-size:17px;color:#0C2340;" class="serif">Project Asclepius</h3>
+   <span class="pill p-ok">Open · closes 15 Nov 2027</span>
+  </div>
+  <p style="font-size:13.5px;">EU specialty-clinics roll-up alongside Fund I's CarePath platform. Co-investment of €3–5m available to Fund I LPs, no management fee, reduced carry. Full memorandum in the data room.</p>
+  <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));">
+   <div class="stat"><div class="k">Sector</div><div class="v" style="font-size:15px;">Clinics</div></div>
+   <div class="stat"><div class="k">Geography</div><div class="v" style="font-size:15px;">Iberia</div></div>
+   <div class="stat"><div class="k">LP tranche</div><div class="v" style="font-size:15px;">€3–5m</div></div>
+   <div class="stat"><div class="k">Fees</div><div class="v" style="font-size:15px;">0 / reduced</div></div>
+  </div>
+  <button class="btn" id="cbtn" onclick="interest()">Express interest</button>
+  <span class="note" id="cmsg" style="margin-left:10px;"></span>
+ </div>
+ <p class="note" style="margin-top:12px;">Co-investment access follows the Founders' Circle programme: priority by commitment size and tenure. Expressing interest is not binding.</p>
+</section>
+
+<section class="pg" id="sec">
+ <div class="top"><div><h1>Security &amp; contact</h1><div class="sub">How we protect you — and who to call</div></div></div>
+ <div class="banner"><b>We will never send you new bank details by email or through this portal.</b> Wire instructions are fixed at subscription. Any change would be confirmed by a phone call from your relationship partner on a number you already know. If in doubt — call before you pay.</div>
+ <div class="grid2">
+  <div class="card"><h3>Your relationship team</h3>
+   <div style="display:flex;gap:12px;align-items:center;padding:8px 0;"><div class="av">AC</div><div><div style="font-weight:600;font-size:14px;">Asish Chaudhury</div><div class="note">Chief Operating Officer · your relationship partner</div></div></div>
+   <div style="display:flex;gap:12px;align-items:center;padding:8px 0;"><div class="av">RM</div><div><div style="font-weight:600;font-size:14px;">Rohan Medhekar</div><div class="note">Digital &amp; Operations · portal and reporting</div></div></div>
+  </div>
+  <div class="card"><h3>How this portal protects you</h3>
+   <div class="act">
+    <div><b>Passkey sign-in (phishing-resistant MFA)</b><div class="t">Your key only works on the genuine portal address.</div></div>
+    <div><b>Watermarked documents, logged access</b><div class="t">Every download is attributable.</div></div>
+    <div><b>Administrator as system of record</b><div class="t">Independent NAV; the portal only displays.</div></div>
+    <div><b>Verified email (DMARC enforced)</b><div class="t">Mail claiming to be from us that is not, is rejected.</div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+</main></div></div>
+<div class="wm"><b>Demonstration.</b> Illustrative data throughout — fictional LP, portfolio and figures. Private &amp; confidential. Not an offer of securities. · Fund I — healthcare, India &amp; EU · target €100m</div>
+
+<script>
+function enter(){document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';}
+document.getElementById('nav').addEventListener('click',function(e){
+ var li=e.target.closest('li[data-p]');if(!li)return;
+ var lis=document.querySelectorAll('#nav li');for(var i=0;i<lis.length;i++)lis[i].classList.remove('on');
+ li.classList.add('on');
+ var pgs=document.querySelectorAll('.pg');for(var j=0;j<pgs.length;j++)pgs[j].classList.remove('on');
+ document.getElementById(li.getAttribute('data-p')).classList.add('on');
+ window.scrollTo(0,0);
+});
+function interest(){
+ try{localStorage.setItem('lp_coinvest','1');}catch(e){}
+ document.getElementById('cbtn').textContent='Interest recorded';
+ document.getElementById('cbtn').disabled=true;
+ document.getElementById('cmsg').textContent='Your relationship partner will contact you within one business day. (Demo: no message sent.)';
+}
+try{if(localStorage.getItem('lp_coinvest')==='1'){document.getElementById('cbtn').textContent='Interest recorded';document.getElementById('cbtn').disabled=true;}}catch(e){}
+document.querySelectorAll('.dl').forEach(function(b){b.addEventListener('click',function(){b.textContent='Demo only';setTimeout(function(){b.textContent='Download';},1400);});});
+</script>
+</body>
+</html>
