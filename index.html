@@ -666,7 +666,7 @@ const ANLZOPT=[
 {h:"E — London hedge (Fund II)",b:"If the UK's streamlined 2028 regime lands as drafted, a UK marketing presence could cheapen distribution. Watch-item only."}];
 document.getElementById('anlzopt').innerHTML=ANLZOPT.map(x=>'<div class="card"><h3>'+x.h+'</h3><div class="sn" style="font-size:12.5px;line-height:1.5;margin-top:6px;">'+x.b+'</div></div>').join('');
 
-/* ---- LIVE NEWS REFRESH (hosted deployments) ---- */
+/* ---- LIVE NEWS REFRESH v2 (hosted): staggered, cached, self-healing ---- */
 const LIVEQ=[
  [0,'"private equity" fund when:7d','Private equity — wire'],
  [1,'"private credit" OR "direct lending" when:7d','Private credit — wire'],
@@ -681,13 +681,16 @@ const GEOQ={gIndia:'India "private equity" OR "private credit" OR "AIF" when:7d'
  gGCC:'Dubai OR "DIFC" OR "sovereign wealth fund" investment when:7d',
  gMar:'shipping finance OR "ship leasing" OR shipowner OR "vessel sale" when:7d',
  gHDT:'biotech funding OR medtech OR "AI drug discovery" OR deeptech when:7d'};
-const PROX=[u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),
+const PROX=[
+ u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),
+ u=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u),
  u=>'https://corsproxy.io/?url='+encodeURIComponent(u)];
 const gnrss=q=>'https://news.google.com/rss/search?q='+encodeURIComponent(q)+'&hl=en-US&gl=US&ceid=US:en';
+const fmtD=dt=>dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
 async function fetchFeed(q){
  for(const p of PROX){
   try{
-   const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),12000);
+   const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),20000);
    const r=await fetch(p(gnrss(q)),{signal:ctl.signal});clearTimeout(tm);
    if(!r.ok)continue;
    const doc=new DOMParser().parseFromString(await r.text(),'text/xml');
@@ -698,7 +701,7 @@ async function fetchFeed(q){
     const sc=it.getElementsByTagName('source')[0];const s2=sc?sc.textContent.trim():'';
     if(s2&&t.slice(-(s2.length+3))===' - '+s2)t=t.slice(0,t.length-s2.length-3);
     let d='';const pd=(it.querySelector('pubDate')||{}).textContent;
-    if(pd){const dt=new Date(pd);if(!isNaN(dt))d=dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+    if(pd){const dt=new Date(pd);if(!isNaN(dt))d=fmtD(dt);}
     return {t:t,u:u,d:d,s:s2};
    }).filter(o=>o.t&&o.u);
    if(items.length>=3)return items;
@@ -706,22 +709,48 @@ async function fetchFeed(q){
  }
  return null;
 }
-(async function refreshNews(){
- if(location.protocol==='file:')return; /* local copies keep the curated set */
- let ok=0;
- const jobs=LIVEQ.map(async x=>{const it=await fetchFeed(x[1]);
-   if(it){SRC[x[0]]=Object.assign({},SRC[x[0]],{items:it,name:x[2],url:'https://news.google.com/search?q='+encodeURIComponent(x[1])});ok++;}})
-  .concat(Object.keys(GEOQ).map(async k=>{const it=await fetchFeed(GEOQ[k]);
-   if(it)GEO[k]=Object.assign({},GEO[k],{items:it.slice(0,5)});}));
- await Promise.all(jobs);
- if(!ok)return;
- document.getElementById('feeds').innerHTML=SRC.map(newsCard).join('');
- for(const k in GEO){document.getElementById(k).innerHTML=newsCard({name:GEO[k].name,tag:GEO[k].tag,url:'#',items:GEO[k].items}).replace(/<div class="item" style="border:none;"><a href="#"[^<]*<\/a><\/div>/,'');}
- document.getElementById('digest').innerHTML=[SRC[1],SRC[0],SRC[5]].map(s=>newsCard({name:s.name,tag:s.tag,url:s.url,items:s.items.slice(0,3)})).join('');
- const now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
- const A=document.getElementById('upd-dash');if(A)A.textContent='Headlines refreshed live '+now+' · markets stream live';
- const B=document.getElementById('upd-news');if(B)B.textContent='Refreshed live '+now+' via Google News · curated fallback of '+CURATED_AT;
-})();
+function renderFeeds(){document.getElementById('feeds').innerHTML=SRC.map(newsCard).join('');
+ document.getElementById('digest').innerHTML=[SRC[1],SRC[0],SRC[5]].map(s=>newsCard({name:s.name,tag:s.tag,url:s.url,items:s.items.slice(0,3)})).join('');}
+function renderGeo(k){document.getElementById(k).innerHTML=newsCard({name:GEO[k].name,tag:GEO[k].tag,url:'#',items:GEO[k].items}).replace(/<div class="item" style="border:none;"><a href="#"[^<]*<\/a><\/div>/,'');}
+function setHdr(when){
+ const A=document.getElementById('upd-dash');if(A)A.textContent='Headlines refreshed live '+when+' · markets stream live';
+ const B=document.getElementById('upd-news');if(B)B.textContent='Refreshed live '+when+' via Google News · curated fallback of '+CURATED_AT;}
+function applySrc(i,items,name){SRC[i]=Object.assign({},SRC[i],{items:items,name:name,url:'https://news.google.com/search?q='+encodeURIComponent(LIVEQ.find(x=>x[0]===i)[1])});}
+const CK='fd_cache_v2';
+function loadCache(){
+ try{const c=JSON.parse(localStorage.getItem(CK)||'null');
+  if(!c||Date.now()-c.ts>1000*60*60*72)return false;
+  (c.src||[]).forEach(e=>applySrc(e.i,e.items,e.name));
+  Object.keys(c.geo||{}).forEach(k=>{if(GEO[k]){GEO[k]=Object.assign({},GEO[k],{items:c.geo[k]});renderGeo(k);}});
+  if((c.src||[]).length){renderFeeds();setHdr(fmtD(new Date(c.ts)));}
+  return true;
+ }catch(e){return false;}
+}
+function saveCache(okSrc,okGeo){
+ try{localStorage.setItem(CK,JSON.stringify({ts:Date.now(),
+  src:okSrc.map(i=>({i:i,items:SRC[i].items,name:SRC[i].name})),
+  geo:okGeo.reduce((a,k)=>{a[k]=GEO[k].items;return a;},{})}));}catch(e){}
+}
+async function refreshNews(){
+ const jobs=[].concat(
+  LIVEQ.map(x=>({run:async()=>{const it=await fetchFeed(x[1]);if(it){applySrc(x[0],it,x[2]);renderFeeds();return ['s',x[0]];}return null;}})),
+  Object.keys(GEOQ).map(k=>({run:async()=>{const it=await fetchFeed(GEOQ[k]);if(it){GEO[k]=Object.assign({},GEO[k],{items:it.slice(0,5)});renderGeo(k);return ['g',k];}return null;}})));
+ const okSrc=[],okGeo=[],failed=[];
+ async function pool(list){
+  let idx=0;
+  async function worker(){
+   while(idx<list.length){const j=list[idx++];
+    const r=await j.run();
+    if(r){if(r[0]==='s')okSrc.push(r[1]);else okGeo.push(r[1]);setHdr(fmtD(new Date()));}
+    else failed.push(j);
+   }}
+  await Promise.all([worker(),worker(),worker()]);
+ }
+ await pool(jobs);
+ if(failed.length){const retry=failed.splice(0);await new Promise(r=>setTimeout(r,4000));await pool(retry);}
+ if(okSrc.length||okGeo.length)saveCache(okSrc,okGeo);
+}
+if(location.protocol!=='file:'){loadCache();refreshNews();}
 
 </script>
 </body>
