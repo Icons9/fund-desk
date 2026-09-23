@@ -9,13 +9,13 @@
 *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
 html{scroll-behavior:smooth;}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);}
-h1{font-size:34px;font-weight:700;letter-spacing:-.022em;margin:0;}
+h1{font-size:clamp(26px,6.5vw,34px);font-weight:700;letter-spacing:-.022em;margin:0;}
 h2{font-size:22px;font-weight:600;letter-spacing:-.017em;margin:0 0 14px;}
 h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin:0 0 10px;}
 .sub{color:var(--mut);font-size:14.5px;margin-top:6px;line-height:1.5;}
 #gate{position:fixed;inset:0;background:linear-gradient(160deg,#0C2340 0%,#13294B 55%,#1E3A63 100%);display:flex;align-items:center;justify-content:center;z-index:60;transition:opacity .6s var(--ease);}
 #gate.out{opacity:0;pointer-events:none;}
-.gcard{background:rgba(255,255,255,.92);backdrop-filter:blur(24px) saturate(160%);border-radius:26px;padding:46px 48px;width:400px;text-align:center;box-shadow:var(--sh2);}
+.gcard{background:rgba(255,255,255,.92);backdrop-filter:blur(24px) saturate(160%);border-radius:26px;padding:clamp(28px,6vw,46px) clamp(24px,6vw,48px);width:400px;max-width:90vw;text-align:center;box-shadow:var(--sh2);}
 .gmark{font-size:27px;font-weight:700;letter-spacing:-.02em;color:var(--navy);}
 .gmark span{color:var(--gold);}
 .gcard p{color:var(--mut);font-size:14px;margin:10px 0 26px;line-height:1.5;}
@@ -100,6 +100,24 @@ tr:last-child td{border-bottom:none;}
 #notif.on{display:block;animation:rise .3s var(--ease);}
 textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px 14px;font-size:14px;font-family:inherit;min-height:84px;resize:vertical;background:#FAFAFC;color:var(--ink);}
 .kbd{background:rgba(0,0,0,.06);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:600;color:var(--mut);}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -6px;padding:0 6px;}
+.tscroll table{min-width:640px;}
+@media(max-width:640px){
+ .tb{flex-wrap:wrap;height:auto;padding:10px 14px;gap:8px;row-gap:8px;}
+ nav{order:3;flex-basis:100%;margin:0 -14px;padding:0 14px;}
+ .tbr{margin-left:auto;}
+ main{padding:24px 14px 120px;}
+ .cards{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;}
+ .stat{padding:14px 16px;}
+ .stat .v{font-size:22px;}
+ .card{padding:18px 16px;border-radius:16px;}
+ #notif{left:12px;right:12px;width:auto;top:104px;}
+ .hero{margin-bottom:20px;}
+ .doc{flex-wrap:wrap;}
+ .wm{font-size:10px;padding:6px 8px;}
+ .co{padding:18px 16px;}
+ .kbd{display:none;}
+}
 @media print{.topbar,.wm,#gate{display:none!important;}.pg{display:block!important;}body{background:#fff;}}
 </style>
 </head>
@@ -227,12 +245,12 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
   <div class="leg"><i style="background:#0C2340;"></i>India 45%<i style="background:#C5A059;"></i>Europe 55%</div>
  </div>
  <div class="card"><h3>Companies</h3>
-  <table><tr><th>Company</th><th>Segment · Location</th><th class="num">Invested</th><th>Status</th><th>This quarter</th></tr>
+  <div class="tscroll"><table><tr><th>Company</th><th>Segment · Location</th><th class="num">Invested</th><th>Status</th><th>This quarter</th></tr>
   <tr><td><b>Arka Diagnostics</b><br><span class="esg">ESG: NABL audit ✓</span></td><td>Specialty diagnostics · Pune, IN</td><td class="num ccy" data-m="6.0">€6.0m</td><td><span class="pill p-ok">Performing</span></td><td>Four new collection centres; revenue +18% QoQ.</td></tr>
   <tr><td><b>Helvia MedTech</b><br><span class="esg">ESG: ISO 14001</span></td><td>Surgical devices CDMO · Munich, DE</td><td class="num ccy" data-m="5.5">€5.5m</td><td><span class="pill p-ok">Performing</span></td><td>Two OEM contracts signed; expansion on budget.</td></tr>
   <tr><td><b>CarePath Clinics</b><br><span class="esg">ESG: patient-safety review</span></td><td>Outpatient clinics · Lisbon, PT</td><td class="num ccy" data-m="4.8">€4.8m</td><td><span class="pill p-warn">Watch</span></td><td>Clinic integration behind plan; new COO in place.</td></tr>
   <tr><td><b>SteriLogix</b><br><span class="esg">ESG: emissions baseline set</span></td><td>Pharma sterilisation · Ahmedabad, IN</td><td class="num ccy" data-m="3.9">€3.9m</td><td><span class="pill p-ok">Performing</span></td><td>New this quarter; anchor contracts with two CDMOs.</td></tr>
-  <tr><td><b>Lumen Health IT</b><br><span class="esg">ESG: data-ethics policy ✓</span></td><td>Claims automation · Tallinn, EE</td><td class="num ccy" data-m="2.6">€2.6m</td><td><span class="pill p-ok">Performing</span></td><td>ARR +11% QoQ; first Indian insurer pilot.</td></tr></table>
+  <tr><td><b>Lumen Health IT</b><br><span class="esg">ESG: data-ethics policy ✓</span></td><td>Claims automation · Tallinn, EE</td><td class="num ccy" data-m="2.6">€2.6m</td><td><span class="pill p-ok">Performing</span></td><td>ARR +11% QoQ; first Indian insurer pilot.</td></tr></table></div>
   <div class="note" style="margin-top:10px;">Valuations follow the fund's valuation policy — computed by the administrator, reviewed by the auditor.</div>
  </div>
 </section>
