@@ -56,7 +56,8 @@ main{max-width:1080px;margin:0 auto;padding:36px 22px 110px;}
 .stat .d{font-size:12px;color:var(--mut);margin-top:4px;}
 .row{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:18px;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:860px){.row,.grid2{grid-template-columns:1fr;}}
+.row.wide{grid-template-columns:1.55fr 1fr;}
+@media(max-width:860px){.row,.row.wide,.grid2{grid-template-columns:1fr;}}
 .card{background:var(--card);border-radius:var(--r);padding:22px 24px;box-shadow:var(--sh);transition:transform .3s var(--ease),box-shadow .3s var(--ease);}
 .card.hoverable:hover{transform:translateY(-3px);box-shadow:var(--sh2);}
 table{width:100%;border-collapse:collapse;font-size:13.5px;}
@@ -176,7 +177,7 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
  <div class="hero"><h1 id="ovh">Good day, Mehta family.</h1>
  <div class="sub">One view of everything you own — 4 custodians · 2 administrators · 11 entities · as of 30 Sep 2027 <span style="color:#B07816;">(illustrative)</span></div></div>
 
- <div class="row" style="grid-template-columns:1.55fr 1fr;">
+ <div class="row wide">
   <div class="card hoverable"><h3>Net worth</h3>
    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;">
     <span class="bignum ccy" data-m="182.4">€182.40m</span>
