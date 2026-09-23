@@ -134,6 +134,8 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
 .opp h3{margin:0;}
 .opp .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mut);}
 .opp .fit{font-size:12.5px;background:#F5F8F5;color:#1D7A4F;border-radius:8px;padding:6px 10px;}
+.donutrow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.donutrow>div{flex:1;min-width:200px;}
 .oppgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;}
 .mode{background:rgba(12,35,64,.08);border-radius:999px;display:flex;padding:3px;}
 .mode button{border:none;background:transparent;border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:600;color:#3A3A3E;cursor:pointer;transition:background .25s,color .25s;}
@@ -194,7 +196,7 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
    <div class="note">Consolidated across all entities and custodians, net of debt. Trend at quarterly marks.</div>
   </div>
   <div class="card hoverable"><h3>Allocation</h3>
-   <div style="display:flex;align-items:center;gap:18px;">
+   <div class="donutrow">
     <svg viewBox="0 0 140 140" width="132" height="132" role="img" aria-label="Allocation donut">
      <g transform="rotate(-90 70 70)">
       <circle cx="70" cy="70" r="54" fill="none" stroke="#0C2340" stroke-width="16" stroke-dasharray="84.8 254.5" stroke-dashoffset="0"/>
