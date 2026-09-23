@@ -120,6 +120,21 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
 }
 @media print{.topbar,.wm,#gate{display:none!important;}.pg{display:block!important;}body{background:#fff;}}
 
+.bignum{font-family:Georgia,'Times New Roman',serif;font-size:clamp(34px,6vw,46px);font-weight:400;letter-spacing:-.01em;color:var(--navy);}
+.hairline{height:1px;background:linear-gradient(90deg,rgba(197,160,89,.0),rgba(197,160,89,.55),rgba(197,160,89,.0));border:none;margin:26px 0;}
+.clsrow{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid #F3F3F5;font-size:13.5px;}
+.clsrow:last-child{border-bottom:none;}
+.clsrow .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.clsrow .nm{flex:1;font-weight:600;}
+.clsrow .pc{color:var(--mut);font-size:12px;width:38px;text-align:right;}
+.clsrow .vl{font-variant-numeric:tabular-nums;font-weight:600;color:var(--navy);white-space:nowrap;}
+.opp{background:var(--card);border-radius:var(--r);padding:20px 22px;box-shadow:var(--sh);transition:transform .3s var(--ease),box-shadow .3s var(--ease);display:flex;flex-direction:column;gap:8px;}
+.opp:hover{transform:translateY(-3px);box-shadow:var(--sh2);}
+.opp .cls{font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold);}
+.opp h3{margin:0;}
+.opp .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mut);}
+.opp .fit{font-size:12.5px;background:#F5F8F5;color:#1D7A4F;border-radius:8px;padding:6px 10px;}
+.oppgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;}
 .mode{background:rgba(12,35,64,.08);border-radius:999px;display:flex;padding:3px;}
 .mode button{border:none;background:transparent;border-radius:999px;padding:5px 13px;font-size:12.5px;font-weight:600;color:#3A3A3E;cursor:pointer;transition:background .25s,color .25s;}
 .mode button.on{background:var(--navy);color:#fff;}
@@ -157,19 +172,57 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
 
 <section class="pg on" id="ov">
  <div class="hero"><h1 id="ovh">Good day, Mehta family.</h1>
- <div class="sub">Single family office · consolidated across 4 custodians · as of 30 Sep 2027 <span style="color:#B07816;">(illustrative)</span></div></div>
- <div class="cards">
-  <div class="stat"><div class="k">Net worth</div><div class="v ccy" data-m="182.4">€182.40m</div><div class="d">All entities, net of debt</div></div>
-  <div class="stat"><div class="k">Liquid</div><div class="v ccy" data-m="46.2">€46.20m</div><div class="d">Cash, bonds, listed equity</div></div>
-  <div class="stat"><div class="k">Private markets</div><div class="v ccy" data-m="58.7">€58.70m</div><div class="d">Funds + directs · 12 positions</div></div>
-  <div class="stat"><div class="k">Real assets</div><div class="v ccy" data-m="63.1">€63.10m</div><div class="d">Real estate, operating co.</div></div>
-  <div class="stat"><div class="k">YTD change</div><div class="v">+4.8%</div><div class="d">Net of fees · all assets</div></div>
- </div>
- <div class="row">
+ <div class="sub">One view of everything you own — 4 custodians · 2 administrators · 11 entities · as of 30 Sep 2027 <span style="color:#B07816;">(illustrative)</span></div></div>
+
+ <div class="row" style="grid-template-columns:1.55fr 1fr;">
+  <div class="card hoverable"><h3>Net worth</h3>
+   <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;">
+    <span class="bignum ccy" data-m="182.4">€182.40m</span>
+    <span class="pill p-ok">+4.8% YTD · net of fees</span>
+   </div>
+   <svg viewBox="0 0 520 200" width="100%" role="img" aria-label="Net worth trend, eight quarters">
+    <line x1="50" y1="170" x2="498" y2="170" stroke="#EDEDF0"/>
+    <path d="M50,156 L114,137 L178,123 L242,105 L306,95 L370,81 L434,63 L498,42 L498,170 L50,170 Z" fill="#0C2340" fill-opacity="0.05"/>
+    <polyline points="50,156 114,137 178,123 242,105 306,95 370,81 434,63 498,42" fill="none" stroke="#0C2340" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="498" cy="42" r="5.5" fill="#C5A059"/>
+    <text x="50" y="188" font-size="10" fill="#98989E">Q4 25</text>
+    <text x="242" y="188" font-size="10" fill="#98989E">Q3 26</text>
+    <text x="474" y="188" font-size="10" fill="#98989E">Q3 27</text>
+    <text x="498" y="30" font-size="11" fill="#8a6a1f" text-anchor="end">€182.4m</text>
+    <text x="50" y="150" font-size="10" fill="#98989E">€158m</text>
+   </svg>
+   <div class="note">Consolidated across all entities and custodians, net of debt. Trend at quarterly marks.</div>
+  </div>
   <div class="card hoverable"><h3>Allocation</h3>
-   <div class="bar"><span style="width:25%;background:#0C2340;"></span><span style="width:32%;background:#C5A059;"></span><span style="width:35%;background:#7C8DA6;"></span><span style="width:8%;background:#D8D2C6;"></span></div>
-   <div class="leg"><i style="background:#0C2340;"></i>Liquid 25%<i style="background:#C5A059;"></i>Private 32%<i style="background:#7C8DA6;"></i>Real assets 35%<i style="background:#D8D2C6;"></i>Other 8%</div>
-   <div class="warnrow">Liquidity watch: €3.1m of private-fund capital calls expected within 90 days against €8.4m near-cash. Comfortable — no action needed.</div>
+   <div style="display:flex;align-items:center;gap:18px;">
+    <svg viewBox="0 0 140 140" width="132" height="132" role="img" aria-label="Allocation donut">
+     <g transform="rotate(-90 70 70)">
+      <circle cx="70" cy="70" r="54" fill="none" stroke="#0C2340" stroke-width="16" stroke-dasharray="84.8 254.5" stroke-dashoffset="0"/>
+      <circle cx="70" cy="70" r="54" fill="none" stroke="#C5A059" stroke-width="16" stroke-dasharray="108.6 230.7" stroke-dashoffset="-84.8"/>
+      <circle cx="70" cy="70" r="54" fill="none" stroke="#7C8DA6" stroke-width="16" stroke-dasharray="118.8 220.5" stroke-dashoffset="-193.4"/>
+      <circle cx="70" cy="70" r="54" fill="none" stroke="#D8D2C6" stroke-width="16" stroke-dasharray="27.1 312.2" stroke-dashoffset="-312.2"/>
+     </g>
+     <text x="70" y="66" font-size="13" font-weight="700" fill="#0C2340" text-anchor="middle">€182.4m</text>
+     <text x="70" y="82" font-size="9.5" fill="#6E6E73" text-anchor="middle">net worth</text>
+    </svg>
+    <div style="flex:1;">
+     <div class="clsrow"><span class="sw" style="background:#0C2340;"></span><span class="nm">Liquid</span><span class="pc">25%</span><span class="vl ccy" data-m="46.2">€46.20m</span></div>
+     <div class="clsrow"><span class="sw" style="background:#C5A059;"></span><span class="nm">Private markets</span><span class="pc">32%</span><span class="vl ccy" data-m="58.7">€58.70m</span></div>
+     <div class="clsrow"><span class="sw" style="background:#7C8DA6;"></span><span class="nm">Real assets</span><span class="pc">35%</span><span class="vl ccy" data-m="63.1">€63.10m</span></div>
+     <div class="clsrow"><span class="sw" style="background:#D8D2C6;"></span><span class="nm">Collectibles &amp; other</span><span class="pc">8%</span><span class="vl ccy" data-m="14.4">€14.40m</span></div>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <div class="row">
+  <div class="card hoverable"><h3>Movement this quarter</h3>
+   <div class="act">
+    <div><b>Listed equity +€1.9m</b><div class="t">Markets and two active managers ahead of index.</div></div>
+    <div><b>Direct: MedServe India +€1.2m</b><div class="t">Revalued on new funding round · board pack in vault.</div></div>
+    <div><b>Private funds +€0.6m</b><div class="t">Q2 marks received from 5 administrators.</div></div>
+    <div><b>FX −€0.4m</b><div class="t">INR translation on Indian assets · unhedged by policy.</div></div>
+   </div>
   </div>
   <div class="card hoverable"><h3>Needs your attention</h3><div class="act">
    <div><b>Capital call — Healthcare PE Fund I</b><div class="t">€400,000 due 14 Oct 2027 · verified notice in vault</div></div>
@@ -178,6 +231,8 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
    <div><b>Family council</b><div class="t">Next session 12 Nov 2027 · agenda drafting open</div></div>
   </div></div>
  </div>
+ <hr class="hairline">
+ <div class="note" style="text-align:center;">Liquidity watch: €3.1m of private-fund calls expected within 90 days against €8.4m near-cash — comfortable. · One desk, read-only, across every custodian.</div>
 </section>
 
 <section class="pg" id="wealth">
@@ -280,6 +335,43 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
  </div></div>
 </section>
 
+<section class="pg" id="opp">
+ <div class="hero"><h1>Opportunities.</h1><div class="sub">Curated for your mandate — income first, healthcare &amp; India tilt · reviewed by your investment committee (illustrative)</div></div>
+ <div class="cards">
+  <div class="stat"><div class="k">Active</div><div class="v">5</div><div class="d">2 in diligence</div></div>
+  <div class="stat"><div class="k">Potential commitment</div><div class="v ccy" data-m="9.5">€9.50m</div><div class="d">If all proceed</div></div>
+  <div class="stat"><div class="k">Next IC</div><div class="v" style="font-size:19px;">28 Oct</div><div class="d">Two decisions due</div></div>
+ </div>
+ <div class="oppgrid">
+  <div class="opp"><span class="cls">Private fund · Healthcare</span><h3>European healthcare PE — vintage 2027</h3>
+   <div class="meta"><span>Ticket €1–3m</span><span>10-yr fund · 8% pref</span><span>First close Q1 28</span></div>
+   <span class="pill p-warn" style="align-self:flex-start;">In diligence · data room open</span>
+   <div class="fit">Fits: healthcare tilt, income-first waterfall · IC decision 28 Oct</div>
+   <button class="dl" style="align-self:flex-start;">Request materials</button></div>
+  <div class="opp"><span class="cls">Co-investment · Clinics</span><h3>Iberia specialty-clinics roll-up</h3>
+   <div class="meta"><span>Ticket €2–4m</span><span>No mgmt fee · reduced carry</span><span>Closes 15 Nov</span></div>
+   <span class="pill p-warn" style="align-self:flex-start;">In diligence · alongside lead fund</span>
+   <div class="fit">Fits: direct exposure preference, healthcare · counsel reviewing docs</div>
+   <button class="dl" style="align-self:flex-start;">Request materials</button></div>
+  <div class="opp"><span class="cls">Real assets · India</span><h3>Mumbai logistics park — pre-lease</h3>
+   <div class="meta"><span>Ticket €3–5m</span><span>Target yield 9% INR</span><span>Decision Q1 28</span></div>
+   <span class="pill p-mut" style="align-self:flex-start;">Reviewing</span>
+   <div class="fit">Fits: India real-asset sleeve · FX unhedged — flag for IC</div>
+   <button class="dl" style="align-self:flex-start;">Request materials</button></div>
+  <div class="opp"><span class="cls">Private credit</span><h3>Senior secured lending sleeve</h3>
+   <div class="meta"><span>Ticket €2m</span><span>Quarterly income</span><span>Open</span></div>
+   <span class="pill p-mut" style="align-self:flex-start;">Reviewing</span>
+   <div class="fit">Fits: income objective · complements PE J-curve</div>
+   <button class="dl" style="align-self:flex-start;">Request materials</button></div>
+  <div class="opp"><span class="cls">Secondaries</span><h3>2019-vintage LP stake — discount</h3>
+   <div class="meta"><span>Ticket €1.5m</span><span>Mature assets, early DPI</span><span>Window closes Dec</span></div>
+   <span class="pill p-mut" style="align-self:flex-start;">Watchlist</span>
+   <div class="fit">Fits: shortens portfolio duration · pricing under review</div>
+   <button class="dl" style="align-self:flex-start;">Request materials</button></div>
+ </div>
+ <p class="note" style="margin-top:16px;">Indicative only, not offers. Every opportunity carries a memorandum in the vault; decisions rest with your investment committee.</p>
+</section>
+
 <section class="pg" id="clients">
  <div class="hero"><h1>Client families.</h1><div class="sub">Advisor cockpit · 6 families · consolidated oversight (illustrative)</div></div>
  <div class="cards">
@@ -313,8 +405,8 @@ textarea.msg{width:100%;border:1px solid #E3E3E8;border-radius:12px;padding:12px
 <script>
 function enter(){document.getElementById('gate').classList.add('out');var a=document.getElementById('app');a.classList.add('in');setTimeout(function(){document.getElementById('gate').style.display='none';},650);}
 var MODE='SFO';
-var NAVS={SFO:[['ov','Overview'],['wealth','Wealth'],['liq','Liquidity'],['gov','Governance'],['desk','Desk'],['docs','Vault']],
-          MFO:[['clients','Clients'],['desk','Desk'],['docs','Vault']]};
+var NAVS={SFO:[['ov','Overview'],['wealth','Wealth'],['opp','Opportunities'],['liq','Liquidity'],['gov','Governance'],['desk','Desk'],['docs','Vault']],
+          MFO:[['clients','Clients'],['opp','Opportunities'],['desk','Desk'],['docs','Vault']]};
 function buildNav(active){
  var n=NAVS[MODE],h='';
  for(var i=0;i<n.length;i++)h+='<a data-p="'+n[i][0]+'"'+(n[i][0]===active?' class="on"':'')+'>'+n[i][1]+'</a>';
