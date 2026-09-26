@@ -6,7 +6,7 @@ Password-protected web portal over the Icons & Company private fund and LP datab
 
 - **Funds**: 116,604 private funds reported on SEC Form ADV Schedule D 7.B.1 (latest filings to Dec 2024): type, domicile, size, investor count, share held by funds of funds and non-US investors, GP entities, auditor, administrator, custodian, prime broker, placement agent.
 - **Managers**: 12,367 advisers with active private funds.
-- **LP commitments**: 4,349 LP-to-fund records from 19 LPs (CalPERS, CalSTRS, Washington SIB, Oregon PERF, NY Common, Florida SBA, EIB, EIF, and UK LGPS funds: Greater Manchester, Strathclyde, Lothian, West Yorkshire, Merseyside, Northern PE Pool, Nottinghamshire, Cambridgeshire, Cheshire, Suffolk, Lincolnshire). Each row links to its public source.
+- **LP commitments**: 4,629 LP-to-fund records from 60 LPs, including India-focused LPs (SIDBI fund of funds, NIIF, IFC, BII, AIIB, DFIs) and (CalPERS, CalSTRS, Washington SIB, Oregon PERF, NY Common, Florida SBA, EIB, EIF, and UK LGPS funds: Greater Manchester, Strathclyde, Lothian, West Yorkshire, Merseyside, Northern PE Pool, Nottinghamshire, Cambridgeshire, Cheshire, Suffolk, Lincolnshire). Each row links to its public source.
 
 ## Run locally
 

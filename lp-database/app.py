@@ -326,7 +326,10 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
           fund_size_m: float = 0, emerging: int = 0):
     want_themes = {t.strip() for t in themes.split(";") if t.strip()}
     ssim = STRAT_SIM.get(strategy, {strategy: 1})
-    gsim = GEO_SIM.get(geography, {geography: 1})
+    gsim = dict(GEO_SIM.get(geography, {geography: 1}))
+    regional = geography not in ("North America", "Europe", "UK", "Global")
+    if regional:
+        gsim["Global"] = 0.1  # a global growth fund says little about appetite for India, Africa etc.
     recs = rows("""SELECT lp, lp_type, lp_country, fund_name, manager_std, strategy, stage, themes, geography, vintage,
                    date_committed, amount_usd_m, asset_class, notes, source_url FROM cmx""")
     by_lp = {}
@@ -349,6 +352,8 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
                                        "n_similar": 0, "tickets": [], "examples": [], "emerging_programme": False})
         d["score"] += w
         d["n_similar"] += 1
+        if gw >= 0.7:
+            d["n_regional"] = d.get("n_regional", 0) + 1
         if r["amount_usd_m"]:
             d["tickets"].append(r["amount_usd_m"])
         d["examples"].append((w, v, r))
@@ -356,9 +361,12 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
             d["emerging_programme"] = True
     out = []
     for d in by_lp.values():
+        d.setdefault("n_regional", 0)
+        if regional and d["n_regional"] == 0:
+            continue
         t = sorted(d.pop("tickets"))
         d["median_ticket_usd_m"] = round(t[len(t) // 2], 1) if t else None
-        ex = sorted(d.pop("examples"), key=lambda x: (x[1], x[0]), reverse=True)[:6]
+        ex = sorted(d.pop("examples"), key=lambda x: (x[0] >= 0.5, x[1], x[0]), reverse=True)[:6]
         d["examples"] = [{"fund_name": e[2]["fund_name"], "manager": e[2]["manager_std"], "vintage": e[1],
                           "amount_usd_m": round(e[2]["amount_usd_m"], 1) if e[2]["amount_usd_m"] else None,
                           "themes": e[2]["themes"], "geography": e[2]["geography"], "source_url": e[2]["source_url"]} for e in ex]
@@ -388,10 +396,12 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
         doms = set((f["domiciles"] or "").split("; "))
         if geography in ("Europe", "UK"):
             geo = 1.6 if f["country"] in EUROPE else 1.15 if doms & EUROPE else 1.0
-        elif geography in ("Asia", "India", "China", "Japan"):
-            geo = 1.6 if f["country"] in ASIA else 1.15 if doms & ASIA else 1.0
+        elif geography in ("Asia", "India", "China", "Japan", "Emerging markets"):
+            geo = 2.0 if f["country"] in ASIA else 1.3 if doms & (ASIA | {"Mauritius"}) else 0.25
         elif geography == "North America" and f["country"] == "United States":
             geo = 1.3
+        elif regional:
+            geo = 0.25
         size = (f["gav"] or 0) / 1e9
         f["rel"] = float(f["rel"]); f["score"] = round((f["rel"] ** 0.5) * geo * (1 + math.log10(1 + size)), 2)
         f["gav_bn"] = round(size, 1)
@@ -400,7 +410,7 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
     top = fof[0]["score"] if fof else 1
     for f in fof:
         f["match"] = round(100 * f["score"] / top)
-    return {"public_lps": out, "fof_allocators": fof,
+    return {"public_lps": out, "fof_allocators": fof, "regional": regional,
             "note": "Public LPs are ranked by how many similar funds they backed (strategy, geography, themes, recency). "
                     "Fund-of-funds allocators come from SEC Form ADV and are ranked by how many relevant fund-of-funds vehicles they run and their size."}
 
