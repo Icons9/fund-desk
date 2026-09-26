@@ -56,8 +56,11 @@ def _make_token(user: str) -> str:
 
 
 def _valid(token: str | None) -> bool:
-    if not token or not PASSWORD:
-        return not PASSWORD  # no password configured = open (local dev only)
+    if not PASSWORD:
+        # no password configured: open only when running locally, locked when hosted
+        return os.environ.get("RENDER") is None
+    if not token:
+        return False
     try:
         user, exp, sig = token.split("|")
     except ValueError:
@@ -90,7 +93,7 @@ def login_page(error: int = 0):
 
 @app.post("/login")
 def login(username: str = Form(...), password: str = Form(...)):
-    ok = hmac.compare_digest(username.strip(), USER) and hmac.compare_digest(password, PASSWORD)
+    ok = bool(PASSWORD) and hmac.compare_digest(username.strip(), USER) and hmac.compare_digest(password, PASSWORD)
     if not ok:
         time.sleep(1)
         return RedirectResponse("/login?error=1", status_code=303)
