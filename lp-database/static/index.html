@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LP Portal</title>
+<style>
+:root{--bg:#f6f5f2;--panel:#fff;--ink:#1c1c1a;--muted:#6b6a65;--line:#e3e1db;--soft:#efeee9;--accent:#1f4e79;--accent-ink:#fff;--good:#2e6b3a;--warn:#8a5a00}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--panel:#1d1d1b;--ink:#ecebe7;--muted:#9b9a94;--line:#2e2e2b;--soft:#242422;--accent:#7fb0dc;--accent-ink:#111;--good:#8fc79a;--warn:#e0b057}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,"Segoe UI",Inter,Roboto,sans-serif}
+header{display:flex;align-items:center;gap:24px;padding:0 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+header h1{font-size:15px;margin:0;padding:14px 0;font-weight:650;white-space:nowrap}
+nav{display:flex;gap:2px;overflow-x:auto;flex:1}
+nav button{border:0;background:none;color:var(--muted);font:inherit;padding:15px 12px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+nav button.on{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+header a{color:var(--muted);font-size:13px;text-decoration:none}
+main{padding:20px;max-width:1400px;margin:0 auto}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.tile b{display:block;font-size:22px;font-weight:650;font-variant-numeric:tabular-nums}
+.tile span{color:var(--muted);font-size:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;overflow:hidden}
+.card h2{font-size:13px;margin:0 0 10px;font-weight:600;color:var(--muted);text-transform:none}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.filters input,.filters select{padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit;min-width:0}
+.filters input[type=search]{flex:1 1 240px}
+.filters input[type=number]{width:110px}
+.count{color:var(--muted);font-size:12px;margin-left:auto}
+.tw{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap;max-width:340px;overflow:hidden;text-overflow:ellipsis}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--soft);position:sticky;top:0}
+td.n,th.n{text-align:right}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--soft)}
+.pager{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:10px;color:var(--muted);font-size:12px}
+.pager button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:5px 10px;font:inherit;cursor:pointer}
+.pager button:disabled{opacity:.4;cursor:default}
+.bar{height:8px;background:var(--accent);border-radius:2px;opacity:.8}
+.drawer{position:fixed;inset:0 0 0 auto;width:min(760px,100%);background:var(--panel);border-left:1px solid var(--line);box-shadow:-8px 0 30px rgba(0,0,0,.12);transform:translateX(105%);transition:transform .18s;z-index:10;overflow-y:auto;padding:20px 22px 40px}
+.drawer.open{transform:none}
+.drawer h3{margin:0 40px 4px 0;font-size:18px}
+.drawer .sub{color:var(--muted);margin-bottom:16px}
+.drawer .x{position:absolute;right:16px;top:14px}
+dl{display:grid;grid-template-columns:200px 1fr;gap:6px 14px;margin:0 0 18px}
+dt{color:var(--muted);font-size:12px}dd{margin:0;word-break:break-word}
+h4{font-size:13px;margin:18px 0 8px;color:var(--muted);font-weight:600}
+a{color:var(--accent)}
+.pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;background:var(--soft);color:var(--muted);margin-right:4px}
+.note{color:var(--muted);font-size:12px;margin:8px 0 0}
+.empty{padding:20px;color:var(--muted)}
+.form{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px 16px;align-items:end}
+.form label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+.form select,.form input[type=number]{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips label{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:14px;padding:4px 10px;font-size:13px;color:var(--ink);margin:0;cursor:pointer}
+.chips input{margin:0}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+.score{display:inline-block;min-width:38px;text-align:right;font-weight:600}
+.lp{border-bottom:1px solid var(--line);padding:12px 4px}
+.lp:last-child{border-bottom:0}
+.lp .top{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.lp .name{font-weight:600;font-size:15px}
+.lp .meta{color:var(--muted);font-size:12px}
+.lp ul{margin:8px 0 0 0;padding-left:18px;color:var(--ink);font-size:13px}
+.lp li{margin:2px 0}
+.flag{font-size:11px;padding:1px 7px;border-radius:10px;background:var(--soft);color:var(--warn);margin-left:4px}
+.meter{display:inline-block;width:60px;height:6px;background:var(--soft);border-radius:3px;vertical-align:middle;margin-left:6px}
+.meter i{display:block;height:6px;background:var(--accent);border-radius:3px}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>LP Portal</h1>
+  <nav id="nav">
+    <button data-v="match" class="on">Find LPs</button>
+    <button data-v="overview">Overview</button>
+    <button data-v="funds">Funds</button>
+    <button data-v="managers">Managers</button>
+    <button data-v="lps">LPs</button>
+    <button data-v="commitments">Commitments</button>
+    <button data-v="overlap">Shared funds</button>
+  </nav>
+  <a href="/logout">Sign out</a>
+</header>
+<main id="main"></main>
+<aside class="drawer" id="drawer"><button class="btn x" onclick="closeDrawer()">Close</button><div id="dbody"></div></aside>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = v => v == null ? '' : String(v).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num = (v, d=0) => v == null || v === '' ? '' : Number(v).toLocaleString('en-US', {maximumFractionDigits:d, minimumFractionDigits:0});
+const pct = v => v == null ? '' : num(v,0) + '%';
+let FACETS = null;
+
+async function api(path) {
+  const r = await fetch(path);
+  if (r.status === 401) { location.href = '/login'; return; }
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+function qs(o) { return Object.entries(o).filter(([k,v]) => v !== '' && v != null && v !== 0).map(([k,v]) => k + '=' + encodeURIComponent(v)).join('&'); }
+function opts(list, sel, blank) { return `<option value="">${blank}</option>` + list.map(x => `<option ${x===sel?'selected':''}>${esc(x)}</option>`).join(''); }
+
+function table(cols, rows, onclick) {
+  if (!rows.length) return '<div class="empty">No results.</div>';
+  const head = cols.map(c => `<th class="${c.n?'n':''}">${c.h}</th>`).join('');
+  const body = rows.map((r,i) => `<tr class="${onclick?'click':''}" data-i="${i}">` + cols.map(c => {
+    const v = c.f ? c.f(r) : esc(r[c.k]);
+    return `<td class="${c.n?'n':''}" title="${esc(r[c.k])}">${v}</td>`; }).join('') + '</tr>').join('');
+  return `<div class="tw"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+function bindRows(el, rows, fn) { el.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => fn(rows[+tr.dataset.i])); }
+function pager(res, go) {
+  const pages = Math.max(1, Math.ceil(res.total / res.page_size));
+  const d = document.createElement('div'); d.className = 'pager';
+  d.innerHTML = `<span>Page ${res.page+1} of ${num(pages)}</span><button ${res.page<=0?'disabled':''}>Previous</button><button ${res.page>=pages-1?'disabled':''}>Next</button>`;
+  const [prev, next] = d.querySelectorAll('button');
+  prev.onclick = () => go(res.page-1); next.onclick = () => go(res.page+1);
+  return d;
+}
+function debounce(fn, ms=300) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+// ---------- views ----------
+const views = {
+  async match() {
+    const O = await api('/api/match_options');
+    $('#main').innerHTML = `<div class="card"><h2>Describe the fund you are raising</h2>
+      <div class="form">
+        <div><label>Strategy</label><select id="ms">${O.strategies.map(x=>`<option>${x}</option>`).join('')}</select></div>
+        <div><label>Stage / size band</label><select id="mst"><option value="">Any</option>${O.stages.map(x=>`<option>${x}</option>`).join('')}</select></div>
+        <div><label>Geographic focus</label><select id="mg">${O.geographies.map(x=>`<option>${x}</option>`).join('')}</select></div>
+        <div><label>Target fund size ($m)</label><input type="number" id="msz" placeholder="e.g. 150"></div>
+      </div>
+      <div style="margin-top:14px"><label style="font-size:12px;color:var(--muted)">Sector themes</label>
+        <div class="chips" style="margin-top:6px">${O.themes.map(t=>`<label><input type="checkbox" value="${t}">${t}</label>`).join('')}</div></div>
+      <div style="margin-top:14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <label class="chips" style="margin:0"><label><input type="checkbox" id="mem">First-time / emerging manager</label></label>
+        <button class="primary" id="mgo">Find LPs</button></div></div>
+      <div id="mres" style="margin-top:16px"></div>`;
+    $('#mg').value = 'Europe';
+    $('#mgo').onclick = async () => {
+      const themes = [...document.querySelectorAll('.chips input[type=checkbox][value]:checked')].map(i=>i.value).join(';');
+      $('#mres').innerHTML = '<div class="empty">Matching…</div>';
+      const R = await api('/api/match?' + qs({strategy:$('#ms').value, stage:$('#mst').value, geography:$('#mg').value, themes,
+        fund_size_m:+$('#msz').value||0, emerging:$('#mem').checked?1:0}));
+      const lpHtml = R.public_lps.length ? R.public_lps.map(d => `<div class="lp"><div class="top">
+          <span class="name">${esc(d.lp)}</span><span class="meta">${esc(d.lp_type)} · ${esc(d.country)}</span>
+          <span class="meta">match <span class="score">${d.match}</span><span class="meter"><i style="width:${d.match}%"></i></span></span>
+          <span class="meta">${d.n_similar} similar commitments${d.median_ticket_usd_m?` · typical ticket $${num(d.median_ticket_usd_m,1)}m`:''}</span>
+          ${d.flags.map(f=>`<span class="flag">${esc(f)}</span>`).join('')}</div>
+          <ul>${d.examples.map(e=>`<li>${esc(e.fund_name)}${e.manager?' ('+esc(e.manager)+')':''} · ${e.vintage||''} · ${e.amount_usd_m?'$'+num(e.amount_usd_m,1)+'m':''} <span class="meta">${esc(e.themes||'')} · ${esc(e.geography||'')}</span>${e.source_url?` · <a href="${esc(e.source_url)}" target="_blank" rel="noopener">source</a>`:''}</li>`).join('')}</ul></div>`).join('')
+        : '<div class="empty">None of the tracked public LPs has backed a similar fund.</div>';
+      const fofEl = document.createElement('div');
+      $('#mres').innerHTML = `<div class="card"><h2>Public LPs with a record of backing similar funds (${R.public_lps.length})</h2>${lpHtml}</div>
+        <div class="card" style="margin-top:16px"><h2>Fund-of-funds allocators (SEC Form ADV) running relevant vehicles</h2><div id="fofr"></div>
+        <p class="note">${esc(R.note)} Click a row to see the manager and its vehicles.</p></div>`;
+      const el = $('#fofr');
+      el.innerHTML = table([{h:'Match',k:'match',n:1,f:r=>`${r.match}<span class="meter"><i style="width:${r.match}%"></i></span>`},{h:'Allocator',k:'name'},{h:'Country',k:'country'},
+        {h:'FoF vehicles',k:'n_vehicles',n:1},{h:'VC',k:'n_vc',n:1},{h:'PE',k:'n_pe',n:1},{h:'RE',k:'n_re',n:1},{h:'Other',k:'n_other',n:1},
+        {h:'Gross assets $bn',k:'gav_bn',n:1,f:r=>num(r.gav_bn,1)},{h:'Largest vehicle',k:'largest_vehicle'},{h:'Domiciles',k:'domiciles'}], R.fof_allocators, true);
+      bindRows(el, R.fof_allocators, r => showManager(r.crd));
+    };
+  },
+
+  async overview() {
+    const s = await api('/api/stats');
+    const maxGav = Math.max(...s.by_type.map(r => r.gav_bn || 0));
+    $('#main').innerHTML = `
+      <div class="tiles">
+        <div class="tile"><b>${num(s.funds.n)}</b><span>active private funds (SEC Form ADV, reported 2023–24)</span></div>
+        <div class="tile"><b>$${s.funds.gav_tn}tn</b><span>gross assets in those funds</span></div>
+        <div class="tile"><b>${num(s.funds.vc)}</b><span>venture capital funds</span></div>
+        <div class="tile"><b>${num(s.funds.fof)}</b><span>funds of funds (LP vehicles)</span></div>
+        <div class="tile"><b>${num(s.managers.n)}</b><span>managers with active funds</span></div>
+        <div class="tile"><b>${num(s.commitments.n)}</b><span>LP commitments from ${s.commitments.lps} LPs</span></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h2>Funds by type</h2>${table([
+          {h:'Type',k:'fund_type'},{h:'Funds',k:'n',n:1,f:r=>num(r.n)},{h:'Gross assets $bn',k:'gav_bn',n:1,f:r=>num(r.gav_bn)},
+          {h:'',k:'gav_bn',f:r=>`<div class="bar" style="width:${Math.round(100*(r.gav_bn||0)/maxGav)}px"></div>`},
+          {h:'Median investors',k:'median_investors',n:1,f:r=>num(r.median_investors)},
+          {h:'Avg % FoF-owned',k:'avg_pct_fof',n:1,f:r=>pct(r.avg_pct_fof)},{h:'Avg % non-US',k:'avg_pct_non_us',n:1,f:r=>pct(r.avg_pct_non_us)}], s.by_type)}</div>
+        <div class="card"><h2>Fund domiciles</h2>${table([{h:'Domicile',k:'domicile_country'},{h:'Funds',k:'n',n:1,f:r=>num(r.n)}], s.by_domicile)}</div>
+      </div>
+      <div class="card" style="margin-top:16px"><h2>Latest dated LP commitments</h2><div id="rc"></div></div>`;
+    $('#rc').innerHTML = table([{h:'Date',k:'date_committed'},{h:'LP',k:'lp'},{h:'Fund',k:'fund_name'},{h:'Manager',k:'manager'},
+      {h:'Asset class',k:'asset_class'},{h:'$m',k:'amount_usd_m',n:1,f:r=>num(r.amount_usd_m,1)}], s.recent_commitments);
+  },
+
+  async funds(state = {q:'',fund_type:'',domicile:'',flag:'',min_gav:0,min_fof:0,min_non_us:0,sort:'gav',page:0}) {
+    $('#main').innerHTML = `<div class="filters">
+      <input type="search" id="fq" placeholder="Search fund, manager or GP entity" value="${esc(state.q)}">
+      <select id="ft">${opts(FACETS.fund_types, state.fund_type, 'All types')}</select>
+      <select id="fd">${opts(FACETS.domiciles, state.domicile, 'All domiciles')}</select>
+      <select id="ff">
+        <option value="">No flag</option><option value="deeptech">Deep tech (keyword)</option><option value="india">India-linked</option>
+        <option value="near_home">Monaco/FR/CH/LU link</option><option value="fof">Funds of funds</option></select>
+      <input type="number" id="fg" placeholder="Min $m" value="${state.min_gav||''}" title="Minimum gross assets, $m">
+      <input type="number" id="fo" placeholder="Min % FoF" value="${state.min_fof||''}" title="Minimum % owned by funds of funds">
+      <input type="number" id="fn" placeholder="Min % non-US" value="${state.min_non_us||''}" title="Minimum % owned by non-US investors">
+      <select id="fs"><option value="gav">Largest</option><option value="newest">Newest</option><option value="investors">Most investors</option>
+        <option value="fof">Most FoF-owned</option><option value="nonus">Most non-US</option><option value="name">Name</option></select>
+      <span class="count" id="fc"></span></div><div id="fr"></div>`;
+    $('#ff').value = state.flag; $('#fs').value = state.sort;
+    const read = () => ({q:$('#fq').value, fund_type:$('#ft').value, domicile:$('#fd').value, flag:$('#ff').value,
+      min_gav:+$('#fg').value||0, min_fof:+$('#fo').value||0, min_non_us:+$('#fn').value||0, sort:$('#fs').value, page:0});
+    const load = async st => {
+      const res = await api('/api/funds?' + qs(st));
+      $('#fc').textContent = num(res.total) + ' funds';
+      const el = $('#fr');
+      el.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'Type',k:'fund_type'},{h:'Domicile',k:'domicile_country'},
+        {h:'Gross assets $m',k:'gav_musd',n:1,f:r=>num(r.gav_musd,1)},{h:'Investors',k:'beneficial_owners',n:1,f:r=>num(r.beneficial_owners)},
+        {h:'% FoF',k:'pct_owned_by_fund_of_funds',n:1,f:r=>pct(r.pct_owned_by_fund_of_funds)},{h:'% non-US',k:'pct_owned_non_us',n:1,f:r=>pct(r.pct_owned_non_us)},
+        {h:'Manager',k:'adviser_name'},{h:'First filed',k:'first_reported'}], res.rows, true);
+      bindRows(el, res.rows, r => showFund(r.fund_id));
+      el.appendChild(pager(res, p => load({...st, page:p})));
+    };
+    const go = debounce(() => load(read()));
+    $('#main').querySelectorAll('input,select').forEach(i => i.addEventListener(i.tagName==='SELECT'?'change':'input', go));
+    load(state);
+  },
+
+  async managers() {
+    $('#main').innerHTML = `<div class="filters"><input type="search" id="mq" placeholder="Search manager">
+      <select id="ms"><option value="gav">Largest fund assets</option><option value="funds">Most funds</option><option value="name">Name</option></select>
+      <span class="count" id="mc"></span></div><div id="mr"></div>`;
+    const load = async (page=0) => {
+      const res = await api('/api/managers?' + qs({q:$('#mq').value, sort:$('#ms').value, page}));
+      $('#mc').textContent = num(res.total) + ' managers';
+      const el = $('#mr');
+      el.innerHTML = table([{h:'Manager',k:'adviser_name'},{h:'Type',k:'adviser_type'},{h:'City',k:'city'},{h:'Country',k:'country'},
+        {h:'Active funds',k:'n_active_funds',n:1,f:r=>num(r.n_active_funds)},{h:'Fund assets $m',k:'fund_gav_musd',n:1,f:r=>num(r.fund_gav_musd)},
+        {h:'Reg. AUM $m',k:'aum_musd',n:1,f:r=>num(r.aum_musd)},{h:'Fund types',k:'fund_types'}], res.rows, true);
+      bindRows(el, res.rows, r => showManager(r.crd));
+      el.appendChild(pager(res, load));
+    };
+    const go = debounce(() => load(0));
+    $('#mq').oninput = go; $('#ms').onchange = go; load();
+  },
+
+  async lps() {
+    const L = await api('/api/lps');
+    $('#main').innerHTML = `<div class="card"><h2>LPs in the database</h2><div id="lr"></div>
+      <p class="note">Click an LP to see its commitments. Amounts in USD millions; non-USD converted at GBP 1.30, EUR 1.10. Florida and Merseyside publish market values, not commitments.</p></div>`;
+    const el = $('#lr');
+    el.innerHTML = table([{h:'LP',k:'lp'},{h:'Type',k:'lp_type'},{h:'Country',k:'country'},{h:'Records',k:'n_commitments',n:1,f:r=>num(r.n_commitments)},
+      {h:'Committed $m',k:'total_usd_m',n:1,f:r=>num(r.total_usd_m)},{h:'Vintages',k:'first_vintage',f:r=>(r.first_vintage||'')+'–'+(r.last_vintage||'')},
+      {h:'Since 2024',k:'n_since_2024',n:1,f:r=>num(r.n_since_2024)},{h:'$m since 2024',k:'usd_m_since_2024',n:1,f:r=>num(r.usd_m_since_2024)},
+      {h:'Asset classes',k:'asset_classes'}], L, true);
+    bindRows(el, L, r => { setView('commitments', {lp:r.lp}); });
+  },
+
+  async commitments(pre = {}) {
+    $('#main').innerHTML = `<div class="filters"><input type="search" id="cq" placeholder="Search fund, manager, theme">
+      <select id="cl">${opts(FACETS.lps, pre.lp||'', 'All LPs')}</select>
+      <select id="ca">${opts(FACETS.asset_classes, '', 'All asset classes')}</select>
+      <input type="number" id="cv" placeholder="Vintage from">
+      <select id="cs"><option value="recent">Most recent</option><option value="amount">Largest</option><option value="fund">Fund name</option></select>
+      <span class="count" id="cc"></span></div><div id="cr"></div>`;
+    const load = async (page=0) => {
+      const res = await api('/api/commitments?' + qs({q:$('#cq').value, lp:$('#cl').value, asset_class:$('#ca').value, vintage_from:+$('#cv').value||0, sort:$('#cs').value, page}));
+      $('#cc').textContent = num(res.total) + ' records';
+      const el = $('#cr');
+      el.innerHTML = table([{h:'LP',k:'lp'},{h:'Fund',k:'fund_name'},{h:'Manager',k:'manager'},{h:'Asset class',k:'asset_class'},
+        {h:'Vintage',k:'vintage'},{h:'Date',k:'date_committed'},{h:'Committed $m',k:'amount_usd_m',n:1,f:r=>num(r.amount_usd_m,1)},
+        {h:'IRR',k:'net_irr'},{h:'Multiple',k:'multiple'},{h:'Theme / notes',k:'theme',f:r=>esc(r.theme||r.notes||'')},
+        {h:'Source',k:'source_url',f:r=>r.source_url?`<a href="${esc(r.source_url)}" target="_blank" rel="noopener">link</a>`:''}], res.rows, true);
+      bindRows(el, res.rows, r => r.adv_fund_id ? showFund(r.adv_fund_id) : null);
+      el.appendChild(pager(res, load));
+    };
+    const go = debounce(() => load(0));
+    $('#main').querySelectorAll('input,select').forEach(i => i.addEventListener(i.tagName==='SELECT'?'change':'input', go));
+    load();
+  },
+
+  async overlap() {
+    const R = await api('/api/overlap?min_lps=2');
+    $('#main').innerHTML = `<div class="card"><h2>Funds backed by more than one LP in the database</h2><div id="or"></div>
+      <p class="note">Matched on normalised fund names, so the real overlap is larger than shown.</p></div>`;
+    const el = $('#or');
+    el.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'LPs',k:'n_lps',n:1},{h:'Vintage',k:'vintage'},{h:'Total committed $m',k:'total_usd_m',n:1,f:r=>num(r.total_usd_m)},{h:'Which LPs',k:'lps'}], R, true);
+    bindRows(el, R, r => r.adv_fund_id ? showFund(r.adv_fund_id) : null);
+  },
+};
+
+// ---------- detail drawers ----------
+function openDrawer(html) { $('#dbody').innerHTML = html; $('#drawer').classList.add('open'); $('#drawer').scrollTop = 0; }
+function closeDrawer() { $('#drawer').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+const yn = v => v === 'Y' ? 'Yes' : v === 'N' ? 'No' : esc(v);
+
+async function showFund(id) {
+  const f = await api('/api/fund/' + encodeURIComponent(id));
+  const flags = [f.deeptech_kw&&'deep tech (keyword)', f.india_link&&'India-linked', f.near_home&&'Monaco/FR/CH/LU link'].filter(Boolean).map(x=>`<span class="pill">${x}</span>`).join('');
+  openDrawer(`<h3>${esc(f.fund_name)}</h3><div class="sub">${esc(f.fund_type)} · ${esc(f.domicile_country)} · SEC fund ID ${esc(f.fund_id)} ${flags}</div>
+    <h4>Setup</h4><dl>
+      <dt>Manager</dt><dd><a href="#" onclick="showManager('${esc(f.adviser_crd)}');return false">${esc(f.adviser_name)}</a> (${esc(f.adviser_type)}, ${esc(f.adviser_city)}, ${esc(f.adviser_country)})</dd>
+      <dt>GP / general partner entities</dt><dd>${esc(f.gp_entities)}</dd>
+      <dt>Master / feeder</dt><dd>Master: ${yn(f.is_master)} · Feeder: ${yn(f.is_feeder)}${f.master_fund_name?' · master fund: '+esc(f.master_fund_name):''}</dd>
+      <dt>Fund of funds</dt><dd>${yn(f.is_fund_of_funds)}</dd>
+      <dt>US exemption</dt><dd>3(c)(1): ${yn(f.exemption_3c1)} · 3(c)(7): ${yn(f.exemption_3c7)}</dd>
+      <dt>Auditor</dt><dd>${esc(f.auditor)}</dd><dt>Administrator</dt><dd>${esc(f.administrator)}</dd>
+      <dt>Custodian</dt><dd>${esc(f.custodian)}</dd><dt>Prime broker</dt><dd>${esc(f.prime_broker)}</dd>
+      <dt>Placement agent</dt><dd>${esc(f.placement_agent) || (f.uses_placement_agent==='N'?'None reported':'')}</dd>
+      <dt>Form D file numbers</dt><dd>${esc(f.form_d_file_numbers)}</dd>
+      <dt>Reported on ADV</dt><dd>${esc(f.first_reported)} to ${esc(f.last_reported)}</dd></dl>
+    <h4>Size and investors</h4><dl>
+      <dt>Gross assets</dt><dd>$${num(f.gross_assets_usd/1e6,1)}m</dd>
+      <dt>Minimum investment</dt><dd>${f.min_investment_usd!=null?'$'+num(f.min_investment_usd):''}</dd>
+      <dt>Number of investors</dt><dd>${num(f.beneficial_owners)}</dd>
+      <dt>Owned by manager / related</dt><dd>${pct(f.pct_owned_by_manager)}</dd>
+      <dt>Owned by funds of funds</dt><dd>${pct(f.pct_owned_by_fund_of_funds)}</dd>
+      <dt>Owned by non-US investors</dt><dd>${pct(f.pct_owned_non_us)}</dd></dl>
+    <h4>LP commitments in the database</h4>${f.commitments.length ? table([{h:'LP',k:'lp'},{h:'Vintage',k:'vintage'},{h:'$m',k:'amount_usd_m',n:1,f:r=>num(r.amount_usd_m,1)},{h:'IRR',k:'net_irr'},{h:'Multiple',k:'multiple'},{h:'As of',k:'as_of'}], f.commitments) : '<div class="note">None matched by name.</div>'}
+    <h4>Other funds from this manager</h4>${table([{h:'Fund',k:'fund_name'},{h:'Type',k:'fund_type'},{h:'$m',k:'gav_musd',n:1,f:r=>num(r.gav_musd,1)},{h:'First filed',k:'first_reported'}], f.siblings)}
+    <p class="note">Source: SEC Form ADV Schedule D 7.B.1, latest filing up to Dec 2024.</p>`);
+  $('#dbody').querySelectorAll('table').forEach((t, i, all) => { if (i === all.length-1) t.querySelectorAll('tbody tr').forEach((tr,j) => { tr.classList.add('click'); tr.onclick = () => showFund(f.siblings[j].fund_id); }); });
+}
+
+async function showManager(crd) {
+  const m = await api('/api/manager/' + encodeURIComponent(crd));
+  openDrawer(`<h3>${esc(m.adviser_name)}</h3><div class="sub">${esc(m.adviser_type)} · ${esc(m.city)}, ${esc(m.country)} · CRD ${esc(m.crd)}</div>
+    <dl><dt>Legal name</dt><dd>${esc(m.adviser_legal_name)}</dd><dt>Regulatory AUM</dt><dd>${m.regulatory_aum?'$'+num(m.regulatory_aum/1e6)+'m':''}</dd>
+    <dt>Active funds</dt><dd>${num(m.n_active_funds)} ($${num(m.active_fund_gav/1e6)}m gross)</dd><dt>Fund domiciles</dt><dd>${esc(m.fund_domiciles)}</dd>
+    <dt>Last ADV filing</dt><dd>${esc(m.last_filed)}</dd><dt>SEC record</dt><dd><a href="https://adviserinfo.sec.gov/firm/summary/${esc(m.crd)}" target="_blank" rel="noopener">IAPD profile</a></dd></dl>
+    <h4>LP commitments to this manager's funds</h4>${m.lp_commitments.length ? table([{h:'LP',k:'lp'},{h:'Fund',k:'fund_name'},{h:'Vintage',k:'vintage'},{h:'$m',k:'amount_usd_m',n:1,f:r=>num(r.amount_usd_m,1)}], m.lp_commitments) : '<div class="note">None matched by name.</div>'}
+    <h4>Funds</h4><div id="mf"></div>`);
+  const el = $('#mf');
+  el.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'Type',k:'fund_type'},{h:'Domicile',k:'domicile_country'},{h:'$m',k:'gav_musd',n:1,f:r=>num(r.gav_musd,1)},
+    {h:'Investors',k:'beneficial_owners',n:1,f:r=>num(r.beneficial_owners)},{h:'% FoF',k:'pct_owned_by_fund_of_funds',n:1,f:r=>pct(r.pct_owned_by_fund_of_funds)},{h:'% non-US',k:'pct_owned_non_us',n:1,f:r=>pct(r.pct_owned_non_us)}], m.funds, true);
+  bindRows(el, m.funds, r => showFund(r.fund_id));
+}
+
+// ---------- routing ----------
+function setView(v, arg) {
+  document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  closeDrawer();
+  $('#main').innerHTML = '<div class="empty">Loading…</div>';
+  views[v](arg).catch(e => $('#main').innerHTML = `<div class="empty">Error: ${esc(e.message)}</div>`);
+}
+document.querySelectorAll('#nav button').forEach(b => b.onclick = () => setView(b.dataset.v));
+api('/api/facets').then(f => { FACETS = f; setView('match'); });
+</script>
+</body>
+</html>

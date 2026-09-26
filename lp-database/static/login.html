@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LP Portal · Sign in</title>
+<style>
+  :root { --bg:#f6f5f2; --panel:#ffffff; --ink:#1c1c1a; --muted:#6b6a65; --line:#e3e1db; --accent:#1f4e79; --err:#a33; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141413; --panel:#1d1d1b; --ink:#ecebe7; --muted:#9b9a94; --line:#2e2e2b; --accent:#7fb0dc; --err:#e88; } }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; background:var(--bg); color:var(--ink);
+         font:15px/1.5 -apple-system, "Segoe UI", Inter, Roboto, sans-serif; padding:16px; }
+  form { width:100%; max-width:340px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:28px; }
+  h1 { font-size:18px; margin:0 0 4px; font-weight:600; }
+  p { margin:0 0 20px; color:var(--muted); font-size:13px; }
+  label { display:block; font-size:12px; color:var(--muted); margin:14px 0 6px; }
+  input { width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:6px; background:transparent; color:var(--ink); font:inherit; }
+  input:focus { outline:2px solid var(--accent); outline-offset:-1px; }
+  button { margin-top:20px; width:100%; padding:10px; border:0; border-radius:6px; background:var(--accent); color:#fff; font:inherit; font-weight:600; cursor:pointer; }
+  @media (prefers-color-scheme: dark) { button { color:#111; } }
+  .err { color:var(--err); font-size:13px; min-height:18px; margin-top:12px; }
+</style>
+</head>
+<body>
+<form method="post" action="/login">
+  <h1>LP Portal</h1>
+  <p>Icons &amp; Company · private fund and LP database</p>
+  <label for="u">User name</label>
+  <input id="u" name="username" autocomplete="username" required autofocus>
+  <label for="p">Password</label>
+  <input id="p" name="password" type="password" autocomplete="current-password" required>
+  <button type="submit">Sign in</button>
+  <div class="err">{{error}}</div>
+</form>
+</body>
+</html>

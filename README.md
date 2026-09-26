@@ -6,3 +6,5 @@ Private-markets intelligence desk: curated headlines (live-refreshed on every vi
 - `markets.html` — standalone live-markets page
 
 Static site. Headlines refresh client-side on each page load; markets stream live. Internal / partner use.
+
+- `lp-database/` — LP Database portal (Python web app, password-protected): find LPs for a described fund, 116k private funds from SEC Form ADV, 12k managers, 4.3k LP commitments from 19 public LPs. Deploys to Render via `render.yaml`; see `lp-database/README.md`.

@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: lp-portal
+    runtime: python
+    plan: free
+    rootDir: lp-database
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: PORTAL_USER
+        value: icons
+      - key: PORTAL_PASSWORD
+        sync: false
+      - key: PORTAL_SECRET
+        generateValue: true
