@@ -51,11 +51,11 @@ for t in ("lp_contacts", "adviser_contacts", "family_offices"):
             PRIVATE[t] = True
             break
 if "lp_contacts" not in PRIVATE:
-    con.execute("CREATE VIEW lp_contacts AS SELECT NULL::VARCHAR db_lp, NULL::VARCHAR institution, NULL::VARCHAR team, NULL::VARCHAR contact_name, NULL::VARCHAR title, NULL::VARCHAR email, NULL::VARCHAR phone, NULL::VARCHAR address, NULL::VARCHAR how_to_apply, NULL::VARCHAR source_url, NULL::VARCHAR notes WHERE false")
+    con.execute('CREATE VIEW lp_contacts AS SELECT NULL::VARCHAR AS "db_lp", NULL::VARCHAR AS "institution", NULL::VARCHAR AS "team", NULL::VARCHAR AS "contact_name", NULL::VARCHAR AS "title", NULL::VARCHAR AS "email", NULL::VARCHAR AS "phone", NULL::VARCHAR AS "address", NULL::VARCHAR AS "how_to_apply", NULL::VARCHAR AS "source_url", NULL::VARCHAR AS "notes" WHERE false')
 if "adviser_contacts" not in PRIVATE:
-    con.execute("CREATE VIEW adviser_contacts AS SELECT NULL::VARCHAR crd, NULL::VARCHAR street, NULL::VARCHAR city, NULL::VARCHAR state, NULL::VARCHAR country, NULL::VARCHAR postal, NULL::VARCHAR phone, NULL::VARCHAR websites, NULL::VARCHAR cco_name, NULL::VARCHAR regulatory_contact WHERE false")
+    con.execute('CREATE VIEW adviser_contacts AS SELECT NULL::VARCHAR AS "crd", NULL::VARCHAR AS "street", NULL::VARCHAR AS "city", NULL::VARCHAR AS "state", NULL::VARCHAR AS "country", NULL::VARCHAR AS "postal", NULL::VARCHAR AS "phone", NULL::VARCHAR AS "websites", NULL::VARCHAR AS "cco_name", NULL::VARCHAR AS "regulatory_contact" WHERE false')
 if "family_offices" not in PRIVATE:
-    con.execute("CREATE VIEW family_offices AS SELECT NULL::VARCHAR name, NULL::VARCHAR principal, NULL::VARCHAR country, NULL::VARCHAR city, NULL::VARCHAR website, NULL::VARCHAR fo_type, NULL::VARCHAR style, NULL::VARCHAR fund_commitments, NULL::VARCHAR sectors, NULL::VARCHAR stages, NULL::VARCHAR typical_cheque, NULL::VARCHAR notable_directs, NULL::VARCHAR general_contact, NULL::VARCHAR sources, NULL::VARCHAR notes, NULL::VARCHAR region WHERE false")
+    con.execute('CREATE VIEW family_offices AS SELECT NULL::VARCHAR AS "name", NULL::VARCHAR AS "principal", NULL::VARCHAR AS "country", NULL::VARCHAR AS "city", NULL::VARCHAR AS "website", NULL::VARCHAR AS "fo_type", NULL::VARCHAR AS "style", NULL::VARCHAR AS "fund_commitments", NULL::VARCHAR AS "sectors", NULL::VARCHAR AS "stages", NULL::VARCHAR AS "typical_cheque", NULL::VARCHAR AS "notable_directs", NULL::VARCHAR AS "general_contact", NULL::VARCHAR AS "sources", NULL::VARCHAR AS "notes", NULL::VARCHAR AS "region" WHERE false')
 # commitments with strategy / stage / themes / geography attached
 con.execute("""CREATE VIEW cmx AS SELECT c.*, k.strategy, k.stage, k.themes, k.geography, coalesce(nullif(k.manager_std,''), c.manager) manager_std
                FROM commitments c LEFT JOIN fund_class k USING (name_key)""")
