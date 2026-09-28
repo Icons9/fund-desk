@@ -23,8 +23,39 @@ COOKIE = "lp_portal"
 SESSION_DAYS = 14
 
 con = duckdb.connect()
-for t in ("funds", "advisers", "commitments", "lps", "fund_class"):
+for t in ("funds", "advisers", "lps"):
     con.execute(f"CREATE VIEW {t} AS SELECT * FROM read_parquet('{DATA / (t + '.parquet')}')")
+# monthly updates (appended by the scheduled refresh) extend commitments and their classification
+UPD = DATA / "commitments_updates.csv"
+if UPD.exists():
+    con.execute(f"""CREATE VIEW commitments_upd AS SELECT lp, lp_country, lp_type, asset_class, fund_name, manager,
+        TRY_CAST(vintage AS INT) vintage, TRY_CAST(date_committed AS DATE) date_committed, TRY_CAST(amount_usd_m AS DOUBLE) amount_usd_m,
+        NULL::DOUBLE contributed_usd_m, NULL::DOUBLE distributed_usd_m, NULL::VARCHAR net_irr, NULL::VARCHAR multiple, themes theme,
+        notes, TRY_CAST(date_committed AS DATE) as_of, source_url, NULL::VARCHAR adv_fund_id,
+        'upd:' || lower(regexp_replace(fund_name, '[^A-Za-z0-9]+', ' ', 'g')) name_key, strategy, stage, themes, geography
+        FROM read_csv('{UPD}', header=true, all_varchar=true)""")
+    con.execute(f"""CREATE VIEW commitments AS SELECT * FROM read_parquet('{DATA / 'commitments.parquet'}')
+        UNION ALL BY NAME SELECT * EXCLUDE (strategy, stage, themes, geography) FROM commitments_upd""")
+    con.execute(f"""CREATE VIEW fund_class AS SELECT * FROM read_parquet('{DATA / 'fund_class.parquet'}')
+        UNION ALL BY NAME SELECT name_key, strategy, stage, themes, geography, manager manager_std FROM commitments_upd""")
+else:
+    for t in ("commitments", "fund_class"):
+        con.execute(f"CREATE VIEW {t} AS SELECT * FROM read_parquet('{DATA / (t + '.parquet')}')")
+# private data (contacts, family offices): only present when the repo is private / files are provided
+PRIVATE = {}
+for t in ("lp_contacts", "adviser_contacts", "family_offices"):
+    for folder in (BASE / "private", DATA):
+        f = folder / (t + ".parquet")
+        if f.exists():
+            con.execute(f"CREATE VIEW {t} AS SELECT * FROM read_parquet('{f}')")
+            PRIVATE[t] = True
+            break
+if "lp_contacts" not in PRIVATE:
+    con.execute("CREATE VIEW lp_contacts AS SELECT NULL::VARCHAR db_lp, NULL::VARCHAR institution, NULL::VARCHAR team, NULL::VARCHAR contact_name, NULL::VARCHAR title, NULL::VARCHAR email, NULL::VARCHAR phone, NULL::VARCHAR address, NULL::VARCHAR how_to_apply, NULL::VARCHAR source_url, NULL::VARCHAR notes WHERE false")
+if "adviser_contacts" not in PRIVATE:
+    con.execute("CREATE VIEW adviser_contacts AS SELECT NULL::VARCHAR crd, NULL::VARCHAR street, NULL::VARCHAR city, NULL::VARCHAR state, NULL::VARCHAR country, NULL::VARCHAR postal, NULL::VARCHAR phone, NULL::VARCHAR websites, NULL::VARCHAR cco_name, NULL::VARCHAR regulatory_contact WHERE false")
+if "family_offices" not in PRIVATE:
+    con.execute("CREATE VIEW family_offices AS SELECT NULL::VARCHAR name, NULL::VARCHAR principal, NULL::VARCHAR country, NULL::VARCHAR city, NULL::VARCHAR website, NULL::VARCHAR fo_type, NULL::VARCHAR style, NULL::VARCHAR fund_commitments, NULL::VARCHAR sectors, NULL::VARCHAR stages, NULL::VARCHAR typical_cheque, NULL::VARCHAR notable_directs, NULL::VARCHAR general_contact, NULL::VARCHAR sources, NULL::VARCHAR notes, NULL::VARCHAR region WHERE false")
 # commitments with strategy / stage / themes / geography attached
 con.execute("""CREATE VIEW cmx AS SELECT c.*, k.strategy, k.stage, k.themes, k.geography, coalesce(nullif(k.manager_std,''), c.manager) manager_std
                FROM commitments c LEFT JOIN fund_class k USING (name_key)""")
@@ -71,7 +102,7 @@ def _valid(token: str | None) -> bool:
 @app.middleware("http")
 async def auth(request: Request, call_next):
     path = request.url.path
-    if path in ("/login", "/healthz") or path.startswith("/static/login"):
+    if path in ("/login", "/healthz") or path.startswith("/static/login") or path.startswith("/mcp"):
         return await call_next(request)
     if not _valid(request.cookies.get(COOKIE)):
         if path.startswith("/api/"):
@@ -381,6 +412,10 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
         d["score"] = round(d["score"], 2)
         out.append(d)
     out.sort(key=lambda d: d["score"], reverse=True)
+    for d in out:
+        d["contacts"] = rows("""SELECT institution, team, contact_name, title, email, phone, how_to_apply, source_url FROM lp_contacts
+                                WHERE db_lp = ? ORDER BY (contact_name IS NULL), (email IS NULL), contact_name""", [d["lp"]])
+        d["how_to_apply"] = next((c["how_to_apply"] for c in d["contacts"] if c["how_to_apply"]), None)
     top = out[0]["score"] if out else 1
     for d in out:
         d["match"] = round(100 * d["score"] / top)
@@ -390,7 +425,8 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
            "Secondaries": "n_pe + 0.5*n_vc + 0.3*n_other", "Fund of funds": "n_pe + n_vc",
            "Real estate": "n_re", "Infrastructure": "n_other + 0.2*n_pe", "Private credit": "n_other + 0.2*n_pe",
            "Distressed/special situations": "n_other + 0.3*n_pe", "Real assets/natural resources": "n_other + 0.2*n_pe"}.get(strategy, "n_pe")
-    fof = rows(f"""SELECT *, ({col}) AS rel FROM fof_managers WHERE ({col}) > 0""")
+    fof = rows(f"""SELECT m.*, ({col}) AS rel, c.phone, c.websites, c.cco_name
+                   FROM fof_managers m LEFT JOIN adviser_contacts c ON c.crd = m.crd WHERE ({col}) > 0""")
     for f in fof:
         geo = 1.0
         doms = set((f["domiciles"] or "").split("; "))
@@ -410,7 +446,7 @@ def match(strategy: str = "Venture", geography: str = "Europe", themes: str = ""
     top = fof[0]["score"] if fof else 1
     for f in fof:
         f["match"] = round(100 * f["score"] / top)
-    return {"public_lps": out, "fof_allocators": fof, "regional": regional,
+    return {"public_lps": out, "fof_allocators": fof, "regional": regional, "private_data": bool(PRIVATE),
             "note": "Public LPs are ranked by how many similar funds they backed (strategy, geography, themes, recency). "
                     "Fund-of-funds allocators come from SEC Form ADV and are ranked by how many relevant fund-of-funds vehicles they run and their size."}
 
@@ -421,3 +457,8 @@ def overlap(min_lps: int = 2):
                    max(vintage) vintage, round(sum(amount_usd_m)) total_usd_m, any_value(adv_fund_id) adv_fund_id
                    FROM commitments GROUP BY name_key HAVING count(DISTINCT lp) >= ?
                    ORDER BY n_lps DESC, total_usd_m DESC NULLS LAST LIMIT 500""", [min_lps])
+
+
+# ---------- extended features (family offices, signals, manager check, founder mode, exports, MCP) ----------
+import extra  # noqa: E402
+extra.register(app, globals())

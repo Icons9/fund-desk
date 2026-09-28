@@ -1,12 +1,19 @@
 # LP Portal
 
-Password-protected web portal over the Icons & Company private fund and LP database.
+Password-protected portal for fundraising research over public private-markets data.
 
-- **Find LPs**: describe the fund you are raising (strategy, stage, geography, themes, size, first-time manager) and get ranked LPs: public LPs with a record of backing similar funds, with examples and typical ticket, plus fund-of-funds allocators from SEC Form ADV that run relevant vehicles.
+- **Find LPs**: describe the fund you are raising (strategy, stage, geography, themes, size, first-time manager) and get ranked public LPs with comparable commitments, typical ticket and published contacts; matching family offices; and fund-of-funds allocators from SEC Form ADV. Shortlist LPs, draft emails that cite each LP's comparable funds, and export to a HubSpot import file.
+- **Shortlist**: saved LPs with outreach status and notes (kept in the browser), exportable to HubSpot.
+- **Family offices**: ~660 family offices across India, the Gulf, Singapore/Hong Kong, Europe and the US, with known fund commitments where public.
+- **Signals**: most active LPs, recent dated commitments, themes in the latest vintages, new large funds, managers backed by several LPs.
+- **Manager check**: due-diligence view of any SEC-reporting manager: funds, investor base, service providers, public LP backers, points to probe.
+- **Find VCs** (founder mode): rank venture managers for a startup by round, geography and themes.
+- **Funds / Managers / LPs / Commitments / Overview**: the underlying data: 116,604 private funds, 12,367 managers, 6,620 LP commitments from 86 LPs.
+- **Claude connector**: `POST /mcp` (MCP over HTTP) with tools find_lps, search_funds, manager_check, lp_commitments, family_offices, find_vcs. Enabled when `PORTAL_MCP_TOKEN` is set; pass it as `Authorization: Bearer <token>` or `?token=<token>`.
 
-- **Funds**: 116,604 private funds reported on SEC Form ADV Schedule D 7.B.1 (latest filings to Dec 2024): type, domicile, size, investor count, share held by funds of funds and non-US investors, GP entities, auditor, administrator, custodian, prime broker, placement agent.
-- **Managers**: 12,367 advisers with active private funds.
-- **LP commitments**: 4,629 LP-to-fund records from 60 LPs, including India-focused LPs (SIDBI fund of funds, NIIF, IFC, BII, AIIB, DFIs) and (CalPERS, CalSTRS, Washington SIB, Oregon PERF, NY Common, Florida SBA, EIB, EIF, and UK LGPS funds: Greater Manchester, Strathclyde, Lothian, West Yorkshire, Merseyside, Northern PE Pool, Nottinghamshire, Cambridgeshire, Cheshire, Suffolk, Lincolnshire). Each row links to its public source.
+Contacts and family offices live in `private/` (git-ignored) and are only served when those files are present, i.e. once the portal runs from a private repository.
+
+`data/commitments_updates.csv` is appended monthly by a scheduled refresh (new commitments with strategy/themes/geography) and is merged into the commitments at start-up.
 
 ## Run locally
 

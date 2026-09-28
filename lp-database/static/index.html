@@ -51,6 +51,14 @@ a{color:var(--accent)}
 .pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;background:var(--soft);color:var(--muted);margin-right:4px}
 .note{color:var(--muted);font-size:12px;margin:8px 0 0}
 .empty{padding:20px;color:var(--muted)}
+.bar2{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;color:var(--muted);font-size:13px;flex-wrap:wrap}
+a.btn{text-decoration:none;display:inline-block}
+.btn.sm{padding:2px 8px;font-size:12px}
+.contacts{margin:8px 0 0;padding:8px 10px;background:var(--soft);border-radius:6px;font-size:13px}
+.contacts div{margin:2px 0}
+.ok{color:var(--good)}.warn{color:var(--warn)}
+textarea{width:100%;min-height:260px;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:13px/1.5 inherit}
+
 .form{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px 16px;align-items:end}
 .form label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
 .form select,.form input[type=number]{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit}
@@ -77,12 +85,16 @@ a{color:var(--accent)}
   <h1>LP Portal</h1>
   <nav id="nav">
     <button data-v="match" class="on">Find LPs</button>
-    <button data-v="overview">Overview</button>
+    <button data-v="shortlist">Shortlist</button>
+    <button data-v="family">Family offices</button>
+    <button data-v="signals">Signals</button>
+    <button data-v="check">Manager check</button>
+    <button data-v="vcs">Find VCs</button>
     <button data-v="funds">Funds</button>
     <button data-v="managers">Managers</button>
     <button data-v="lps">LPs</button>
     <button data-v="commitments">Commitments</button>
-    <button data-v="overlap">Shared funds</button>
+    <button data-v="overview">Overview</button>
   </nav>
   <a href="/logout">Sign out</a>
 </header>
@@ -130,39 +142,143 @@ const views = {
     const O = await api('/api/match_options');
     $('#main').innerHTML = `<div class="card"><h2>Describe the fund you are raising</h2>
       <div class="form">
+        <div><label>Fund name (for email drafts)</label><input type="text" id="mfn" placeholder="e.g. Icons Deep Tech Fund I" style="width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit"></div>
         <div><label>Strategy</label><select id="ms">${O.strategies.map(x=>`<option>${x}</option>`).join('')}</select></div>
         <div><label>Stage / size band</label><select id="mst"><option value="">Any</option>${O.stages.map(x=>`<option>${x}</option>`).join('')}</select></div>
         <div><label>Geographic focus</label><select id="mg">${O.geographies.map(x=>`<option>${x}</option>`).join('')}</select></div>
         <div><label>Target fund size ($m)</label><input type="number" id="msz" placeholder="e.g. 150"></div>
       </div>
       <div style="margin-top:14px"><label style="font-size:12px;color:var(--muted)">Sector themes</label>
-        <div class="chips" style="margin-top:6px">${O.themes.map(t=>`<label><input type="checkbox" value="${t}">${t}</label>`).join('')}</div></div>
+        <div class="chips" style="margin-top:6px">${O.themes.map(t=>`<label><input type="checkbox" class="th" value="${t}">${t}</label>`).join('')}</div></div>
       <div style="margin-top:14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
         <label class="chips" style="margin:0"><label><input type="checkbox" id="mem">First-time / emerging manager</label></label>
         <button class="primary" id="mgo">Find LPs</button></div></div>
       <div id="mres" style="margin-top:16px"></div>`;
     $('#mg').value = 'Europe';
     $('#mgo').onclick = async () => {
-      const themes = [...document.querySelectorAll('.chips input[type=checkbox][value]:checked')].map(i=>i.value).join(';');
+      const themes = [...document.querySelectorAll('.th:checked')].map(i=>i.value).join(';');
+      const P = {strategy:$('#ms').value, stage:$('#mst').value, geography:$('#mg').value, themes, fund_size_m:+$('#msz').value||0, emerging:$('#mem').checked?1:0};
+      LASTQ = {...P, fund_name:$('#mfn').value};
       $('#mres').innerHTML = '<div class="empty">Matching…</div>';
-      const R = await api('/api/match?' + qs({strategy:$('#ms').value, stage:$('#mst').value, geography:$('#mg').value, themes,
-        fund_size_m:+$('#msz').value||0, emerging:$('#mem').checked?1:0}));
-      const lpHtml = R.public_lps.length ? R.public_lps.map(d => `<div class="lp"><div class="top">
-          <span class="name">${esc(d.lp)}</span><span class="meta">${esc(d.lp_type)} · ${esc(d.country)}</span>
-          <span class="meta">match <span class="score">${d.match}</span><span class="meter"><i style="width:${d.match}%"></i></span></span>
-          <span class="meta">${d.n_similar} similar commitments${d.median_ticket_usd_m?` · typical ticket $${num(d.median_ticket_usd_m,1)}m`:''}</span>
-          ${d.flags.map(f=>`<span class="flag">${esc(f)}</span>`).join('')}</div>
-          <ul>${d.examples.map(e=>`<li>${esc(e.fund_name)}${e.manager?' ('+esc(e.manager)+')':''} · ${e.vintage||''} · ${e.amount_usd_m?'$'+num(e.amount_usd_m,1)+'m':''} <span class="meta">${esc(e.themes||'')} · ${esc(e.geography||'')}</span>${e.source_url?` · <a href="${esc(e.source_url)}" target="_blank" rel="noopener">source</a>`:''}</li>`).join('')}</ul></div>`).join('')
-        : '<div class="empty">None of the tracked public LPs has backed a similar fund.</div>';
-      const fofEl = document.createElement('div');
-      $('#mres').innerHTML = `<div class="card"><h2>Public LPs with a record of backing similar funds (${R.public_lps.length})</h2>${lpHtml}</div>
+      const [R, F] = await Promise.all([api('/api/match?' + qs(P)), api('/api/match_fo?' + qs({strategy:P.strategy, geography:P.geography, themes}))]);
+      LASTR = R;
+      const lpHtml = R.public_lps.length ? R.public_lps.map((d,i) => lpCard(d,i)).join('') : '<div class="empty">None of the tracked public LPs has backed a similar fund.</div>';
+      const foHtml = !F.available ? '<div class="empty">Family office data is kept out of the public repository. It appears here once the portal runs from a private repo.</div>'
+        : F.family_offices.length ? F.family_offices.slice(0,30).map(f => `<div class="lp"><div class="top"><span class="name">${esc(f.name)}</span>
+            <span class="meta">${esc([f.fo_type, f.city, f.country].filter(Boolean).join(' · '))}</span>
+            <span class="meta">match <span class="score">${f.match}</span><span class="meter"><i style="width:${f.match}%"></i></span></span>
+            <button class="btn sm" onclick='addShort(${JSON.stringify({name:f.name, kind:"Family office", country:f.country, website:f.website, why:(f.reasons||[]).join("; ")}).replace(/'/g,"&#39;")})'>Shortlist</button></div>
+            <ul>${f.fund_commitments?`<li><b>LP in:</b> ${esc(f.fund_commitments)}</li>`:''}${f.sectors?`<li><b>Focus:</b> ${esc(f.sectors)}${f.stages?' · '+esc(f.stages):''}</li>`:''}
+            ${f.style?`<li><b>Style:</b> ${esc(f.style)}${f.typical_cheque?' · cheque '+esc(f.typical_cheque):''}</li>`:''}
+            ${f.website?`<li><a href="${/^http/.test(f.website)?esc(f.website):'https://'+esc(f.website)}" target="_blank" rel="noopener">${esc(f.website)}</a>${f.general_contact?' · '+esc(f.general_contact):''}</li>`:''}</ul></div>`).join('')
+        : '<div class="empty">No family offices matched.</div>';
+      $('#mres').innerHTML = `<div class="bar2"><span>${R.public_lps.length} public LPs · ${F.family_offices?F.family_offices.length:0} family offices · ${R.fof_allocators.length} fund-of-funds managers</span>
+          <a class="btn" href="/api/export/hubspot.csv?${qs({...P, fund_name:LASTQ.fund_name})}">Export all to HubSpot (CSV)</a></div>
+        <div class="card"><h2>Public LPs with a record of backing similar funds</h2>${lpHtml}</div>
+        <div class="card" style="margin-top:16px"><h2>Family offices</h2>${foHtml}
+          <p class="note">Family offices rarely publish commitments; "LP in" lists funds they are publicly known to back. Directory-only entries carry less evidence.</p></div>
         <div class="card" style="margin-top:16px"><h2>Fund-of-funds allocators (SEC Form ADV) running relevant vehicles</h2><div id="fofr"></div>
-        <p class="note">${esc(R.note)} Click a row to see the manager and its vehicles.</p></div>`;
+        <p class="note">${esc(R.note)} Phone and website are the firm's SEC-filed office details. Click a row for the manager check.</p></div>`;
       const el = $('#fofr');
       el.innerHTML = table([{h:'Match',k:'match',n:1,f:r=>`${r.match}<span class="meter"><i style="width:${r.match}%"></i></span>`},{h:'Allocator',k:'name'},{h:'Country',k:'country'},
-        {h:'FoF vehicles',k:'n_vehicles',n:1},{h:'VC',k:'n_vc',n:1},{h:'PE',k:'n_pe',n:1},{h:'RE',k:'n_re',n:1},{h:'Other',k:'n_other',n:1},
-        {h:'Gross assets $bn',k:'gav_bn',n:1,f:r=>num(r.gav_bn,1)},{h:'Largest vehicle',k:'largest_vehicle'},{h:'Domiciles',k:'domiciles'}], R.fof_allocators, true);
-      bindRows(el, R.fof_allocators, r => showManager(r.crd));
+        {h:'FoF vehicles',k:'n_vehicles',n:1},{h:'VC',k:'n_vc',n:1},{h:'PE',k:'n_pe',n:1},{h:'Gross assets $bn',k:'gav_bn',n:1,f:r=>num(r.gav_bn,1)},
+        {h:'Phone',k:'phone'},{h:'Website',k:'websites',f:r=>r.websites?esc(r.websites.split('; ')[0]):''},{h:'Largest vehicle',k:'largest_vehicle'}], R.fof_allocators, true);
+      bindRows(el, R.fof_allocators, r => showCheck(r.crd));
+    };
+  },
+
+  async shortlist() {
+    const S = loadShort(); const items = Object.values(S);
+    const statuses = ['To contact','Contacted','Replied','Meeting','Due diligence','Committed','Passed'];
+    $('#main').innerHTML = `<div class="card"><h2>Shortlist (${items.length})</h2>
+      <p class="note" style="margin:0 0 10px">Kept in this browser. Export to HubSpot to share it or keep it safe.</p>
+      <div class="bar2"><span></span><button class="btn" id="sx">Export shortlist to HubSpot (CSV)</button></div><div id="sl"></div></div>`;
+    if (!items.length) { $('#sl').innerHTML = '<div class="empty">Nothing shortlisted yet. Use "Shortlist" on the Find LPs results.</div>'; return; }
+    $('#sl').innerHTML = `<div class="tw"><table><thead><tr><th>Name</th><th>Type</th><th>Country</th><th>Status</th><th>Notes</th><th>Contact</th><th></th></tr></thead><tbody>${
+      items.map((it,i)=>`<tr><td title="${esc(it.why||'')}">${esc(it.name)}</td><td>${esc(it.kind||'')}</td><td>${esc(it.country||'')}</td>
+        <td><select data-i="${esc(it.name)}" class="st">${statuses.map(s=>`<option ${s===it.status?'selected':''}>${s}</option>`).join('')}</select></td>
+        <td><input data-i="${esc(it.name)}" class="nt" value="${esc(it.notes||'')}" style="width:220px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)"></td>
+        <td>${esc((it.contacts||[]).filter(c=>c.contact_name).map(c=>c.contact_name+(c.email?' <'+c.email+'>':'')).slice(0,2).join('; '))}</td>
+        <td><button class="btn sm" data-rm="${esc(it.name)}">Remove</button></td></tr>`).join('')}</tbody></table></div>`;
+    document.querySelectorAll('.st').forEach(e=>e.onchange=()=>{const S=loadShort(); S[e.dataset.i].status=e.value; saveShort(S);});
+    document.querySelectorAll('.nt').forEach(e=>e.onchange=()=>{const S=loadShort(); S[e.dataset.i].notes=e.value; saveShort(S);});
+    document.querySelectorAll('[data-rm]').forEach(e=>e.onclick=()=>{const S=loadShort(); delete S[e.dataset.rm]; saveShort(S); views.shortlist();});
+    $('#sx').onclick = () => exportShortCsv(Object.values(loadShort()));
+  },
+
+  async family(state={q:'',region:'',style:'',has_funds:0}) {
+    $('#main').innerHTML = `<div class="filters"><input type="search" id="fq" placeholder="Search name, principal, sector, fund">
+      <select id="fr"><option value="">All regions</option>${['India','Middle East','Asia','Europe','UK','North America'].map(x=>`<option>${x}</option>`).join('')}</select>
+      <select id="fs"><option value="">Any style</option><option value="fund">Invests in funds</option><option value="both">Both</option><option value="direct">Direct only</option></select>
+      <label class="chips" style="margin:0"><label><input type="checkbox" id="fh">Known fund commitments only</label></label>
+      <span class="count" id="fc"></span></div><div id="fres"></div>`;
+    const load = async (page=0) => {
+      const res = await api('/api/family_offices?' + qs({q:$('#fq').value, region:$('#fr').value, style:$('#fs').value, has_funds:$('#fh').checked?1:0, page}));
+      if (!res.available) { $('#fres').innerHTML = '<div class="empty">Family office data is kept out of the public repository. It appears once the portal runs from a private repo.</div>'; return; }
+      $('#fc').textContent = num(res.total) + ' family offices';
+      const el = $('#fres');
+      el.innerHTML = table([{h:'Name',k:'name'},{h:'Principal',k:'principal'},{h:'City',k:'city'},{h:'Country',k:'country'},{h:'Type',k:'fo_type'},{h:'Style',k:'style'},
+        {h:'Known fund commitments',k:'fund_commitments'},{h:'Sectors',k:'sectors'},{h:'Website',k:'website'}], res.rows, true);
+      bindRows(el, res.rows, f => openDrawer(`<h3>${esc(f.name)}</h3><div class="sub">${esc([f.fo_type,f.city,f.country].filter(Boolean).join(' · '))}</div><dl>
+        <dt>Principal</dt><dd>${esc(f.principal)}</dd><dt>Style</dt><dd>${esc(f.style)}</dd><dt>Known fund commitments</dt><dd>${esc(f.fund_commitments)}</dd>
+        <dt>Sectors</dt><dd>${esc(f.sectors)}</dd><dt>Stages</dt><dd>${esc(f.stages)}</dd><dt>Typical cheque</dt><dd>${esc(f.typical_cheque)}</dd>
+        <dt>Notable direct investments</dt><dd>${esc(f.notable_directs)}</dd><dt>Website</dt><dd>${esc(f.website)}</dd><dt>General contact</dt><dd>${esc(f.general_contact)}</dd>
+        <dt>Sources</dt><dd>${(f.sources||'').split(' | ').filter(Boolean).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join('<br>')}</dd></dl>
+        <button class="btn" onclick='addShort(${JSON.stringify({name:f.name,kind:"Family office",country:f.country,website:f.website,why:f.fund_commitments||f.sectors||""}).replace(/'/g,"&#39;")})'>Add to shortlist</button>`));
+      el.appendChild(pager(res, load));
+    };
+    const go = debounce(() => load(0));
+    $('#main').querySelectorAll('input,select').forEach(i => i.addEventListener(i.tagName==='SELECT'||i.type==='checkbox'?'change':'input', go));
+    load();
+  },
+
+  async signals() {
+    const [S, O] = await Promise.all([api('/api/signals'), api('/api/overlap?min_lps=3')]);
+    const maxT = Math.max(1, ...S.themes_recent.map(t=>t.n));
+    $('#main').innerHTML = `<div class="grid2">
+      <div class="card"><h2>Most active LPs (last 12 months or latest vintages)</h2><div id="sa"></div></div>
+      <div class="card"><h2>Themes in the latest vintages</h2>${table([{h:'Theme',k:'theme'},{h:'Commitments',k:'n',n:1},{h:'',k:'n',f:r=>`<div class="bar" style="width:${Math.round(120*r.n/maxT)}px"></div>`},{h:'$m',k:'usd_m',n:1,f:r=>num(r.usd_m)}], S.themes_recent)}</div></div>
+      <div class="card" style="margin-top:16px"><h2>Dated commitments in the last 12 months</h2><div id="sr"></div></div>
+      <div class="card" style="margin-top:16px"><h2>Largest VC and PE funds first filed since 2024 (SEC Form ADV)</h2><div id="sn"></div></div>
+      <div class="card" style="margin-top:16px"><h2>Managers backed by three or more tracked LPs</h2><div id="so"></div></div>`;
+    $('#sa').innerHTML = table([{h:'LP',k:'lp'},{h:'Type',k:'lp_type'},{h:'Commitments',k:'n',n:1},{h:'$m',k:'usd_m',n:1,f:r=>num(r.usd_m)},{h:'Latest',k:'latest'}], S.active_lps);
+    $('#sr').innerHTML = table([{h:'Date',k:'date_committed'},{h:'LP',k:'lp'},{h:'Fund',k:'fund_name'},{h:'Manager',k:'manager'},{h:'Strategy',k:'strategy'},{h:'Themes',k:'themes'},{h:'Geography',k:'geography'},{h:'$m',k:'amount_usd_m',n:1,f:r=>num(r.amount_usd_m,1)},
+      {h:'Source',k:'source_url',f:r=>r.source_url?`<a href="${esc(r.source_url)}" target="_blank" rel="noopener">link</a>`:''}], S.recent_commitments);
+    const n = $('#sn'); n.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'Type',k:'fund_type'},{h:'Domicile',k:'domicile_country'},{h:'$m',k:'gav_musd',n:1,f:r=>num(r.gav_musd,1)},{h:'Investors',k:'beneficial_owners',n:1},{h:'Manager',k:'adviser_name'},{h:'First filed',k:'first_reported'}], S.new_funds, true);
+    bindRows(n, S.new_funds, r => showFund(r.fund_id));
+    const o = $('#so'); o.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'LPs',k:'n_lps',n:1},{h:'Vintage',k:'vintage'},{h:'Total $m',k:'total_usd_m',n:1,f:r=>num(r.total_usd_m)},{h:'Which LPs',k:'lps'}], O, true);
+    bindRows(o, O, r => r.adv_fund_id ? showFund(r.adv_fund_id) : null);
+  },
+
+  async check() {
+    $('#main').innerHTML = `<div class="card"><h2>Manager check</h2><p class="note" style="margin:0 0 10px">Look up a fund manager before investing with or pitching it: fund history, investor base, service providers, public LP backers and points to probe.</p>
+      <div class="filters"><input type="search" id="cq" placeholder="Manager name, e.g. Horsley Bridge, Blume, Balderton"></div><div id="cr"></div></div>`;
+    const load = async () => {
+      const q = $('#cq').value; if (q.length < 2) { $('#cr').innerHTML=''; return; }
+      const res = await api('/api/managers?' + qs({q, sort:'gav'}));
+      const el = $('#cr'); el.innerHTML = table([{h:'Manager',k:'adviser_name'},{h:'Type',k:'adviser_type'},{h:'City',k:'city'},{h:'Country',k:'country'},{h:'Active funds',k:'n_active_funds',n:1},{h:'Fund assets $m',k:'fund_gav_musd',n:1,f:r=>num(r.fund_gav_musd)}], res.rows.slice(0,15), true);
+      bindRows(el, res.rows, r => showCheck(r.crd));
+    };
+    $('#cq').oninput = debounce(load);
+  },
+
+  async vcs() {
+    const O = await api('/api/match_options');
+    $('#main').innerHTML = `<div class="card"><h2>Founder mode: find VCs for a startup</h2>
+      <div class="form"><div><label>Round</label><select id="vs">${['Pre-seed / seed','Series A','Series B+','Growth'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+        <div><label>Geography</label><select id="vg">${['North America','Europe','UK','India','Asia'].map(x=>`<option>${x}</option>`).join('')}</select></div></div>
+      <div style="margin-top:14px"><div class="chips">${O.themes.filter(t=>t!=='generalist').map(t=>`<label><input type="checkbox" class="vt" value="${t}">${t}</label>`).join('')}</div></div>
+      <div style="margin-top:14px"><button class="primary" id="vgo">Find VCs</button></div></div><div id="vres" style="margin-top:16px"></div>`;
+    $('#vs').value = 'Series A';
+    $('#vgo').onclick = async () => {
+      const themes = [...document.querySelectorAll('.vt:checked')].map(i=>i.value).join(';');
+      $('#vres').innerHTML = '<div class="empty">Matching…</div>';
+      const R = await api('/api/find_vcs?' + qs({stage:$('#vs').value, geography:$('#vg').value, themes}));
+      $('#vres').innerHTML = `<div class="card"><h2>Venture managers (${R.vcs.length})</h2><div id="vt"></div><p class="note">${esc(R.note)}</p></div>`;
+      const el = $('#vt'); el.innerHTML = table([{h:'Match',k:'match',n:1,f:r=>`${r.match}<span class="meter"><i style="width:${r.match}%"></i></span>`},{h:'Manager',k:'name'},{h:'Country',k:'country'},
+        {h:'VC funds',k:'n_funds',n:1},{h:'Median fund $m',k:'median_fund_musd',n:1,f:r=>num(r.median_fund_musd,1)},{h:'Latest fund filed',k:'newest'},{h:'Latest fund',k:'latest_fund'},
+        {h:'Themes',k:'themes_hit',f:r=>esc((r.themes_hit||[]).join(', '))},{h:'Website',k:'websites',f:r=>r.websites?esc(r.websites.split('; ')[0]):''},{h:'Phone',k:'phone'}], R.vcs, true);
+      bindRows(el, R.vcs, r => showCheck(r.crd));
     };
   },
 
@@ -235,7 +351,7 @@ const views = {
       el.innerHTML = table([{h:'Manager',k:'adviser_name'},{h:'Type',k:'adviser_type'},{h:'City',k:'city'},{h:'Country',k:'country'},
         {h:'Active funds',k:'n_active_funds',n:1,f:r=>num(r.n_active_funds)},{h:'Fund assets $m',k:'fund_gav_musd',n:1,f:r=>num(r.fund_gav_musd)},
         {h:'Reg. AUM $m',k:'aum_musd',n:1,f:r=>num(r.aum_musd)},{h:'Fund types',k:'fund_types'}], res.rows, true);
-      bindRows(el, res.rows, r => showManager(r.crd));
+      bindRows(el, res.rows, r => showCheck(r.crd));
       el.appendChild(pager(res, load));
     };
     const go = debounce(() => load(0));
@@ -277,15 +393,69 @@ const views = {
     load();
   },
 
-  async overlap() {
-    const R = await api('/api/overlap?min_lps=2');
-    $('#main').innerHTML = `<div class="card"><h2>Funds backed by more than one LP in the database</h2><div id="or"></div>
-      <p class="note">Matched on normalised fund names, so the real overlap is larger than shown.</p></div>`;
-    const el = $('#or');
-    el.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'LPs',k:'n_lps',n:1},{h:'Vintage',k:'vintage'},{h:'Total committed $m',k:'total_usd_m',n:1,f:r=>num(r.total_usd_m)},{h:'Which LPs',k:'lps'}], R, true);
-    bindRows(el, R, r => r.adv_fund_id ? showFund(r.adv_fund_id) : null);
-  },
 };
+
+
+// ---------- shortlist, cards, drafts ----------
+let LASTQ = {}, LASTR = null;
+function loadShort(){ try { return JSON.parse(localStorage.getItem('lp_shortlist')||'{}'); } catch(e){ return {}; } }
+function saveShort(S){ try { localStorage.setItem('lp_shortlist', JSON.stringify(S)); } catch(e){} }
+function addShort(it){ const S = loadShort(); if (!S[it.name]) S[it.name] = {...it, status:'To contact', notes:'', added:new Date().toISOString().slice(0,10)}; saveShort(S); toast('Added to shortlist: ' + it.name); }
+function toast(t){ let d=document.createElement('div'); d.textContent=t; d.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:6px;z-index:20;font-size:13px'; document.body.appendChild(d); setTimeout(()=>d.remove(),2200); }
+function lpCard(d, i){
+  const cts = (d.contacts||[]).filter(c=>c.contact_name||c.email).slice(0,4);
+  const snap = {name:d.lp, kind:d.lp_type, country:d.country, why:(d.examples||[]).slice(0,3).map(e=>e.fund_name+(e.vintage?' ('+e.vintage+')':'')).join('; '), contacts:cts, ticket:d.median_ticket_usd_m, match:d.match};
+  return `<div class="lp"><div class="top">
+    <span class="name">${esc(d.lp)}</span><span class="meta">${esc(d.lp_type)} · ${esc(d.country)}</span>
+    <span class="meta">match <span class="score">${d.match}</span><span class="meter"><i style="width:${d.match}%"></i></span></span>
+    <span class="meta">${d.n_similar} similar commitments${d.median_ticket_usd_m?` · typical ticket $${num(d.median_ticket_usd_m,1)}m`:''}</span>
+    ${d.flags.map(f=>`<span class="flag">${esc(f)}</span>`).join('')}
+    <button class="btn sm" onclick='addShort(${JSON.stringify(snap).replace(/'/g,"&#39;")})'>Shortlist</button>
+    <button class="btn sm" onclick="draftEmail(${i})">Draft email</button></div>
+    <ul>${d.examples.map(e=>`<li>${esc(e.fund_name)}${e.manager?' ('+esc(e.manager)+')':''} · ${e.vintage||''} · ${e.amount_usd_m?'$'+num(e.amount_usd_m,1)+'m':''} <span class="meta">${esc(e.themes||'')} · ${esc(e.geography||'')}</span>${e.source_url?` · <a href="${esc(e.source_url)}" target="_blank" rel="noopener">source</a>`:''}</li>`).join('')}</ul>
+    ${cts.length?`<div class="contacts">${cts.map(c=>`<div>${esc(c.contact_name||c.team||'General')}${c.title?' · <span class="meta">'+esc(c.title)+'</span>':''}${c.email?' · <a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>':''}${c.phone?' · '+esc(c.phone):''}${c.source_url?' · <a href="'+esc(c.source_url)+'" target="_blank" rel="noopener">source</a>':''}</div>`).join('')}</div>`:''}
+  </div>`;
+}
+async function draftEmail(i){
+  const d = LASTR.public_lps[i];
+  const r = await api('/api/draft_email?' + qs({strategy:LASTQ.strategy, geography:LASTQ.geography, themes:LASTQ.themes, stage:LASTQ.stage, fund_size_m:LASTQ.fund_size_m, emerging:LASTQ.emerging, lp:d.lp, fund_name:LASTQ.fund_name}));
+  const to = r.to && r.to.email ? r.to.email : '';
+  openDrawer(`<h3>Draft to ${esc(d.lp)}</h3><div class="sub">${r.to&&r.to.contact_name?esc(r.to.contact_name)+(r.to.title?' · '+esc(r.to.title):''):'No named contact published; address it to the team or use the published channel.'}</div>
+    <label class="meta">Subject</label><input id="esub" value="${esc(r.subject)}" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);margin:4px 0 10px">
+    <textarea id="ebody">${esc(r.body)}</textarea>
+    <div style="margin-top:10px;display:flex;gap:8px"><button class="btn" onclick="navigator.clipboard.writeText($('#esub').value+'\n\n'+$('#ebody').value).then(()=>toast('Copied'))">Copy</button>
+    ${to?`<a class="btn" href="mailto:${esc(to)}?subject=${encodeURIComponent(r.subject)}&body=${encodeURIComponent(r.body)}">Open in mail</a>`:''}</div>
+    <p class="note">Edit before sending. It cites the LP's comparable commitments from public sources; check each one is still accurate.</p>`);
+}
+function exportShortCsv(items){
+  const head = ['Company name','First Name','Last Name','Job Title','Email','Phone Number','Country/Region','Lifecycle Stage','Lead Status','LP type','Match score','Typical ticket (USD m)','Why','Status','Notes','Website'];
+  const q = v => '"' + String(v==null?'':v).replace(/"/g,'""') + '"';
+  const lines = [head.map(q).join(',')];
+  const leadStatus = {'To contact':'NEW','Contacted':'ATTEMPTED_TO_CONTACT','Replied':'CONNECTED','Meeting':'IN_PROGRESS','Due diligence':'IN_PROGRESS','Committed':'CONNECTED','Passed':'UNQUALIFIED'};
+  items.forEach(it => { const cs = (it.contacts&&it.contacts.length)?it.contacts:[{}];
+    cs.forEach(c => { const n = (c.contact_name||'').split(' ');
+      lines.push([it.name, c.contact_name?n[0]:'', c.contact_name?n.slice(1).join(' '):'', c.title||'', c.email||'', c.phone||'', it.country||'', 'lead', leadStatus[it.status]||'NEW', it.kind||'', it.match||'', it.ticket||'', it.why||'', it.status||'', it.notes||'', it.website||''].map(q).join(',')); }); });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([lines.join('\n')], {type:'text/csv'})); a.download = 'lp-shortlist-hubspot.csv'; a.click();
+}
+async function showCheck(crd){
+  const r = await api('/api/manager_check/' + encodeURIComponent(crd));
+  const m = r.manager, s = r.summary, c = r.contact||{};
+  const prov = (k,l) => r.providers[k].length ? `<dt>${l}</dt><dd>${r.providers[k].map(p=>esc(p[0])+' ('+p[1]+')').join('; ')}</dd>` : '';
+  openDrawer(`<h3>${esc(m.adviser_name)}</h3><div class="sub">${esc(m.adviser_type)} · ${esc(m.city)}, ${esc(m.country)} · <a href="${r.sec_profile}" target="_blank" rel="noopener">SEC profile</a></div>
+    <div class="tiles" style="grid-template-columns:repeat(4,1fr)"><div class="tile"><b>${s.n_funds}</b><span>active funds</span></div><div class="tile"><b>$${num(s.gross_assets_usd/1e9,1)}bn</b><span>gross fund assets</span></div>
+      <div class="tile"><b>${s.first_on_record||''}</b><span>first fund on record</span></div><div class="tile"><b>${s.latest_fund_filed||''}</b><span>latest fund filed</span></div></div>
+    ${r.positives.length?`<h4>Points in its favour</h4><ul>${r.positives.map(x=>`<li class="ok">${esc(x)}</li>`).join('')}</ul>`:''}
+    ${r.flags.length?`<h4>Points to probe</h4><ul>${r.flags.map(x=>`<li class="warn">${esc(x)}</li>`).join('')}</ul>`:''}
+    <h4>Investor base (medians across funds)</h4><dl><dt>Investors per fund</dt><dd>${num(s.median_investors)}</dd><dt>Held by funds of funds</dt><dd>${pct(s.median_pct_fof)}</dd>
+      <dt>Held by non-US investors</dt><dd>${pct(s.median_pct_non_us)}</dd><dt>Held by manager / related</dt><dd>${pct(s.median_pct_manager)}</dd><dt>Minimum investment</dt><dd>${s.median_min_investment?'$'+num(s.median_min_investment):''}</dd>
+      <dt>Fund types</dt><dd>${esc(s.fund_types.join(', '))}</dd><dt>Domiciles</dt><dd>${esc(s.domiciles.join(', '))}</dd></dl>
+    <h4>Service providers</h4><dl>${prov('auditor','Auditor')}${prov('administrator','Administrator')}${prov('custodian','Custodian')}${prov('placement_agent','Placement agent')}</dl>
+    ${c.phone||c.websites?`<h4>Firm contact (SEC filing)</h4><dl><dt>Office</dt><dd>${esc([c.street,c.city,c.postal,c.country].filter(Boolean).join(', '))}</dd><dt>Phone</dt><dd>${esc(c.phone)}</dd><dt>Website</dt><dd>${esc(c.websites)}</dd><dt>Chief compliance officer</dt><dd>${esc(c.cco_name)}</dd></dl>`:''}
+    <h4>Public LPs backing its funds</h4>${r.lp_backers.length?table([{h:'LP',k:'lp'},{h:'Fund',k:'fund_name'},{h:'Vintage',k:'vintage'},{h:'$m',k:'amount_usd_m',n:1,f:x=>num(x.amount_usd_m,1)},{h:'IRR',k:'net_irr'}], r.lp_backers):'<div class="note">None matched by name.</div>'}
+    <h4>Funds</h4><div id="ckf"></div><p class="note">Source: SEC Form ADV Schedule D, filings to Dec 2024.</p>`);
+  const el = $('#ckf'); el.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'Type',k:'fund_type'},{h:'Domicile',k:'domicile_country'},{h:'$m',k:'gross_assets_usd',n:1,f:x=>num(x.gross_assets_usd/1e6,1)},{h:'Investors',k:'beneficial_owners',n:1},{h:'% FoF',k:'pct_owned_by_fund_of_funds',n:1,f:x=>pct(x.pct_owned_by_fund_of_funds)},{h:'First filed',k:'first_reported'}], r.funds, true);
+  bindRows(el, r.funds, x => showFund(x.fund_id));
+}
 
 // ---------- detail drawers ----------
 function openDrawer(html) { $('#dbody').innerHTML = html; $('#drawer').classList.add('open'); $('#drawer').scrollTop = 0; }
@@ -298,7 +468,7 @@ async function showFund(id) {
   const flags = [f.deeptech_kw&&'deep tech (keyword)', f.india_link&&'India-linked', f.near_home&&'Monaco/FR/CH/LU link'].filter(Boolean).map(x=>`<span class="pill">${x}</span>`).join('');
   openDrawer(`<h3>${esc(f.fund_name)}</h3><div class="sub">${esc(f.fund_type)} · ${esc(f.domicile_country)} · SEC fund ID ${esc(f.fund_id)} ${flags}</div>
     <h4>Setup</h4><dl>
-      <dt>Manager</dt><dd><a href="#" onclick="showManager('${esc(f.adviser_crd)}');return false">${esc(f.adviser_name)}</a> (${esc(f.adviser_type)}, ${esc(f.adviser_city)}, ${esc(f.adviser_country)})</dd>
+      <dt>Manager</dt><dd><a href="#" onclick="showCheck('${esc(f.adviser_crd)}');return false">${esc(f.adviser_name)}</a> (${esc(f.adviser_type)}, ${esc(f.adviser_city)}, ${esc(f.adviser_country)})</dd>
       <dt>GP / general partner entities</dt><dd>${esc(f.gp_entities)}</dd>
       <dt>Master / feeder</dt><dd>Master: ${yn(f.is_master)} · Feeder: ${yn(f.is_feeder)}${f.master_fund_name?' · master fund: '+esc(f.master_fund_name):''}</dd>
       <dt>Fund of funds</dt><dd>${yn(f.is_fund_of_funds)}</dd>
