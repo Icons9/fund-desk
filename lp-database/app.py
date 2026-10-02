@@ -33,11 +33,11 @@ if UPD.exists():
         NULL::DOUBLE contributed_usd_m, NULL::DOUBLE distributed_usd_m, NULL::VARCHAR net_irr, NULL::VARCHAR multiple, themes theme,
         notes, TRY_CAST(date_committed AS DATE) as_of, source_url, NULL::VARCHAR adv_fund_id,
         'upd:' || lower(regexp_replace(fund_name, '[^A-Za-z0-9]+', ' ', 'g')) name_key, strategy, stage, themes, geography
-        FROM read_csv('{UPD}', header=true, all_varchar=true)""")
+        FROM read_csv('{UPD}', header=true, all_varchar=true, delim=',', quote='"', escape='"')""")
     con.execute(f"""CREATE VIEW commitments AS SELECT * FROM read_parquet('{DATA / 'commitments.parquet'}')
         UNION ALL BY NAME SELECT * EXCLUDE (strategy, stage, themes, geography) FROM commitments_upd""")
     con.execute(f"""CREATE VIEW fund_class AS SELECT * FROM read_parquet('{DATA / 'fund_class.parquet'}')
-        UNION ALL BY NAME SELECT name_key, strategy, stage, themes, geography, manager manager_std FROM commitments_upd""")
+        UNION ALL BY NAME SELECT DISTINCT ON (name_key) name_key, strategy, stage, themes, geography, manager manager_std FROM commitments_upd""")
 else:
     for t in ("commitments", "fund_class"):
         con.execute(f"CREATE VIEW {t} AS SELECT * FROM read_parquet('{DATA / (t + '.parquet')}')")
