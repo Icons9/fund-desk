@@ -1,32 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="fd-mode" content="learn">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="fd-mode" content="learn">
 <title>Fund Desk · Learn</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 /* Layout: header (search + views) / area filter / main stage (graph, learn, lifecycle, legal, chains) + reading panel on the right. */
 :root{
-  --bg:#eceef0; --surface:#fafbfc; --ink:#131a23; --muted:#5a6472; --line:#d3d8de;
-  --accent:#1f4fd1; --accent-soft:#e3e9fb; --good:#1d7a4c; --good-soft:#dff1e7;
-  --display:"Newsreader", Georgia, "Times New Roman", serif;
-  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  /* Fund Desk design language: navy + gold on warm paper, Georgia headings, system sans body. Single light theme to match the desk. */
+  --navy:#0C2340; --navy2:#16345A; --gold:#C5A059; --goldlt:#E6CD8E;
+  --bg:#F7F5F1; --surface:#FFFFFF; --ink:#2E3440; --muted:#6B7280; --line:#E5E1D5;
+  --accent:#1B3A6B; --accent-soft:#F3F0EA; --good:#2F7D55; --good-soft:#E3F1E8;
+  --display:Georgia, "Times New Roman", serif;
+  --body:"Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   color-scheme: light;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0e1217; --surface:#161b22; --ink:#e5e8ed; --muted:#97a1ae; --line:#29303a;
-    --accent:#8aa5ff; --accent-soft:#1d2640; --good:#5cc98f; --good-soft:#14301f; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0e1217; --surface:#161b22; --ink:#e5e8ed; --muted:#97a1ae; --line:#29303a;
-  --accent:#8aa5ff; --accent-soft:#1d2640; --good:#5cc98f; --good-soft:#14301f; color-scheme: dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
@@ -85,8 +74,7 @@ canvas.dragging{cursor:grabbing}
 .btn{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px;font-weight:500}
 .btn:hover{border-color:var(--accent)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-:root[data-theme="dark"] .btn.primary{color:#0e1217}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0e1217}}
+
 .btn.good{background:var(--good-soft);border-color:var(--good);color:var(--good)}
 
 /* Learn matrix */
@@ -284,8 +272,7 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-b
 .howto{padding-left:20px;margin:8px 0 0}
 .howto li{margin:6px 0;font-size:14px}
 @media (max-width:640px){.levels{grid-template-columns:1fr}.fcard{padding:16px}}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .badge.review{background:#3a2c10;color:#e8b860}}
-:root[data-theme="dark"] .badge.review{background:#3a2c10;color:#e8b860}
+
 
 
 .backlink{display:inline-block;font-size:12.5px;color:var(--accent);text-decoration:none;margin-top:2px}
@@ -395,6 +382,58 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-b
   .zoom button{width:40px;height:40px}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ---- Desk design language overrides ---- */
+body{font-size:14.5px}
+.brand h1,.sec-title,.panel h2,.fcard h2,.stage-head h2,.card h3,.ncard h3{font-family:var(--display);color:var(--navy);font-weight:700}
+.sec-title{font-size:22px;margin:0 0 2px}
+.lead{color:var(--muted);font-size:13.5px}
+.h-sub{color:var(--gold);font-size:10.5px;letter-spacing:.6px}
+.box h3,.vids h3,.panel h3,.rel h3,.fcard h3{font-family:var(--display);text-transform:none;letter-spacing:0;font-size:14px;color:var(--navy);font-weight:700;border-bottom:2px solid var(--gold);padding-bottom:5px;margin-bottom:8px}
+.panel .pill,.fc-head .pill,.ntag,.mod-top .num{color:var(--gold)}
+.pill{font-size:10.5px;letter-spacing:.6px;font-weight:700}
+.box,.card,.ncard,.mod,.fcard,.scen,.titem,.mtile,.calrow{border-color:var(--line);border-radius:10px}
+.btn{border-color:#D8D2C6;background:var(--surface);color:var(--navy);font-weight:600}
+.btn:hover{background:var(--accent-soft);border-color:var(--gold)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.primary:hover{background:var(--navy2)}
+.tabs{background:var(--surface);border-color:var(--line)}
+.tabs button{color:var(--navy)}
+.tabs button[aria-pressed="true"]{background:var(--navy);color:#fff;box-shadow:none}
+.subtabs button,.jpills button{border-color:#D8D2C6;color:var(--navy);font-weight:600}
+.subtabs button[aria-pressed="true"],.jpills button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.levels button[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold);background:#FBF7EE}
+.step[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 -3px 0 var(--gold)}
+.step .num{color:var(--gold)}
+.chip,.tlink,.tchip,.gchip{border-color:var(--gold);background:var(--surface);color:var(--navy)}
+.chip[aria-pressed="false"]{border-color:var(--line)}
+.tlink:hover,.tchip:hover,.gchip:hover{background:var(--accent-soft);border-color:var(--gold)}
+.ex{border-left-color:var(--gold);background:#FBFAF7}
+.continue{border-left-color:var(--gold)}
+.box.comp{border-left:3px solid var(--navy)}
+.cell[aria-pressed="true"]{border-color:var(--gold);background:#FBF7EE}
+ol.steps li::before{color:var(--navy);border-color:var(--gold)}
+.mx thead th,.rtable th{background:var(--navy);color:#fff}
+.tmx thead th{background:var(--navy);color:#fff}
+.chainbar{border-left-color:var(--gold)}
+header{background:var(--navy);border-bottom:2px solid var(--gold)}
+header .brand h1{color:#fff}
+header #sub{color:var(--goldlt)}
+header .tabs{background:transparent;border-color:rgba(255,255,255,.14)}
+header .tabs button{color:#D7E0EE}
+header .tabs button:hover{color:#fff}
+header .tabs button[aria-pressed="true"]{background:var(--gold);color:var(--navy)}
+header .backlink{color:var(--goldlt)}
+.linkbtn,.vmore,.backlink{color:var(--accent)}
+.opt.right{border-color:var(--good)}
+/* Embedded inside the Fund Desk: no own branding or tabs; the desk sidebar navigates. */
+html.embed header{background:transparent;border:0;padding:16px 24px 6px}
+html.embed .brand,html.embed .tabs{display:none}
+html.embed .search{max-width:420px}
+html.embed .filters{background:transparent;border:0;padding:4px 24px 8px}
+html.embed .view .scroll{padding:8px 24px 40px}
+html.embed aside{background:#FCFBF8}
+@media (max-width:960px){html.embed header{padding:10px 14px 4px}html.embed .view .scroll{padding:8px 14px 40px}}
 </style>
 </head>
 <body>
@@ -450,11 +489,13 @@ kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-b
 
 <script>
 /* ---------- Config ---------- */
-const MODE=(document.querySelector('meta[name="fd-mode"]')||{}).content||"full";
+const EMBED=new URLSearchParams(location.search).has("embed");
+const MODE=EMBED?"learn":((document.querySelector('meta[name="fd-mode"]')||{}).content||"full");
+if(EMBED)document.documentElement.classList.add("embed");
 if(MODE==="learn"){
   ["news","markets","dir","library"].forEach(v=>{const t=document.getElementById("tab-"+v),s=document.getElementById("view-"+v);if(t)t.remove();if(s)s.remove()});
   document.querySelector(".brand h1").innerHTML='Fund Desk <span style="font-weight:500;color:var(--muted)">· Learn</span>';
-  const back=document.createElement("a");back.href="../";back.className="backlink";back.textContent="← Back to Fund Desk";document.querySelector(".brand").appendChild(back);
+  const back=document.createElement("a");back.href="../";if(EMBED)back.style.display="none";back.className="backlink";back.textContent="← Back to Fund Desk";document.querySelector(".brand").appendChild(back);
 }
 const CATS = {
   structure:{name:"Vehicles & structure",color:"#2f6db5"},
@@ -902,7 +943,7 @@ let raf=0;const redraw=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;draw()}
 function resize(){
   const r=wrap.getBoundingClientRect();if(!r.width||!r.height)return;
   dpr=window.devicePixelRatio||1;W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
-  if(ready&&!fitted){fit(false);fitted=true}draw();
+  if(ready&&!fitted){if(state.selected){const k=1.4,n=state.selected;tween({k,x:W/2-n.x*k,y:H/2-n.y*k},false)}else fit(false);fitted=true}draw();
 }
 function bounds(l){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;l.forEach(n=>{x0=Math.min(x0,n.x);y0=Math.min(y0,n.y);x1=Math.max(x1,n.x);y1=Math.max(y1,n.y)});return{x0,y0,x1,y1}}
 function fit(animate=true,list){
@@ -911,13 +952,15 @@ function fit(animate=true,list){
   const k=Math.min(2.2,Math.min(W/(b.x1-b.x0+pad*2),H/(b.y1-b.y0+pad*2)));
   tween({k,x:W/2-(b.x0+b.x1)/2*k,y:H/2-(b.y0+b.y1)/2*k},animate);
 }
+let tweenId=0;
 function tween(t,animate=true){
+  const id=++tweenId;
   if(!animate||reduced){view=t;redraw();return}
   const from={...view},t0=performance.now(),d=360;
-  (function step(now){const p=Math.min(1,(now-t0)/d),e=1-Math.pow(1-p,3);
+  (function step(now){if(id!==tweenId)return;const p=Math.min(1,(now-t0)/d),e=1-Math.pow(1-p,3);
     view={k:from.k+(t.k-from.k)*e,x:from.x+(t.x-from.x)*e,y:from.y+(t.y-from.y)*e};draw();if(p<1)requestAnimationFrame(step)})(t0);
 }
-function centerOn(n){const k=Math.max(view.k,1.2);tween({k,x:W/2-n.x*k,y:H/2-n.y*k})}
+function centerOn(n){if(!W||!fitted)return;const k=Math.max(view.k,1.2);tween({k,x:W/2-n.x*k,y:H/2-n.y*k})}
 const toWorld=(px,py)=>({x:(px-view.x)/view.k,y:(py-view.y)/view.k});
 function hit(px,py){const w=toWorld(px,py);let best=null,bd=1e9;nodes.forEach(n=>{if(!state.cats.has(n.cat))return;const d=Math.hypot(n.x-w.x,n.y-w.y);if(d<radius(n)+5/view.k&&d<bd){bd=d;best=n}});return best}
 let drag=null,pinch=null;const pts=new Map();
@@ -1059,6 +1102,7 @@ function setView(v){
   if(v==="markets")renderMarkets();
   if(v==="dir")renderDir();
   if(v==="library")renderLibrary();
+  if(EMBED&&window.parent!==window){try{window.parent.postMessage({fdLearnView:v},location.origin)}catch(e){}}
   const tb=document.getElementById("tab-"+v);if(tb&&tb.scrollIntoView)tb.scrollIntoView({block:"nearest",inline:"nearest"});
   if(v!=="graph"&&isMobile())window.scrollTo(0,0);
 }

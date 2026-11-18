@@ -20,9 +20,24 @@ a{color:#1B3A6B;text-decoration:none;} a:hover{text-decoration:underline;}
 .nav li.on{background:rgba(255,255,255,.08);border-left-color:var(--gold);color:#fff;font-weight:600;}
 .nav .grp{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);padding:12px 18px 4px;cursor:default;}
 .nav .grp:hover{background:none;}
-.nav li.navlink{padding:0;}
-.nav li.navlink a{display:block;padding:9px 18px;color:#D7E0EE;text-decoration:none;}
-.nav li.navlink a:hover{color:#fff;}
+#learn.show{margin:-22px -28px;position:relative;}
+#learnframe{display:block;width:100%;height:100vh;border:0;background:var(--bg);}
+.main{position:relative;}
+body:has(#learn.show) .foot{display:none;}
+.learnback{position:absolute;top:16px;right:24px;z-index:5;display:none;background:#fff;border:1px solid var(--gold);color:var(--navy);border-radius:16px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer;}
+.learnback.on{display:inline-block;}
+.lcard{margin:6px 0 4px;}
+.lcard .lrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.lbtn{background:#fff;border:1px solid #D8D2C6;color:var(--navy);border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.lbtn:hover{background:#F3F0EA;border-color:var(--gold);}
+.lbtn.pri{background:var(--navy);border-color:var(--navy);color:#fff;}
+.lbar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:8px;max-width:340px;}
+.lbar i{display:block;height:100%;background:var(--gold);}
+.lterm{font-family:Georgia,serif;font-size:19px;color:var(--navy);font-weight:700;margin:4px 0 2px;}
+.tchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.tchip{background:#fff;border:1px dashed var(--gold);color:var(--navy);border-radius:12px;padding:1px 8px;font-size:10.8px;font-weight:600;cursor:pointer;line-height:1.5;}
+.tchip:hover{border-style:solid;background:#F3F0EA;}
+.tchip::before{content:"?";display:inline-block;width:12px;height:12px;line-height:12px;text-align:center;border-radius:50%;background:var(--gold);color:#fff;font-size:9px;margin-right:4px;vertical-align:1px;}
 .main{flex:1;padding:22px 28px;min-width:0;}
 .htop{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
 h1{font-family:Georgia,serif;color:var(--navy);font-size:22px;margin:0;}
@@ -62,6 +77,9 @@ tr:nth-child(even) td{background:#FBFAF7;}
 .foot{margin-top:26px;font-size:11px;color:var(--mut);font-style:italic;border-top:1px solid var(--line);padding-top:10px;}
 .menubtn{display:none;}
 @media(max-width:860px){
+ #learn.show{margin:0 -28px -22px;}
+ #learnframe{height:calc(100vh - 58px);height:calc(100dvh - 58px);}
+ .learnback{top:26px;right:14px;}
  .side{position:fixed;left:-230px;z-index:50;transition:left .2s;}
  .side.open{left:0;}
  .menubtn{display:inline-block;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:14px;margin-bottom:10px;cursor:pointer;}
@@ -92,17 +110,19 @@ tr:nth-child(even) td{background:#FBFAF7;}
   <li data-pg="people">People</li>
   <li data-pg="ma">M&A & trends</li>
   <li data-pg="anlz">Landscape analysis</li>
+  <li class="grp">Learn</li>
+  <li data-pg="learn" data-view="learn">Learning modules</li>
+  <li data-pg="learn" data-view="graph">Fund terms map</li>
+  <li data-pg="learn" data-view="lifecycle">Fund lifecycle</li>
+  <li data-pg="learn" data-view="legal">Legal &amp; compliance</li>
+  <li data-pg="learn" data-view="chains">Process chains</li>
   <li class="grp">Reference</li>
   <li data-pg="lib">Library</li>
-  <li class="grp">Learn</li>
-  <li class="navlink"><a href="learn/#learn">Learn modules</a></li>
-  <li class="navlink"><a href="learn/#graph">Fund terms map</a></li>
-  <li class="navlink"><a href="learn/#lifecycle">Fund lifecycle</a></li>
-  <li class="navlink"><a href="learn/#legal">Legal &amp; compliance</a></li>
  </ul>
 </nav>
 <main class="main">
 <button class="menubtn" onclick="document.getElementById('side').classList.toggle('open')">☰ Menu</button>
+<button class="learnback" id="learnback" type="button"></button>
 
 <!-- DASHBOARD -->
 <section class="pg show" id="home">
@@ -115,6 +135,7 @@ tr:nth-child(even) td{background:#FBFAF7;}
   </script></div>
  </div>
  <div id="stats"></div>
+ <div id="learncard"></div>
  <h2 class="sec">Today's reading</h2>
  <div class="grid" id="digest"></div>
 </section>
@@ -429,6 +450,10 @@ tr:nth-child(even) td{background:#FBFAF7;}
 </section>
 
 <p class="foot">Fund Desk · curated news as of 5 Aug 2026 · markets stream live via TradingView embeds · headlines belong to their publishers · figures indicative. Built for internal / partner use.</p>
+<!-- LEARN (embedded learning app, same design language) -->
+<section class="pg" id="learn">
+ <iframe id="learnframe" title="Learn: fund terms, lifecycle, legal and compliance"></iframe>
+</section>
 </main>
 </div>
 
@@ -553,17 +578,88 @@ document.getElementById('tfo').addEventListener('click',e=>{
 document.getElementById('fosearch').addEventListener('input',e=>forows(e.target.value));
 
 const nav=document.getElementById('nav');
+const PGNAME={home:'Dashboard',news:'Industry headlines',india:'India desk',eu:'EU · Monaco · London',gcc:'GCC · Dubai',mar:'Maritime',hcdt:'Healthcare · Deeptech',mkt:'Live markets',gl15:'Managers — global',in10:'Managers — India',fo:'Family offices',tech:'Technology',people:'People',ma:'M&A & trends',anlz:'Landscape analysis',lib:'Library'};
+let curPg='home',curView='';
+function markNav(pg,view){document.querySelectorAll('#nav li[data-pg]').forEach(x=>x.classList.toggle('on',x.dataset.pg===pg&&(pg!=='learn'||x.dataset.view===view)));}
+function showPg(pg,view){
+ if(!document.getElementById(pg))pg='home';
+ document.querySelectorAll('.pg').forEach(x=>x.classList.toggle('show',x.id===pg));
+ curPg=pg;curView=view||'';markNav(pg,curView);
+ if(pg!=='learn'){learnFrom=null;learnBack.classList.remove('on');}
+ document.getElementById('side').classList.remove('open');
+ try{localStorage.setItem('fd_pg',pg);localStorage.setItem('fd_view',curView);}catch(e2){}
+ window.scrollTo(0,0);
+}
+const learnFrame=document.getElementById('learnframe'),learnBack=document.getElementById('learnback');
+let learnFrom=null;
+function openLearn(target,from){
+ learnFrom=from||null;
+ learnBack.textContent=learnFrom?'← Back to '+(PGNAME[learnFrom]||'the desk'):'';
+ learnBack.classList.toggle('on',!!learnFrom);
+ const views=['learn','graph','lifecycle','legal','chains'];
+ showPg('learn',views.includes(target)?target:'graph');
+ const hh=target?'#'+target:'';
+ if(!learnFrame.getAttribute('src'))learnFrame.src='learn/?embed=1'+hh;
+ else{try{learnFrame.contentWindow.location.hash=target||'learn';}catch(e){learnFrame.src='learn/?embed=1'+hh;}}
+}
+learnBack.addEventListener('click',()=>{if(learnFrom)showPg(learnFrom);});
+window.addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||!e.data.fdLearnView)return;curView=e.data.fdLearnView;if(curPg==='learn'){markNav('learn',curView);try{localStorage.setItem('fd_view',curView);}catch(e2){}}});
 nav.addEventListener('click',e=>{
  const li=e.target.closest('li[data-pg]'); if(!li)return;
- document.querySelectorAll('.pg').forEach(x=>x.classList.toggle('show',x.id===li.dataset.pg));
- document.querySelectorAll('#nav li').forEach(x=>x.classList.toggle('on',x===li));
- document.getElementById('side').classList.remove('open');
- try{localStorage.setItem('fd_pg',li.dataset.pg);}catch(e2){}
- window.scrollTo(0,0);
+ if(li.dataset.pg==='learn')openLearn(li.dataset.view);else showPg(li.dataset.pg);
 });
-try{const t=localStorage.getItem('fd_pg');
- if(t&&document.getElementById(t)){document.querySelectorAll('.pg').forEach(x=>x.classList.toggle('show',x.id===t));
- document.querySelectorAll('#nav li').forEach(x=>x.classList.toggle('on',x.dataset.pg===t));}}catch(e){}
+try{const t=localStorage.getItem('fd_pg'),v=localStorage.getItem('fd_view');
+ if(t==='learn')openLearn(v||'learn');else if(t&&document.getElementById(t))showPg(t);}catch(e){}
+
+/* ---- LEARN: term of the day, progress, and fund terms tagged in headlines ---- */
+const LEARN_FILES=['structure','parties-docs','raise-capital','econ-metrics','deal-venture','exit-credit-real-hedge','lp-ops-reg','extra'];
+let TERMS=[],TERM_BY={},TERM_RX=[];
+function learnProgress(){let s={};try{s=JSON.parse(localStorage.getItem('fta:status')||'{}')||{};}catch(e){}return Object.values(s).filter(x=>x==='known').length;}
+function buildTermMatcher(){
+ const skip=new Set(['fund','exit','distribution','commitment','sourcing','screening','dilution','syndicate','lp','gp','manager','consultant']);
+ const STOP=new Set(['discount','cap','PAI','pref','promote','reserves','warrants','core','IR','AI','PE','DD','FoF','CV fund']);
+ const pairs=[];
+ TERMS.forEach(n=>{[n.l.replace(/\s*\(.*?\)/g,'').trim(),...(n.l.match(/\((.*?)\)/)||[]).slice(1),...(n.a||'').split(/,\s*/)].forEach(s=>{s=(s||'').trim();if(!s||STOP.has(s))return;const acr=/^[A-Z0-9&+]{2,6}$/.test(s);if(!acr&&s.length<4)return;if(skip.has(n.id)&&!acr)return;pairs.push([s,n.id,acr]);});});
+ [['secondaries','secondary-fund'],['oversubscribed','oversubscription'],['fundraising','fundraising-period'],['value creation','value-creation-plan'],['GP-led','gp-secondary'],['GP-leds','gp-secondary'],['single-asset','continuation-vehicle'],['take-private','take-private'],['NAV discount','secondary-pricing']].forEach(([s,id])=>{if(TERM_BY[id])pairs.push([s,id,false]);});
+ pairs.sort((a,b)=>b[0].length-a[0].length);
+ TERM_RX=pairs.map(([s,id,acr])=>[new RegExp('(^|[^A-Za-z])'+s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+(acr?'s?':'(s|es)?')+'(?=$|[^A-Za-z])',acr?'':'i'),id]);
+}
+function termsIn(text){const f=[];let t=' '+text+' ';for(const [rx,id] of TERM_RX){if(f.includes(id))continue;if(rx.test(t)){f.push(id);t=t.replace(rx,'$1 ');if(f.length>=2)break;}}return f;}
+function tagHeadlines(){
+ if(!TERM_RX.length)return;
+ document.querySelectorAll('.main .item').forEach(it=>{
+  if(it.dataset.tg)return;it.dataset.tg='1';
+  const a=it.querySelector('a[target="_blank"]');if(!a||/^Latest from|→/.test(a.textContent))return;
+  const ids=termsIn(a.textContent);if(!ids.length)return;
+  const box=document.createElement('div');box.className='tchips';
+  box.innerHTML=ids.map(id=>'<button type="button" class="tchip" data-term="'+id+'" title="What does this mean?">'+esc(TERM_BY[id].l)+'</button>').join('');
+  it.appendChild(box);
+ });
+}
+document.querySelector('.main').addEventListener('click',e=>{
+ const c=e.target.closest('.tchip[data-term]');if(c){e.preventDefault();openLearn(c.dataset.term,curPg);return;}
+ const t=e.target.closest('[data-learnterm]');if(t){openLearn(t.dataset.learnterm,'home');return;}
+ const v=e.target.closest('[data-learnview]');if(v){openLearn(v.dataset.learnview);}
+});
+function renderLearnCard(){
+ const el=document.getElementById('learncard');if(!el||!TERMS.length)return;
+ const pool=TERMS.filter(t=>t.v===1).sort((a,b)=>a.id.localeCompare(b.id));
+ const day=Math.floor(Date.now()/864e5),t=pool[day%pool.length];
+ const known=learnProgress(),tot=TERMS.length;
+ const first=(t.d.match(/^.*?[.!?](\s|$)/)||[t.d])[0];
+ el.innerHTML='<h2 class="sec">Learn</h2><div class="grid lcard">'+
+  '<div class="card"><div class="tag">Term of the day</div><div class="lterm">'+esc(t.l)+'</div><div class="sn" style="font-size:13px;color:var(--body);line-height:1.45;">'+esc(first)+'</div>'+
+  '<div class="lrow"><button class="lbtn pri" data-learnterm="'+t.id+'">Examples, scenarios and videos →</button></div></div>'+
+  '<div class="card"><div class="tag">Your progress</div><div class="lterm">'+known+' of '+tot+' terms known</div><div class="lbar"><i style="width:'+(known/tot*100)+'%"></i></div>'+
+  '<div class="sn" style="font-size:12.5px;color:var(--body);margin-top:6px;">Short modules with quizzes, a 13-stage fund lifecycle and legal rules for eight jurisdictions. Terms in headlines are tagged — tap one to see what it means.</div>'+
+  '<div class="lrow"><button class="lbtn pri" data-learnview="learn">'+(known?'Continue learning':'Start learning')+'</button><button class="lbtn" data-learnview="lifecycle">Fund lifecycle</button><button class="lbtn" data-learnview="legal">Legal &amp; compliance</button></div></div></div>';
+}
+Promise.all(LEARN_FILES.map(f=>fetch('learn/data/terms-'+f+'.json').then(r=>r.ok?r.json():[]).catch(()=>[]))).then(parts=>{
+ TERMS=parts.flat();TERMS.forEach(t=>TERM_BY[t.id]=t);
+ buildTermMatcher();renderLearnCard();tagHeadlines();
+ let tm=null;new MutationObserver(()=>{clearTimeout(tm);tm=setTimeout(tagHeadlines,250);}).observe(document.querySelector('.main'),{childList:true,subtree:true});
+});
+window.addEventListener('focus',renderLearnCard);
 
 /* ---- PEOPLE ---- */
 const PEOPLE=[
