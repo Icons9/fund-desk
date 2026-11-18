@@ -1,0 +1,56 @@
+{
+"asof": "18 November 2026",
+"sources": [
+{"id":"credit","name":"PEI Private Credit","tag":"Private credit","url":"https://www.pei-privatecredit.com/news-analysis/","items":[
+ {"t":"Bain holds first close on Asia special sits fund at $1.81bn","u":"https://www.pei-privatecredit.com/bain-holds-first-close-on-asia-special-sits-fund-at-1-81bn/","d":"16 Nov 2026","r":"asia"},
+ {"t":"Loan Note: Performance concerns emerge; top 10 funds dominate fundraising","u":"https://www.pei-privatecredit.com/loan-note-performance-concerns-emerge-top-10-funds-dominate-fundraising/","d":"16 Nov 2026"},
+ {"t":"Private credit's latest deals: 16 November 2026","u":"https://www.pei-privatecredit.com/private-credits-latest-deals-16-november-2026/","d":"16 Nov 2026"},
+ {"t":"The future of private credit: More strategies, more complexity, more opportunity","u":"https://www.pei-privatecredit.com/the-future-of-private-credit-more-strategies-more-complexity-more-opportunity/","d":"16 Nov 2026"},
+ {"t":"Infranity raises €1.5bn for the fourth vintage of senior infra debt strategy","u":"https://www.pei-privatecredit.com/infranity-raises-e1-5bn-for-the-fourth-vintage-of-senior-infra-debt-strategy/","d":"13 Nov 2026","r":"eu"},
+ {"t":"Top funds dominate credit fundraising","u":"https://www.pei-privatecredit.com/top-funds-dominate-credit-fundraising/","d":"13 Nov 2026"}
+]},
+{"id":"secondaries","name":"PEI Secondaries Investor","tag":"Secondaries","url":"https://www.pei-secondariesinvestor.com/","items":[
+ {"t":"Lexington Partners reaches $3bn target for CV-focused fund, surpassing its initial expectations","u":"https://www.pei-secondariesinvestor.com/lexington-partners-reaches-3bn-target-for-cv-focused-fund-surpassing-its-initial-expectations/","d":"17 Nov 2026"},
+ {"t":"Asia's newest secondaries firm looks beyond NAV discounts","u":"https://www.pei-secondariesinvestor.com/asias-newest-secondaries-firm-looks-beyond-nav-discounts/","d":"15 Nov 2026","r":"asia"},
+ {"t":"Neuberger and CVC back PAI's €1.6bn CV for two assets","u":"https://www.pei-secondariesinvestor.com/neuberger-and-cvc-back-pais-e1-6bn-cv-for-two-assets/","d":"13 Nov 2026","r":"eu"},
+ {"t":"Changing sentiment towards CVs is leading to step change for infra GP-leds","u":"https://www.pei-secondariesinvestor.com/pantheons-barr-infrastructure-secondaries-on-the-precipice-of-a-step-change-towards-gp-leds/","d":"12 Nov 2026"},
+ {"t":"Adams Street, BlackRock and HarbourVest co-led Madison Dearborn's CV for retirement services provider","u":"https://www.pei-secondariesinvestor.com/harbourvest-and-adams-street-co-led-madison-dearborns-cv-for-retirement-services-provider/","d":"12 Nov 2026"},
+ {"t":"In for the long haul: Behind CVC's single-asset deal for RAC","u":"https://www.pei-secondariesinvestor.com/in-for-the-long-haul-behind-cvcs-single-asset-deal-for-rac/","d":"11 Nov 2026","r":"eu"}
+]},
+{"id":"venture","name":"PEI Venture Capital","tag":"Venture","url":"https://www.privateequityinternational.com/venture-capital/news-analysis/","items":[
+ {"t":"Serena Williams aims for $200m for new firm Starfire Ventures","u":"https://www.privateequityinternational.com/serena-williams-aims-for-200m-for-new-firm-starfire-ventures/","d":"17 Nov 2026"},
+ {"t":"LP Better Society Capital looks to healthcare VC","u":"https://www.privateequityinternational.com/better-society-capital-looks-to-healthcare-vc/","d":"16 Nov 2026","r":"eu"},
+ {"t":"Solar draws fresh capital as data centers strain the grid","u":"https://www.privateequityinternational.com/solar-draws-fresh-capital-as-data-centers-strain-the-grid/","d":"13 Nov 2026"},
+ {"t":"Zacua's oversubscribed Fund II is all-in on automating construction worksites","u":"https://www.privateequityinternational.com/zacuas-oversubscribed-fund-ii-is-all-in-on-automating-construction-worksites/","d":"12 Nov 2026"},
+ {"t":"NVP Capital holds first close on Fund III to back companies in critical industries","u":"https://www.privateequityinternational.com/nvp-capital-holds-first-close-on-fund-iii-to-back-companies-in-critical-industries/","d":"11 Nov 2026"},
+ {"t":"First In's new partner brings CIA insights to defense tech","u":"https://www.privateequityinternational.com/first-ins-new-partner-brings-cia-insights-to-defense-tech/","d":"9 Nov 2026"}
+]},
+{"id":"pe","name":"Private Equity International","tag":"Private equity","url":"https://www.privateequityinternational.com/","items":[
+ {"t":"Stacking up: How PE performs in each region","u":"https://www.privateequityinternational.com/stacking-up-how-pe-performs-in-each-region/","d":"10 Nov 2026"},
+ {"t":"How secondaries are reshaping fund operations","u":"https://www.privateequityinternational.com/how-secondaries-are-reshaping-fund-operations/","d":"9 Nov 2026"},
+ {"t":"Data snapshot: Top 10 funds as % of total fundraising","u":"https://www.privateequityinternational.com/the-largest-funds-take-a-growing-share-of-total-pe-fundraising/","d":"29 Oct 2026"},
+ {"t":"Hamilton Lane's Hirsch: Private markets industry has too many GPs","u":"https://www.privateequityinternational.com/hamilton-lanes-hirsch-private-markets-industry-has-too-many-gps/","d":"22 Oct 2026"},
+ {"t":"The Exit Playbook: Safe landings when exits stall","u":"https://www.privateequityinternational.com/the-exit-playbook-safe-landings-when-exits-stall/","d":"13 Oct 2026"}
+]},
+{"id":"impact","name":"New Private Markets","tag":"Impact & sustainability","url":"https://www.newprivatemarkets.com/","items":[
+ {"t":"How forced labour has become a deals issue and how due diligence misses it","u":"https://www.newprivatemarkets.com/how-forced-labour-has-become-a-deals-issue-and-how-due-diligence-misses-it/","d":"18 Nov 2026"},
+ {"t":"GPs identify physical climate risk, people and localisation as overlooked areas","u":"https://www.newprivatemarkets.com/gps-identify-physical-climate-risk-people-and-localisation-as-overlooked-areas/","d":"18 Nov 2026"},
+ {"t":"Sustainability execs at European firms trade salary for carry","u":"https://www.newprivatemarkets.com/sustainability-execs-at-european-firms-trade-salary-for-carry/","d":"17 Nov 2026","r":"eu"},
+ {"t":"Danish pension wants 'less metrics and more dialogue' from GPs","u":"https://www.newprivatemarkets.com/danish-pension-wants-less-metrics-and-more-dialogue-from-gps/","d":"17 Nov 2026","r":"eu"},
+ {"t":"CGC commits to emerging managers through StepStone","u":"https://www.newprivatemarkets.com/cgc-commits-to-emerging-managers-through-stepstone/","d":"17 Nov 2026"},
+ {"t":"PRI, ERM partner on healthcare sustainability value creation guidance","u":"https://www.newprivatemarkets.com/pri-erm-partner-on-healthcare-sustainability-value-creation-guidance/","d":"17 Nov 2026"}
+]},
+{"id":"esma","name":"ESMA","tag":"Regulation","url":"https://www.esma.europa.eu/press-news/esma-news","items":[
+ {"t":"EU seeks nominations for stakeholder group on tokenisation standards in finance","u":"https://www.esma.europa.eu/press-news/esma-news/eu-seeks-nominations-stakeholder-group-tokenisation-standards-finance","d":"9 Nov 2026","r":"eu"},
+ {"t":"ESMA proposes simpler EU Taxonomy reporting","u":"https://www.esma.europa.eu/press-news/esma-news/esma-proposes-simpler-eu-taxonomy-reporting","d":"29 Oct 2026","r":"eu"},
+ {"t":"ESMA streamlines several Q&As as part of simplification efforts","u":"https://www.esma.europa.eu/press-news/esma-news/esma-streamlines-several-qas-part-simplification-efforts","d":"22 Oct 2026","r":"eu"},
+ {"t":"ESMA finalises the review of guidelines on the delay in disclosure of inside information","u":"https://www.esma.europa.eu/press-news/esma-news/esma-finalises-review-guidelines-delay-disclosure-inside-information","d":"16 Oct 2026","r":"eu"},
+ {"t":"One year to go for T+1 settlement: the regulatory framework is complete","u":"https://www.esma.europa.eu/press-news/esma-news/one-year-go-t1-settlement-regulatory-framework-complete-now-lets-make-it","d":"16 Oct 2026","r":"eu"}
+]},
+{"id":"cssf","name":"CSSF (Luxembourg)","tag":"Regulation","url":"https://www.cssf.lu/en/news/","items":[
+ {"t":"Global situation of undertakings for collective investment at the end of September 2026","u":"https://www.cssf.lu/en/news/","d":"Nov 2026","r":"eu"},
+ {"t":"Annex to Circular CSSF 22/822","u":"https://www.cssf.lu/en/news/","d":"Nov 2026","r":"eu"},
+ {"t":"CSSF communication on Final Guidance on Money Market Fund Weekly Liquid Asset Levels","u":"https://www.cssf.lu/en/news/","d":"Nov 2026","r":"eu"}
+]}
+]
+}

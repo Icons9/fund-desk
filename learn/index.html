@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="fd-mode" content="learn">
+<title>Fund Desk · Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+/* Layout: header (search + views) / area filter / main stage (graph, learn, lifecycle, legal, chains) + reading panel on the right. */
+:root{
+  --bg:#eceef0; --surface:#fafbfc; --ink:#131a23; --muted:#5a6472; --line:#d3d8de;
+  --accent:#1f4fd1; --accent-soft:#e3e9fb; --good:#1d7a4c; --good-soft:#dff1e7;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1217; --surface:#161b22; --ink:#e5e8ed; --muted:#97a1ae; --line:#29303a;
+    --accent:#8aa5ff; --accent-soft:#1d2640; --good:#5cc98f; --good-soft:#14301f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1217; --surface:#161b22; --ink:#e5e8ed; --muted:#97a1ae; --line:#29303a;
+  --accent:#8aa5ff; --accent-soft:#1d2640; --good:#5cc98f; --good-soft:#14301f; color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;display:flex;flex-direction:column}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{text-wrap:balance}
+
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--surface)}
+.brand h1{font-family:var(--display);font-weight:600;font-size:22px;margin:0;line-height:1.1}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.search{position:relative;flex:1 1 240px;max-width:380px}
+.search input{width:100%;padding:8px 12px 8px 34px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.results{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:30;padding:4px;display:none;max-height:360px;overflow:auto}
+.results.open{display:block}
+.results button{display:flex;gap:8px;align-items:baseline;width:100%;text-align:left;background:none;border:0;padding:7px 8px;border-radius:6px;cursor:pointer}
+.results button[aria-selected="true"],.results button:hover{background:var(--accent-soft)}
+.results small{color:var(--muted);margin-left:auto;white-space:nowrap}
+.tabs{display:flex;flex-wrap:wrap;gap:3px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:3px}
+.tabs button{border:0;background:none;padding:5px 11px;border-radius:6px;cursor:pointer;color:var(--muted);font-weight:500}
+.tabs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+.filters{display:flex;flex-wrap:wrap;gap:5px;padding:7px 20px;border-bottom:1px solid var(--line);background:var(--surface)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:2px 9px;font-size:12.5px;cursor:pointer}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
+.chip[aria-pressed="false"]{opacity:.42}
+.chip.all{font-weight:500}
+
+main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 410px}
+.stage{position:relative;min-height:0;overflow:hidden}
+.view{position:absolute;inset:0;display:none}
+.view.on{display:block}
+#graphWrap{position:absolute;inset:0}
+canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas.dragging{cursor:grabbing}
+.zoom{position:absolute;right:14px;bottom:14px;display:flex;flex-direction:column;gap:4px}
+.zoom button{width:34px;height:34px;border:1px solid var(--line);background:var(--surface);border-radius:8px;cursor:pointer;font-size:16px}
+.hint{position:absolute;left:14px;bottom:14px;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:4px 8px}
+.chainbar{position:absolute;left:14px;top:14px;right:64px;display:none;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:6px 10px;font-size:13px;max-width:520px}
+.chainbar.on{display:flex}
+.chainbar button{margin-left:auto;border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:2px 8px;cursor:pointer;font-size:12px}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px}
+
+.scroll{overflow:auto;height:100%;padding:20px 22px 40px}
+.wrapw{max-width:1100px}
+.sec-title{font-family:var(--display);font-weight:600;font-size:26px;margin:0 0 4px}
+.lead{margin:0 0 14px;color:var(--muted);max-width:75ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.card h3{font-family:var(--display);font-weight:600;font-size:19px;margin:0;line-height:1.2}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card .steps{font-size:12.5px;color:var(--muted)}
+.card .row{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#0e1217}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0e1217}}
+.btn.good{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+
+/* Learn matrix */
+.prog{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 16px}
+.prog div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:120px}
+.prog b{display:block;font-family:var(--mono);font-size:20px;font-weight:500;font-variant-numeric:tabular-nums}
+.prog span{font-size:12px;color:var(--muted)}
+.mx-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table.mx{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+.mx th,.mx td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+.mx thead th{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg)}
+.mx tbody tr:last-child td{border-bottom:0}
+.mx .cat{display:flex;align-items:center;gap:8px;font-weight:500;white-space:nowrap}
+.cell{width:100%;border:1px solid transparent;background:none;border-radius:6px;padding:4px 6px;cursor:pointer;text-align:left}
+.cell:hover{border-color:var(--line);background:var(--bg)}
+.cell[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.cell .n{font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+.bar{height:5px;border-radius:3px;background:var(--line);margin-top:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--good)}
+.cell.empty{color:var(--muted);cursor:default}
+.lvl{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.03em;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
+.learn-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 8px}
+.learn-bar h3{margin:0;font-size:16px;font-weight:600}
+.learn-bar input{padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;min-width:200px}
+.tlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+.titem{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer}
+.titem:hover{border-color:var(--accent)}
+.titem .dot{margin-top:6px}
+.titem b{font-weight:600}
+.titem p{grid-column:2/4;margin:0;color:var(--muted);font-size:13px}
+.titem .ok{color:var(--good);font-size:12px;font-weight:600}
+.empty-note{color:var(--muted)}
+
+/* Lifecycle */
+.stepper{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;margin:0 0 14px}
+.step{flex:none;display:flex;flex-direction:column;gap:2px;min-width:132px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;cursor:pointer;position:relative}
+.step .num{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.step b{font-size:13.5px;font-weight:600;line-height:1.25}
+.step small{font-size:11.5px;color:var(--muted)}
+.step[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.stage-head{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;margin-bottom:6px}
+.stage-head h2{font-family:var(--display);font-weight:600;font-size:28px;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.meta span{font-size:12.5px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.goal{font-size:16px;margin:4px 0 6px;font-weight:500}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:14px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.box h3,.panel h3,.rel h3{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 6px}
+.box ul{margin:0;padding-left:18px}
+.box li{margin:3px 0;font-size:14px}
+.box.warn{border-left:3px solid #c43a55}
+.box.comp{border-left:3px solid var(--accent)}
+.checks label{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin:5px 0;cursor:pointer}
+.checks input{margin-top:3px}
+.nav-row{display:flex;justify-content:space-between;gap:8px;margin-top:16px}
+
+/* Legal */
+.subtabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.subtabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;cursor:pointer;font-size:13.5px}
+.subtabs button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.jpills{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.jpills button{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13.5px}
+.jpills button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:500}
+table.kv{width:100%;border-collapse:collapse;font-size:13.5px}
+.kv td{padding:5px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.kv td:first-child{color:var(--muted);width:45%}
+.kv td:last-child{font-variant-numeric:tabular-nums}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:5px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.timeline li:last-child{border-bottom:0}
+.timeline b{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--accent)}
+.tmx-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);max-height:70vh}
+table.tmx{border-collapse:collapse;font-size:13px;min-width:1100px}
+.tmx th,.tmx td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:7px 9px;vertical-align:top;text-align:left}
+.tmx thead th{position:sticky;top:0;background:var(--bg);font-size:12px;font-weight:600;z-index:1}
+.tmx tbody th{position:sticky;left:0;background:var(--surface);min-width:170px;font-weight:600}
+.tmx tbody th small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.cal{display:flex;flex-direction:column;gap:6px}
+.calrow{display:grid;grid-template-columns:170px 90px 1fr;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:14px}
+.calrow .when{font-weight:600;font-size:13px}
+.calrow .tag{font-size:11.5px;color:var(--muted)}
+.calrow small{display:block;color:var(--muted);font-size:12px}
+.note{font-size:12.5px;color:var(--muted);margin:14px 0 0}
+
+/* Panel */
+aside{border-left:1px solid var(--line);background:var(--surface);overflow:auto;min-height:0}
+.panel{padding:20px 22px 40px;max-width:65ch}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.panel h2{font-family:var(--display);font-weight:600;font-size:28px;line-height:1.15;margin:6px 0 4px}
+.aka{color:var(--muted);font-size:13px;margin:0 0 12px}
+.def{margin:0 0 14px}
+.exs{display:grid;gap:8px;margin:0 0 16px}
+.ex{background:var(--bg);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:8px 12px;font-size:14px}
+.ex b{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
+.scen{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 8px;background:var(--surface)}
+.scen p{margin:0 0 8px;font-size:14px}
+.scen .out{display:none;margin:8px 0 0;padding-top:8px;border-top:1px dashed var(--line);font-size:14px}
+.scen.open .out{display:block}
+.scen .btn{font-size:12.5px;padding:3px 9px}
+.links{display:flex;flex-wrap:wrap;gap:6px}
+.tlink{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:3px 9px;font-size:13.5px;cursor:pointer;text-align:left}
+.tlink:hover{border-color:var(--accent)}
+.rel h3{margin-top:16px}
+.study{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+ol.steps{list-style:none;padding:0;margin:10px 0 0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--mono);font-size:12px;color:var(--accent);border:1px solid var(--accent);border-radius:50%;width:22px;height:22px;display:grid;place-items:center}
+ol.steps p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stats div{background:var(--bg);border-radius:8px;padding:8px 10px}
+.stats b{display:block;font-family:var(--mono);font-size:20px;font-weight:500;font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:var(--muted)}
+.muted{color:var(--muted)}
+.calc{margin-top:18px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg)}
+.calc .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.calc label{display:flex;flex-direction:column;font-size:12px;color:var(--muted);gap:3px}
+.calc input{font-family:var(--mono);font-size:14px;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);width:100%}
+.calc table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px}
+.calc th,.calc td{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.calc th:first-child,.calc td:first-child{text-align:left}
+.calc td{font-family:var(--mono);font-size:13px}
+.calc td:first-child{font-family:var(--body);font-size:13.5px}
+.calc tfoot td{font-weight:600;border-bottom:0}
+
+
+/* Learn (course layout) */
+.overall{margin:0 0 14px}
+.ov-bar{display:flex;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.ov-bar i{display:block;height:100%}
+.ov-bar .k,.sw.k{background:var(--good)}
+.ov-bar .r,.sw.r{background:#d9a23a}
+.sw.n{background:var(--line)}
+.ov-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px;font-size:13px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.continue{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:14px 16px;margin:0 0 10px}
+.continue.alt{border-left-color:#d9a23a}
+.continue div{display:flex;flex-direction:column;gap:2px}
+.continue b{font-size:17px}
+.continue .muted{font-size:13px}
+.btn.big{padding:9px 16px;font-size:14.5px}
+.h-sub{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:22px 0 8px}
+.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.levels button{display:flex;flex-direction:column;gap:3px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;cursor:pointer}
+.levels button b{font-size:15px}
+.levels button span{font-size:12.5px;color:var(--muted)}
+.levels button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.mini{display:block;height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:4px}
+.mini i{display:block;height:100%;background:var(--good)}
+.level-desc{color:var(--muted);margin:10px 0 14px;max-width:75ch}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.mod{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.mod.done{border-color:var(--good)}
+.mod-top{display:flex;align-items:center;gap:8px}
+.mod-top .num{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.mod-top b{font-size:15px}
+.mod-meta{margin:0;font-size:13px;color:var(--muted)}
+.mod-peek{margin:0;font-size:12.5px;color:var(--muted);flex:1}
+.mod .row{display:flex;gap:6px;margin-top:4px}
+.bar{height:5px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--good)}
+.bar.big{height:7px;margin:8px 0 14px}
+.browse{margin-top:22px;border-top:1px solid var(--line);padding-top:12px}
+.browse summary{cursor:pointer;font-weight:600}
+.browse input{display:block;margin:10px 0;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;width:min(100%,360px)}
+.titem .rv{color:#b07d1c;font-size:12px;font-weight:600}
+.study-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.study-top b{flex:1;font-size:15px}
+.mono{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 24px;max-width:760px}
+.fcard h2{font-family:var(--display);font-weight:600;font-size:32px;line-height:1.15;margin:8px 0 4px}
+.fcard h3{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:16px 0 6px}
+.fc-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.badge{font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px}
+.badge.known{background:var(--good-soft);color:var(--good)}
+.badge.review{background:#f6e7c8;color:#8a5d0c}
+.small{font-size:13px;margin:-2px 0 8px}
+.fc-q{margin:20px 0 8px;font-weight:600}
+.fc-actions{display:flex;flex-wrap:wrap;gap:8px}
+.fc-actions.left{margin-top:14px}
+.fc-nav{display:flex;justify-content:space-between;gap:8px;margin-top:16px;padding-top:12px;border-top:1px solid var(--line);flex-wrap:wrap}
+.linkbtn{background:none;border:0;color:var(--accent);cursor:pointer;font-size:13.5px;padding:2px 0}
+kbd{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;margin-left:4px;color:var(--muted);background:var(--bg)}
+.qprompt{font-size:17px;line-height:1.55;margin:4px 0 16px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:15px}
+.opt kbd{margin:0}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:#c43a55;background:rgba(196,58,85,.1)}
+.feedback{margin:14px 0 10px;padding:10px 12px;border-radius:8px;font-size:14px}
+.feedback.ok{background:var(--good-soft)}
+.feedback.no{background:rgba(196,58,85,.1)}
+.done-card h2{margin-top:0}
+.howto{padding-left:20px;margin:8px 0 0}
+.howto li{margin:6px 0;font-size:14px}
+@media (max-width:640px){.levels{grid-template-columns:1fr}.fcard{padding:16px}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .badge.review{background:#3a2c10;color:#e8b860}}
+:root[data-theme="dark"] .badge.review{background:#3a2c10;color:#e8b860}
+
+
+.backlink{display:inline-block;font-size:12.5px;color:var(--accent);text-decoration:none;margin-top:2px}
+.backlink:hover{text-decoration:underline}
+/* Videos */
+.vids{margin:16px 0 4px}
+.vbox{margin-top:14px;max-width:820px}
+.vbox .vids{margin:0}
+.vid{display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:center;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px;margin:0 0 6px;text-decoration:none;color:var(--ink)}
+.vid:hover{border-color:#c4302b}
+.vid b{display:block;font-size:14px;font-weight:600;line-height:1.3}
+.vid small{display:block;font-size:12px;color:var(--muted)}
+.play{display:inline-block;width:36px;height:25px;border-radius:7px;background:#c4302b;position:relative;flex:none}
+.play::after{content:"";position:absolute;left:14px;top:6.5px;border-left:10px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.play.sm{width:22px;height:15px;border-radius:4px;vertical-align:-2px;margin-right:6px}
+.play.sm::after{left:8.5px;top:3.5px;border-left-width:6px;border-top-width:4px;border-bottom-width:4px}
+.vmore{display:inline-block;font-size:13px;color:var(--accent);text-decoration:none;margin-top:2px}
+.vmore:hover{text-decoration:underline}
+.mvid{font-size:12.5px;color:var(--ink);text-decoration:none;line-height:1.35}
+.mvid:hover{color:var(--accent)}
+/* Desk */
+.ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.ncard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.ncard.wide{max-width:820px}
+.ncard h3{font-family:var(--display);font-size:18px;font-weight:600;margin:0 0 4px}
+.ntag{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.item{padding:9px 0;border-bottom:1px solid var(--line)}
+.item:last-of-type{border-bottom:0}
+.item a{color:var(--ink);font-weight:600;font-size:14.5px;line-height:1.35;text-decoration:none}
+.item a:hover{text-decoration:underline;color:var(--accent)}
+.item .d{font-size:12px;color:var(--muted);margin-top:2px}
+.tchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.tchip{display:inline-flex;align-items:center;gap:5px;border:1px dashed var(--line);background:var(--bg);border-radius:999px;padding:2px 9px;font-size:12px;cursor:pointer}
+.tchip:hover{border-color:var(--accent);border-style:solid}
+.nfoot{margin-top:8px;font-size:13px}
+.nfoot a,.srcs a,.lib a,.lgrid a{color:var(--accent);text-decoration:none}
+.nfoot a:hover,.srcs a:hover,.lib a:hover{text-decoration:underline}
+.gchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.gchip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 11px;font-size:13px;color:var(--ink);text-decoration:none}
+.gchip:hover{border-color:var(--accent)}
+.srcs{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin-top:4px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.mtile{display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--ink)}
+.mtile:hover{border-color:var(--accent)}
+.mtile b{font-size:15px}
+.mtile span{font-size:12px;color:var(--muted)}
+.rtable{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.rtable table{width:100%;border-collapse:collapse;font-size:14px}
+.rtable th{text-align:left;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg);padding:8px 10px;border-bottom:1px solid var(--line)}
+.rtable td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.rtable tr:last-child td{border-bottom:0}
+.rtable a{color:var(--accent);text-decoration:none}
+.rtable .num{white-space:nowrap;font-variant-numeric:tabular-nums}
+.newslink{font-weight:600}
+.dsearch{display:block;width:min(100%,360px);padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;margin:0 0 10px}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.lib{padding:3px 0;font-size:14px}
+.sheet-head{display:none}
+.backdrop{display:none}
+
+@media (max-width: 960px){
+  html,body{height:auto}
+  body{display:block}
+  header{padding:10px 14px;gap:8px}
+  .brand h1{font-size:20px}
+  .brand p{font-size:12px}
+  .search{flex:1 1 100%;max-width:none;order:3}
+  .search kbd{display:none}
+  .search input{font-size:16px}
+  .tabs{order:4;flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:none;padding:7px 12px}
+  .filters{flex-wrap:nowrap;overflow-x:auto;padding:6px 14px;scrollbar-width:none}
+  .filters .chip{flex:none}
+  main{display:block}
+  .stage{height:auto;overflow:visible}
+  .view{position:static}
+  #view-graph.on{display:block;position:relative;height:72vh;min-height:380px}
+  .view .scroll{height:auto;overflow:visible;padding:16px 14px 40px}
+  .hint{display:none}
+  .chainbar{right:56px}
+  .sec-title{font-size:23px}
+  .jpills,.subtabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .jpills button,.subtabs button{flex:none}
+  .ngrid,.grid2,.lgrid,.mods,.tlist,.cards{grid-template-columns:1fr}
+  .mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .calrow{grid-template-columns:1fr}
+  .stage-head h2{font-size:24px}
+  .fcard{padding:16px}
+  .fcard h2{font-size:26px}
+  .fc-actions .btn.big{flex:1 1 140px}
+  .study-top b{flex-basis:100%;order:3}
+  .rtable{border:0;background:none;overflow:visible}
+  .rtable table,.rtable tbody,.rtable tr,.rtable td{display:block;width:100%}
+  .rtable thead{display:none}
+  .rtable tr{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 8px;padding:8px 12px}
+  .rtable td{border:0;padding:3px 0;display:grid;grid-template-columns:96px 1fr;gap:8px}
+  .rtable td::before{content:attr(data-l);font-size:12px;color:var(--muted)}
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:49}
+  .backdrop.open{display:block}
+  aside{position:fixed;left:0;right:0;bottom:0;height:86vh;height:86dvh;z-index:50;border-left:0;border-top:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.25);transform:translateY(105%);transition:transform .25s ease;overflow:auto;padding-bottom:env(safe-area-inset-bottom)}
+  aside.open{transform:none}
+  .sheet-head{display:flex;align-items:center;justify-content:flex-end;position:sticky;top:0;background:var(--surface);padding:8px 14px;border-bottom:1px solid var(--line);z-index:2}
+  .grab{position:absolute;left:50%;top:6px;width:40px;height:4px;border-radius:2px;background:var(--line);transform:translateX(-50%)}
+  .panel{padding:14px 16px 40px}
+  .panel h2{font-size:24px}
+  .zoom button{width:40px;height:40px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>Fund Desk</h1>
+    <p id="sub">Loading terms…</p>
+  </div>
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Search terms, e.g. clawback, SAFE, AIFMD" autocomplete="off" aria-label="Search terms" aria-controls="results">
+    <kbd>Ctrl K</kbd>
+    <div class="results" id="results" role="listbox"></div>
+  </div>
+  <div class="tabs" role="group" aria-label="View">
+    <button id="tab-news" aria-pressed="true" data-view="news">News</button>
+    <button id="tab-markets" aria-pressed="false" data-view="markets">Markets</button>
+    <button id="tab-dir" aria-pressed="false" data-view="dir">Directory</button>
+    <button id="tab-graph" aria-pressed="false" data-view="graph">Terms</button>
+    <button id="tab-learn" aria-pressed="false" data-view="learn">Learn</button>
+    <button id="tab-lifecycle" aria-pressed="false" data-view="lifecycle">Lifecycle</button>
+    <button id="tab-legal" aria-pressed="false" data-view="legal">Legal &amp; compliance</button>
+    <button id="tab-chains" aria-pressed="false" data-view="chains">Chains</button>
+    <button id="tab-library" aria-pressed="false" data-view="library">Library</button>
+  </div>
+</header>
+<div class="filters" id="filters" aria-label="Filter by area"></div>
+<main>
+  <div class="stage">
+    <section class="view" id="view-graph" aria-label="Terms graph">
+      <div id="graphWrap"><canvas id="cv" aria-label="Knowledge graph of fund terms. Use search or the Learn tab for a keyboard-accessible list."></canvas></div>
+      <div class="loading" id="loading">Loading terms…</div>
+      <div class="chainbar" id="chainbar"><span>Chain: <strong id="chainName"></strong></span><button id="chainClear">Clear</button></div>
+      <div class="hint">Drag to pan · scroll to zoom · click a term</div>
+      <div class="zoom">
+        <button id="zin" aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">–</button>
+        <button id="zfit" aria-label="Fit graph to view" style="font-size:12px">Fit</button>
+      </div>
+    </section>
+    <section class="view" id="view-learn" aria-label="Learn"><div class="scroll"><div class="wrapw" id="learn"></div></div></section>
+    <section class="view" id="view-lifecycle" aria-label="Fund lifecycle"><div class="scroll"><div class="wrapw" id="life"></div></div></section>
+    <section class="view" id="view-legal" aria-label="Legal and compliance"><div class="scroll"><div class="wrapw" id="legal"></div></div></section>
+    <section class="view on" id="view-news" aria-label="News"><div class="scroll"><div class="wrapw" id="news"><p class="muted">Loading headlines…</p></div></div></section>
+    <section class="view" id="view-markets" aria-label="Markets"><div class="scroll"><div class="wrapw" id="markets"></div></div></section>
+    <section class="view" id="view-dir" aria-label="Directory"><div class="scroll"><div class="wrapw" id="dir"></div></div></section>
+    <section class="view" id="view-library" aria-label="Library"><div class="scroll"><div class="wrapw" id="library"></div></div></section>
+    <section class="view" id="view-chains" aria-label="Chains"><div class="scroll"><div class="wrapw"><h2 class="sec-title">Chains</h2><p class="lead">Step-by-step walks through a process. Each chain highlights its path on the graph.</p><div class="cards" id="cards"></div></div></div></section>
+  </div>
+  <div class="backdrop" id="backdrop"></div>
+  <aside aria-label="Details"><div class="sheet-head"><span class="grab" aria-hidden="true"></span><button class="btn" id="sheetClose">Close</button></div><div class="panel" id="panel"></div></aside>
+</main>
+
+<script>
+/* ---------- Config ---------- */
+const MODE=(document.querySelector('meta[name="fd-mode"]')||{}).content||"full";
+if(MODE==="learn"){
+  ["news","markets","dir","library"].forEach(v=>{const t=document.getElementById("tab-"+v),s=document.getElementById("view-"+v);if(t)t.remove();if(s)s.remove()});
+  document.querySelector(".brand h1").innerHTML='Fund Desk <span style="font-weight:500;color:var(--muted)">· Learn</span>';
+  const back=document.createElement("a");back.href="../";back.className="backlink";back.textContent="← Back to Fund Desk";document.querySelector(".brand").appendChild(back);
+}
+const CATS = {
+  structure:{name:"Vehicles & structure",color:"#2f6db5"},
+  parties:{name:"Parties & roles",color:"#7a4fb5"},
+  docs:{name:"Documents",color:"#8b6b3d"},
+  raise:{name:"Fundraising",color:"#d1601f"},
+  capital:{name:"Capital flows",color:"#1d8a6e"},
+  econ:{name:"Fees & carry",color:"#c43a55"},
+  metrics:{name:"Performance",color:"#2a9dc4"},
+  deal:{name:"Deals & terms",color:"#5e811c"},
+  venture:{name:"Venture & deep tech",color:"#b8437f"},
+  exit:{name:"Exits & secondaries",color:"#c9971f"},
+  credit:{name:"Private credit",color:"#0f7c8c"},
+  real:{name:"Real assets",color:"#7f5539"},
+  hedge:{name:"Hedge & open-ended",color:"#e0786a"},
+  lpside:{name:"LP portfolio",color:"#4f5bd5"},
+  ops:{name:"Fund operations",color:"#8a95a8"},
+  reg:{name:"Regulation, tax & governance",color:"#5a6470"}
+};
+const LEVELS={1:"Foundation",2:"Practitioner",3:"Advanced"};
+const FILES=["structure","parties-docs","raise-capital","econ-metrics","deal-venture","exit-credit-real-hedge","lp-ops-reg","extra"].map(f=>`data/terms-${f}.json`);
+const REL = {
+  contains:["includes","part of"], sets:["sets out","set out in"], feeds:["feeds into","calculated from"],
+  precedes:["leads to","comes after"], limits:["limits","limited by"], protects:["protects","protected by"],
+  variant:["is a form of","forms"], governs:["governs","governed by"], does:["handles","handled by"],
+  reduces:["reduces","reduced by"], see:["related","related"]
+};
+const EDGES = `
+closed-end variant fund
+open-end variant fund
+limited-partnership variant fund
+scsp variant limited-partnership
+raif variant fund
+scsp see raif
+aif-categories variant fund
+scheme see aif-categories
+gift-ifsc variant fund
+master-feeder contains feeder
+parallel-fund see feeder
+co-investment see spv
+fund-of-funds variant fund
+continuation-vehicle variant fund
+blocker see feeder
+limited-partnership contains gp
+limited-partnership contains lp
+closed-end see limited-partnership
+open-end see lmt
+blocker see tax-transparency
+gift-ifsc see feeder
+gp does limited-partnership
+manager does fund
+gp see manager
+manager contains ic
+lp see commitment
+aifm variant manager
+aifm does raif
+sponsor does continuing-interest
+trustee does scheme
+trustee see ima
+sponsor see trustee
+ic-memo feeds ic
+lpac does conflicts
+lpac protects lp
+lpac see valuation-policy
+key-persons see key-person-event
+depositary protects lp
+administrator does capital-account
+administrator does capital-call
+administrator does nav
+administrator does kyc-aml
+auditor see nav
+auditor see investor-reporting
+placement-agent see fee-offset
+placement-agent see lp
+anchor-lp precedes first-close
+anchor-lp variant lp
+fund-counsel does lpa
+fund-counsel does ppm
+fund-counsel does side-letter
+lpa sets management-fee
+lpa sets carry
+lpa sets waterfall
+lpa sets fund-term
+lpa sets investment-period
+lpa sets key-person-event
+lpa sets no-fault
+lpa sets removal-cause
+lpa sets concentration-limit
+lpa sets recycling
+lpa sets hard-cap
+lpa sets clawback
+lpa sets default-lp
+lpa sets org-expenses
+lpa sets lpac
+lpa sets hurdle
+lpa sets extension
+ppm sets target-size
+ppm sets track-record
+ppm precedes subscription-agreement
+ppm see lpa
+subscription-agreement sets commitment
+subscription-agreement see kyc-aml
+subscription-agreement precedes first-close
+side-letter contains mfn
+side-letter see lpa
+side-letter sets excuse-right
+side-letter sets co-investment
+ima sets management-fee
+ima see manager
+ddq precedes soft-circle
+ddq see ilpa
+capital-call see call-notice
+call-notice precedes paid-in
+capital-account see paid-in
+capital-account see nav
+investor-reporting contains capital-account
+ilpa see investor-reporting
+ilpa see fee-offset
+valuation-policy feeds nav
+ipev feeds valuation-policy
+target-size see hard-cap
+hard-cap limits commitment
+track-record precedes soft-circle
+first-time-fund see track-record
+first-time-fund see anchor-lp
+soft-circle precedes subscription-agreement
+first-close precedes subsequent-close
+subsequent-close precedes final-close
+first-close precedes investment-period
+management-fee see first-close
+equalisation see subsequent-close
+equalisation see capital-call
+gp-commitment protects lp
+continuing-interest variant gp-commitment
+sebi-aif governs continuing-interest
+sebi-aif governs min-corpus
+sebi-aif governs min-investment
+sebi-aif governs aif-categories
+sebi-aif governs sponsor
+min-investment see accredited-investor
+warehousing see first-close
+warehousing see conflicts
+marketing-passport see raif
+aifmd governs marketing-passport
+nppr see marketing-passport
+reverse-solicitation see nppr
+commitment precedes capital-call
+capital-call feeds paid-in
+commitment contains unfunded
+capital-call reduces unfunded
+investment-period precedes harvest-period
+fund-term contains investment-period
+fund-term contains harvest-period
+extension see fund-term
+harvest-period precedes extension
+fund-term precedes wind-up
+recycling see distribution
+recycling see investment-period
+follow-on-reserves see portfolio-construction
+follow-on-reserves see pro-rata-right
+deployment see investment-period
+deployment see vintage
+distribution feeds dpi
+waterfall governs distribution
+in-kind variant distribution
+in-kind see ipo
+default-lp see capital-call
+excuse-right see capital-call
+subscription-line see capital-call
+subscription-line feeds irr
+subscription-line see unfunded
+nav-facility see nav
+exit precedes distribution
+wind-up see clawback
+management-fee contains fee-basis
+management-fee contains fee-step-down
+fee-offset reduces management-fee
+transaction-fees feeds fee-offset
+org-expenses see fund-expenses
+broken-deal variant fund-expenses
+management-fee feeds fee-drag
+fund-expenses feeds fee-drag
+carry feeds fee-drag
+waterfall contains return-of-capital
+waterfall contains hurdle
+waterfall contains catch-up
+waterfall contains carry
+return-of-capital precedes hurdle
+hurdle precedes catch-up
+catch-up precedes carry
+european-waterfall variant waterfall
+american-waterfall variant waterfall
+american-waterfall see clawback
+clawback protects lp
+carry-escrow protects clawback
+carry-vesting see carry
+carry see gp
+fee-waiver see management-fee
+fee-waiver see continuing-interest
+carry see carry-tax
+gp-commitment see fee-waiver
+paid-in feeds dpi
+paid-in feeds rvpi
+paid-in feeds tvpi
+dpi feeds tvpi
+rvpi feeds tvpi
+nav feeds rvpi
+nav feeds tvpi
+gross-irr variant irr
+net-irr variant irr
+fee-drag reduces net-irr
+gross-irr see net-irr
+moic see tvpi
+moic see gross-irr
+pme see net-irr
+pme see tvpi
+j-curve see management-fee
+j-curve see net-irr
+vintage see quartile
+quartile see net-irr
+quartile see tvpi
+loss-ratio see write-off
+loss-ratio see portfolio-construction
+track-record see net-irr
+track-record see dpi
+sourcing precedes screening
+screening precedes due-diligence
+due-diligence precedes ic-memo
+ic precedes term-sheet
+term-sheet sets valuation-deal
+term-sheet sets liquidation-preference
+term-sheet sets anti-dilution
+term-sheet sets pro-rata-right
+term-sheet sets board-seat
+term-sheet sets protective-provisions
+term-sheet sets drag-along
+term-sheet sets tag-along
+preferred-shares contains liquidation-preference
+preferred-shares contains anti-dilution
+preferred-shares contains protective-provisions
+valuation-deal feeds cap-table
+down-round precedes anti-dilution
+down-round reduces nav
+liquidation-preference see exit
+portfolio-construction see concentration-limit
+concentration-limit see co-investment
+sfdr see esg
+esg see due-diligence
+board-seat see protective-provisions
+drag-along see trade-sale
+tag-along see drag-along
+ipo variant exit
+trade-sale variant exit
+secondary-buyout variant exit
+write-off variant exit
+recap see exit
+ipo precedes lock-up
+lock-up precedes in-kind
+lp-secondary see nav
+gp-secondary see continuation-vehicle
+gp-secondary see conflicts
+lp-secondary see lp
+write-off reduces nav
+aifmd governs aifm
+aifmd governs depositary
+aifmd contains lmt
+aifmd contains loan-origination
+lmt limits open-end
+ifsca governs gift-ifsc
+us-advisers governs manager
+us-advisers see accredited-investor
+kyc-aml see fatca-crs
+tax-transparency see limited-partnership
+tax-transparency see aif-categories
+withholding-tax see blocker
+withholding-tax see feeder
+key-person-event limits investment-period
+removal-cause limits gp
+no-fault limits gp
+no-fault limits investment-period
+lu-cssf governs raif
+fr-amf governs fpci
+mc-ccaf governs monaco-fund
+sebi-aif governs aiof
+sebi-aif governs lvf
+sebi-aif governs angel-fund
+aifmd governs eltif
+aifmd see euveca
+fca-uk governs uk-pflp
+`;
+
+const CHAINS = [
+ {id:"life",title:"Life of a closed-end fund",summary:"The usual arc of a ten-year fund, from first marketing to dissolution. The Lifecycle tab has each stage in depth.",steps:[["ppm","Team, strategy and terms go out to prospective LPs."],["first-close","Enough commitments signed; fees start and the fund can invest."],["final-close","Last LPs join, typically 12–18 months later, and pay equalisation."],["investment-period","Four to six years of new investments."],["harvest-period","The portfolio is managed and sold."],["extension","One or two extra years if exits are not finished."],["wind-up","Last assets sold or distributed, clawback settled, vehicle dissolved."]]},
+ {id:"raise",title:"From PPM to final close",summary:"How commitments are won and formalised.",steps:[["track-record","LPs start with what the team has done before."],["ppm","The offering document and summary of terms."],["ddq","Operational, compliance and ESG questions answered."],["soft-circle","LPs indicate amounts without signing."],["anchor-lp","A large early commitment makes first close viable."],["subscription-agreement","LPs sign commitments and pass KYC."],["first-close","The fund starts operating."],["subsequent-close","More LPs admitted at later closes."],["equalisation","Late LPs catch up on calls already made, plus interest."],["final-close","Book closed; no new commitments."]]},
+ {id:"euro",title:"A euro from commitment to distribution",summary:"Follow one euro of an LP's commitment through the fund and back.",steps:[["commitment","The LP agrees to provide capital when asked."],["capital-call","The GP calls part of it to fund a deal."],["subscription-line","Often a bank funds the deal first and the call comes later."],["paid-in","The money is now contributed capital."],["nav","It is valued each quarter while the investment is held."],["exit","The company is sold or listed."],["distribution","Proceeds are paid out."],["waterfall","They are split between LPs and GP, tier by tier."],["dpi","The LP's realised multiple goes up."]]},
+ {id:"waterfall",title:"European waterfall, tier by tier",summary:"Who gets paid, in what order, under a whole-fund waterfall with an 8% hurdle and full catch-up.",calc:true,steps:[["return-of-capital","100% to LPs until all contributed capital is back."],["hurdle","100% to LPs until they have an 8% compounded return on that capital."],["catch-up","100% to the GP until it holds 20% of all profit paid so far."],["carry","Everything after that splits 80/20 between LPs and GP."],["clawback","At wind-up, any carry above 20% of total profit goes back to LPs."],["carry-escrow","Held-back carry secures that promise."]]},
+ {id:"deal",title:"How a buyout gets done",summary:"From first contact with a company to the exit.",steps:[["sourcing","The team finds the company."],["screening","Checked against mandate, stage and ticket size."],["loi","Indicative price and exclusivity."],["due-diligence","Commercial, financial, legal, technical and tax work."],["ic-memo","The case is written up."],["ic","The committee approves, rejects or asks for more work."],["spa","Binding purchase agreement with warranties."],["lbo","Debt and equity fund the purchase."],["value-creation-plan","The plan for the holding period."],["exit","Sale or listing."]]},
+ {id:"deeptech",title:"Financing a deep-tech company",summary:"How a science-based startup typically moves from lab to exit.",steps:[["university-spinout","Research licensed out of a university."],["ip-diligence","Investors confirm ownership and freedom to operate."],["non-dilutive-funding","Grants carry the earliest technical risk."],["trl","Capital staged as the technology matures."],["safe","Early equity on convertible terms."],["priced-round","A lead sets price and preferred share rights."],["venture-debt","Debt extends runway between rounds."],["exit","Trade sale to a strategic or IPO."]]},
+ {id:"net",title:"Why net returns trail gross",summary:"What sits between the return on the deals and what LPs receive.",steps:[["gross-irr","Return on the investments themselves."],["management-fee","Charged every year, on commitments in the early years."],["fund-expenses","Audit, administration, deal and legal costs."],["carry","20% of profit once the hurdle is cleared."],["fee-drag","The combined gap between gross and net."],["net-irr","What LPs actually earn."]]},
+ {id:"measure",title:"Reading fund performance",summary:"The standard metrics and what each one adds.",steps:[["paid-in","The denominator for every multiple."],["dpi","Cash actually returned."],["rvpi","Value still held in the portfolio."],["tvpi","DPI plus RVPI."],["net-irr","Adds timing."],["pme","What an index would have done with the same cash flows."],["quartile","Position against same-vintage peers."]]},
+ {id:"lp",title:"Running an LP programme",summary:"How an institution builds and maintains a private markets portfolio.",steps:[["asset-allocation","Target share for private markets."],["commitment-pacing","How much to commit each year."],["manager-selection","Choosing funds."],["odd","Checking operations and controls."],["overcommitment","Committing ahead of cash."],["denominator-effect","Public markets fall; allocation overshoots."],["lp-secondary","Selling interests to rebalance."],["re-up","Backing the next fund of good managers."]]},
+ {id:"keyperson",title:"When the team changes",summary:"How LP protections work if key people leave or lose LPs' confidence.",steps:[["key-persons","Named in the LPA with a time commitment."],["key-person-event","One or more of them stops meeting it."],["investment-period","New investments are suspended automatically."],["lpac","Often consulted on proposed replacements."],["no-fault","If LPs lose confidence, a supermajority can end the investment period or remove the GP."],["removal-cause","Misconduct allows removal at a lower threshold."]]},
+ {id:"india",title:"Setting up an Indian AIF",summary:"The main building blocks under the SEBI AIF Regulations.",steps:[["sponsor","Sets up the fund and passes the fit and proper test."],["trust-deed","Trust deed signed; the trustee holds the assets."],["ima","The trustee appoints the manager."],["aif-categories","Category chosen to fit the strategy."],["merchant-banker","Scheme PPM filed with SEBI."],["min-corpus","Each scheme needs at least ₹20 crore of corpus."],["continuing-interest","Sponsor or manager commits its share."],["min-investment","₹1 crore per investor unless accredited."]]},
+ {id:"eu",title:"Setting up an EU fund in Luxembourg",summary:"A common route for a European closed-end fund.",steps:[["scsp","Partnership wrapper with a flexible LPA."],["raif","No CSSF product approval needed."],["host-aifm","An authorised AIFM is appointed, own or third-party."],["depositary","Appointed for custody and oversight."],["aifmd","The AIFM's obligations apply, including AIFMD II from April 2026."],["pre-marketing","Notified pre-marketing tests demand."],["marketing-passport","A notification lets the AIFM market across the EU to professional investors."]]}
+];
+
+/* ---------- State & storage ---------- */
+const store={get(k,d){try{const v=localStorage.getItem("fta:"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("fta:"+k,JSON.stringify(v))}catch(e){}}};
+let status=store.get("status",null);
+if(!status){status={};store.get("learned",[]).forEach(id=>status[id]="known");}
+const saveStatus=()=>{store.set("status",status);redraw();if(typeof markUpdated==="function")markUpdated()};
+let checks=store.get("checks",{});
+const state={view:"graph",selected:null,chain:null,hover:null,cats:new Set(Object.keys(CATS)),learnCell:null,learnFilter:"",studyList:null,lifeStage:0,legalTab:"jur",jur:"eu",calJur:"all"};
+let nodes=[],byId={},edges=[],adj={},LIFE=null,LEGAL=null,ready=false;
+
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dot=c=>`<span class="dot" style="background:${CATS[c].color}"></span>`;
+const tlink=n=>n?`<button class="tlink" data-term="${n.id}">${dot(n.cat)}${esc(n.label)}</button>`:"";
+const firstSentence=t=>(t.match(/^.*?[.!?](\s|$)/)||[t])[0].trim();
+
+/* ---------- Videos ---------- */
+let VID={videos:{},stages:{},cats:{},terms:{}};
+const ytUrl=id=>id.startsWith("PL")?"https://www.youtube.com/playlist?list="+id:"https://www.youtube.com/watch?v="+id;
+const ytSearch=q=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q);
+function videoBlock(ids,q,title){
+  ids=[...new Set(ids||[])].filter(id=>VID.videos[id]);
+  return `<div class="vids"><h3>${esc(title||"Watch")}</h3>${ids.map(id=>`<a class="vid" href="${ytUrl(id)}" target="_blank" rel="noopener"><span class="play" aria-hidden="true"></span><span><b>${esc(VID.videos[id])}</b><small>${id.startsWith("PL")?"Playlist":"Video"} · opens in YouTube</small></span></a>`).join("")}<a class="vmore" href="${ytSearch(q)}" target="_blank" rel="noopener">Search YouTube for more on ${esc(q.replace(/ explained$/,""))} →</a></div>`;
+}
+function termVideoBlock(n){
+  const own=VID.terms[n.id]||[];
+  const q=n.label.replace(/\s*\(.*?\)/g,"")+" explained";
+  return own.length?videoBlock(own,q,"Watch"):videoBlock((VID.cats[n.cat]||[]).slice(0,1),q,`Watch: ${CATS[n.cat].name.toLowerCase()} basics`);
+}
+const STAGE_Q={"pre-conception":"how to start a venture capital fund","design":"private equity fund terms and structure","formation":"private fund formation legal structure","marketing":"private equity fundraising LP due diligence","first-close":"private equity first close capital call","closes":"private equity fund final close equalisation","investing":"private equity investment process","managing":"private equity portfolio value creation","successor":"raising a fund II venture capital","harvest":"private equity exits distribution waterfall","tail":"continuation fund GP-led secondary","windup":"private equity fund wind down liquidation","after":"private equity track record fund performance"};
+
+/* ---------- Load ---------- */
+async function load(){
+  try{
+    const [parts,life,legal]=await Promise.all([
+      Promise.all(FILES.map(f=>fetch(f).then(r=>{if(!r.ok)throw new Error(f);return r.json()}))),
+      fetch("data/lifecycle.json").then(r=>r.json()),
+      fetch("data/legal.json").then(r=>r.json())
+    ]);
+    LIFE=life;LEGAL=legal;
+    [NEWS,DESK,VID]=await Promise.all([fetch("data/news.json").then(r=>r.json()),fetch("data/desk.json").then(r=>r.json()),fetch("data/videos.json").then(r=>r.json()).catch(()=>({videos:{},stages:{},cats:{},terms:{}}))]);
+    nodes=parts.flat().map(t=>({id:t.id,label:t.l,cat:t.c,lvl:t.v,aka:t.a||"",def:t.d,ex:t.x||[],sc:t.s||[],r:t.r||[],x:0,y:0,vx:0,vy:0,deg:0}));
+    byId=Object.fromEntries(nodes.map(n=>[n.id,n]));
+    buildEdges();layout();buildMatcher();ready=true;
+    document.getElementById("loading").remove();
+    document.getElementById("sub").textContent=MODE==="learn"?`${nodes.length} fund terms · learning modules · lifecycle · legal & compliance`:`News, markets and directories · ${nodes.length} fund terms · lifecycle · legal & compliance`;
+    renderFilters();renderCards();resize();
+    fromHash();initSync();
+  }catch(e){
+    document.getElementById("loading").textContent="Could not load the term files. Reload the page to try again.";
+    console.error(e);
+  }
+}
+function buildEdges(){
+  const seen=new Set();
+  const add=(s,t,type)=>{if(!byId[s]||!byId[t]||s===t)return;const k=[s,t].sort().join("|");if(seen.has(k))return;seen.add(k);edges.push({s:byId[s],t:byId[t],type})};
+  EDGES.trim().split("\n").forEach(line=>{const [s,type,t]=line.trim().split(/\s+/);if(REL[type])add(s,t,type)});
+  nodes.forEach(n=>n.r.forEach(ref=>{const [a,b]=ref.includes(":")?ref.split(":"):["see",ref];add(n.id,b,REL[a]?a:"see")}));
+  nodes.forEach(n=>adj[n.id]=[]);
+  edges.forEach(e=>{e.s.deg++;e.t.deg++;adj[e.s.id].push({other:e.t,label:REL[e.type][0]});adj[e.t.id].push({other:e.s,label:REL[e.type][1]})});
+}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function layout(){
+  const r=rng(7),keys=Object.keys(CATS),R=760,centers={};
+  keys.forEach((k,i)=>{const a=i/keys.length*Math.PI*2-Math.PI/2;centers[k]={x:Math.cos(a)*R,y:Math.sin(a)*R}});
+  nodes.forEach(n=>{const c=centers[n.cat];n.x=c.x+(r()-.5)*200;n.y=c.y+(r()-.5)*200});
+  const N=nodes.length,T=320;
+  for(let i=0;i<T;i++){
+    const a=1-i/T;
+    for(let p=0;p<N;p++){const u=nodes[p];
+      for(let q=p+1;q<N;q++){const v=nodes[q];
+        let dx=u.x-v.x,dy=u.y-v.y,d2=dx*dx+dy*dy;if(d2>90000)continue;if(d2<25)d2=25;
+        const f=2200*a/d2,d=Math.sqrt(d2);dx/=d;dy/=d;u.vx+=dx*f;u.vy+=dy*f;v.vx-=dx*f;v.vy-=dy*f;}}
+    edges.forEach(e=>{const dx=e.t.x-e.s.x,dy=e.t.y-e.s.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-90)*0.012*a;
+      e.s.vx+=dx/d*f;e.s.vy+=dy/d*f;e.t.vx-=dx/d*f;e.t.vy-=dy/d*f;});
+    nodes.forEach(n=>{const c=centers[n.cat];n.vx+=(c.x-n.x)*0.045*a;n.vy+=(c.y-n.y)*0.045*a;n.vx*=0.55;n.vy*=0.55;n.x+=n.vx;n.y+=n.vy;});
+  }
+  const sorted=[...nodes].sort((a,b)=>b.deg-a.deg);labelMinDeg=sorted[Math.min(28,sorted.length-1)].deg;
+}
+let labelMinDeg=99;
+const radius=n=>3.5+Math.sqrt(n.deg)*1.6;
+
+/* ---------- Graph drawing ---------- */
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d"),wrap=document.getElementById("graphWrap");
+let W=0,H=0,dpr=1,view={x:0,y:0,k:1},fitted=false;
+const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function hexA(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`}
+function focusSet(){
+  if(state.chain)return new Set(state.chain.steps.map(s=>s[0]));
+  if(state.selected){const s=new Set([state.selected.id]);adj[state.selected.id].forEach(a=>s.add(a.other.id));return s}
+  return null;
+}
+const alphaOf=(n,f)=>!state.cats.has(n.cat)?.06:(f&&!f.has(n.id)?.12:1);
+function draw(){
+  if(!ready||!W)return;
+  const bg=tok("--bg"),ink=tok("--ink"),muted=tok("--muted"),line=tok("--line"),accent=tok("--accent");
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  ctx.translate(view.x,view.y);ctx.scale(view.k,view.k);
+  const f=focusSet();
+  ctx.lineWidth=1/view.k;
+  edges.forEach(e=>{
+    const hot=state.selected&&!state.chain&&(e.s===state.selected||e.t===state.selected);
+    const a=Math.min(alphaOf(e.s,f),alphaOf(e.t,f));
+    ctx.strokeStyle=hot?hexA(CATS[state.selected.cat].color,.9):line;
+    ctx.globalAlpha=hot?1:(f?a*.5:.6);ctx.lineWidth=(hot?1.6:1)/view.k;
+    ctx.beginPath();ctx.moveTo(e.s.x,e.s.y);ctx.lineTo(e.t.x,e.t.y);ctx.stroke();
+  });
+  ctx.globalAlpha=1;
+  if(state.chain){
+    const pts=state.chain.steps.map(s=>byId[s[0]]).filter(Boolean);
+    ctx.strokeStyle=accent;ctx.lineWidth=2.6/view.k;ctx.setLineDash([6/view.k,4/view.k]);
+    ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();ctx.setLineDash([]);
+  }
+  nodes.forEach(n=>{
+    ctx.globalAlpha=alphaOf(n,f);ctx.fillStyle=CATS[n.cat].color;
+    ctx.beginPath();ctx.arc(n.x,n.y,radius(n),0,Math.PI*2);ctx.fill();
+    if(status[n.id]==="known"&&alphaOf(n,f)===1){ctx.strokeStyle=tok("--good");ctx.lineWidth=1.5/view.k;ctx.stroke()}
+    if(n===state.selected||n===state.hover){ctx.strokeStyle=ink;ctx.lineWidth=2/view.k;ctx.stroke()}
+  });
+  ctx.globalAlpha=1;
+  if(state.chain){
+    ctx.font=`500 ${10/view.k}px ${tok("--mono")}`;ctx.textAlign="center";ctx.textBaseline="middle";
+    state.chain.steps.forEach((s,i)=>{const n=byId[s[0]];if(!n)return;const bx=n.x-radius(n)-7/view.k,by=n.y-radius(n)-7/view.k;
+      ctx.fillStyle=accent;ctx.beginPath();ctx.arc(bx,by,8/view.k,0,Math.PI*2);ctx.fill();ctx.fillStyle=bg;ctx.fillText(String(i+1),bx,by+.5/view.k);});
+  }
+  const fs=12/view.k;ctx.font=`500 ${fs}px ${tok("--body")}`;ctx.textAlign="left";ctx.textBaseline="middle";ctx.lineJoin="round";
+  nodes.forEach(n=>{
+    const a=alphaOf(n,f);
+    const show=(f&&f.has(n.id))||n===state.hover||(!f&&a===1&&(n.deg>=labelMinDeg||view.k>1.4));
+    if(!show)return;
+    const tx=n.x+radius(n)+4/view.k;
+    ctx.strokeStyle=bg;ctx.lineWidth=3.5/view.k;ctx.strokeText(n.label,tx,n.y);
+    ctx.fillStyle=(f||n===state.hover)?ink:muted;
+    if(n===state.selected)ctx.font=`600 ${fs*1.1}px ${tok("--body")}`;
+    ctx.fillText(n.label,tx,n.y);
+    if(n===state.selected)ctx.font=`500 ${fs}px ${tok("--body")}`;
+  });
+}
+let raf=0;const redraw=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;draw()})};
+function resize(){
+  const r=wrap.getBoundingClientRect();if(!r.width||!r.height)return;
+  dpr=window.devicePixelRatio||1;W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+  if(ready&&!fitted){fit(false);fitted=true}draw();
+}
+function bounds(l){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;l.forEach(n=>{x0=Math.min(x0,n.x);y0=Math.min(y0,n.y);x1=Math.max(x1,n.x);y1=Math.max(y1,n.y)});return{x0,y0,x1,y1}}
+function fit(animate=true,list){
+  if(!W)return;list=list||nodes.filter(n=>state.cats.has(n.cat));if(!list.length)list=nodes;
+  const b=bounds(list),pad=list.length<14?150:50;
+  const k=Math.min(2.2,Math.min(W/(b.x1-b.x0+pad*2),H/(b.y1-b.y0+pad*2)));
+  tween({k,x:W/2-(b.x0+b.x1)/2*k,y:H/2-(b.y0+b.y1)/2*k},animate);
+}
+function tween(t,animate=true){
+  if(!animate||reduced){view=t;redraw();return}
+  const from={...view},t0=performance.now(),d=360;
+  (function step(now){const p=Math.min(1,(now-t0)/d),e=1-Math.pow(1-p,3);
+    view={k:from.k+(t.k-from.k)*e,x:from.x+(t.x-from.x)*e,y:from.y+(t.y-from.y)*e};draw();if(p<1)requestAnimationFrame(step)})(t0);
+}
+function centerOn(n){const k=Math.max(view.k,1.2);tween({k,x:W/2-n.x*k,y:H/2-n.y*k})}
+const toWorld=(px,py)=>({x:(px-view.x)/view.k,y:(py-view.y)/view.k});
+function hit(px,py){const w=toWorld(px,py);let best=null,bd=1e9;nodes.forEach(n=>{if(!state.cats.has(n.cat))return;const d=Math.hypot(n.x-w.x,n.y-w.y);if(d<radius(n)+5/view.k&&d<bd){bd=d;best=n}});return best}
+let drag=null,pinch=null;const pts=new Map();
+const ptPos=e=>{const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+cv.addEventListener("pointerdown",e=>{if(!ready)return;cv.setPointerCapture(e.pointerId);const p=ptPos(e);pts.set(e.pointerId,p);
+  if(pts.size===2){const [a,b]=[...pts.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y)||1,k:view.k,vx:view.x,vy:view.y,mx:(a.x+b.x)/2,my:(a.y+b.y)/2};drag=null;return}
+  drag={sx:p.x,sy:p.y,node:hit(p.x,p.y),moved:false,vx:view.x,vy:view.y};cv.classList.add("dragging")});
+cv.addEventListener("pointermove",e=>{if(!ready)return;const p=ptPos(e);
+  if(pts.has(e.pointerId))pts.set(e.pointerId,p);
+  if(pinch&&pts.size===2){const [a,b]=[...pts.values()];const d=Math.hypot(a.x-b.x,a.y-b.y)||1;const k=Math.max(.15,Math.min(5,pinch.k*d/pinch.d));
+    const wx=(pinch.mx-pinch.vx)/pinch.k,wy=(pinch.my-pinch.vy)/pinch.k,mx=(a.x+b.x)/2,my=(a.y+b.y)/2;view={k,x:mx-wx*k,y:my-wy*k};redraw();return}
+  if(!drag){if(e.pointerType==="mouse"){const n=hit(p.x,p.y);if(n!==state.hover){state.hover=n;cv.style.cursor=n?"pointer":"grab";redraw()}}return}
+  if(Math.hypot(p.x-drag.sx,p.y-drag.sy)>4)drag.moved=true;if(!drag.moved)return;
+  if(drag.node){const w=toWorld(p.x,p.y);drag.node.x=w.x;drag.node.y=w.y}else{view.x=drag.vx+(p.x-drag.sx);view.y=drag.vy+(p.y-drag.sy)}redraw()});
+function endDrag(e){pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!drag)return;cv.classList.remove("dragging");
+  if(!drag.moved){if(drag.node)selectTerm(drag.node.id);else if(state.selected&&!state.chain){state.selected=null;renderIntro();setHash("graph");redraw()}}drag=null}
+cv.addEventListener("pointerup",endDrag);cv.addEventListener("pointercancel",endDrag);
+cv.addEventListener("pointerleave",()=>{if(!drag&&state.hover){state.hover=null;redraw()}});
+cv.addEventListener("wheel",e=>{e.preventDefault();const r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;
+  const k=Math.max(.15,Math.min(5,view.k*Math.exp(-e.deltaY*0.0015)));view.x=px-(px-view.x)*k/view.k;view.y=py-(py-view.y)*k/view.k;view.k=k;redraw()},{passive:false});
+const zoomBy=f=>{const k=Math.max(.15,Math.min(5,view.k*f));tween({k,x:W/2-(W/2-view.x)*k/view.k,y:H/2-(H/2-view.y)*k/view.k})};
+document.getElementById("zin").onclick=()=>zoomBy(1.35);
+document.getElementById("zout").onclick=()=>zoomBy(1/1.35);
+document.getElementById("zfit").onclick=()=>fit(true,state.chain?state.chain.steps.map(s=>byId[s[0]]).filter(Boolean):undefined);
+new ResizeObserver(resize).observe(wrap);
+
+/* ---------- Panel ---------- */
+const panel=document.getElementById("panel");
+function renderIntro(){
+  if(!ready){panel.innerHTML=`<p class="muted">Loading…</p>`;return}
+  const pct=Math.round(Object.values(status).filter(s=>s==="known").length/nodes.length*100);
+  panel.innerHTML=`
+    <span class="pill">Fund Desk</span>
+    <h2>${MODE==="learn"?"Fund terms, lifecycle and rules":"News, terms and rules in one place"}</h2>
+    <p class="def">${MODE==="learn"?"":"Read the day's private markets headlines, then tap any tagged term to see what it means. "}The Terms graph maps ${nodes.length} fund terms and how they connect; Learn takes you through them in short modules; Lifecycle and Legal cover a fund's life and its rules.</p>
+    <div class="stats"><div><b>${nodes.length}</b><span>terms</span></div><div><b>${edges.length}</b><span>links</span></div><div><b>${pct}%</b><span>known</span></div></div>
+    <h3>Good places to start</h3>
+    <div class="links">${["carry","waterfall","lpa","tvpi","capital-call","continuing-interest","aifmd","safe","deep-tech","mc-ccaf"].map(id=>tlink(byId[id])).join("")}</div>
+    <h3 style="margin-top:16px">Chains</h3>
+    <div class="links">${CHAINS.map(c=>`<button class="tlink" data-chain="${c.id}">${esc(c.title)}</button>`).join("")}</div>
+    <p class="muted" style="font-size:12.5px;margin-top:20px">Regulatory figures checked as of ${esc(LEGAL.asof)}. Market norms such as fee rates are typical ranges, not rules. A study tool, not legal or tax advice.</p>`;
+}
+function renderTerm(n){
+  const groups={};adj[n.id].forEach(a=>{(groups[a.label]=groups[a.label]||[]).push(a.other)});
+  const order=Object.values(REL).flat();const keys=Object.keys(groups).sort((a,b)=>order.indexOf(a)-order.indexOf(b));
+  const chains=CHAINS.filter(c=>c.steps.some(s=>s[0]===n.id));
+  const stages=LIFE.stages.filter(s=>s.terms.includes(n.id));
+  const list=state.studyList,idx=list?list.indexOf(n.id):-1;
+  const isL=status[n.id]==="known";
+  panel.innerHTML=`
+    <span class="pill">${dot(n.cat)}${esc(CATS[n.cat].name)} · <span class="lvl">${LEVELS[n.lvl]}</span></span>
+    <h2>${esc(n.label)}</h2>
+    ${n.aka?`<p class="aka">Also called: ${esc(n.aka)}</p>`:`<div style="height:6px"></div>`}
+    <p class="def">${esc(n.def)}</p>
+    <h3>Examples</h3>
+    <div class="exs">${n.ex.map((e,i)=>`<div class="ex"><b>Example ${i+1}</b>${esc(e)}</div>`).join("")}</div>
+    <h3>Scenarios</h3>
+    ${n.sc.map((s,i)=>`<div class="scen" id="sc${i}"><p><b>Scenario ${i+1}.</b> ${esc(s[0])}</p><button class="btn" data-reveal="sc${i}">Show what happens</button><div class="out">${esc(s[1])}</div></div>`).join("")}
+    ${termVideoBlock(n)}
+    <div class="rel">${keys.map(k=>`<h3>${esc(k)}</h3><div class="links">${groups[k].sort((a,b)=>a.label.localeCompare(b.label)).map(tlink).join("")}</div>`).join("")}</div>
+    ${chains.length?`<h3 style="margin-top:16px">In chains</h3><div class="links">${chains.map(c=>`<button class="tlink" data-chain="${c.id}">${esc(c.title)}</button>`).join("")}</div>`:""}
+    ${stages.length?`<h3 style="margin-top:16px">In lifecycle stages</h3><div class="links">${stages.map(s=>`<button class="tlink" data-stage="${s.id}">${esc(s.n)}</button>`).join("")}</div>`:""}
+    <div class="study">
+      <button class="btn ${isL?"good":"primary"}" data-learn="${n.id}">${isL?"Known ✓ (undo)":"Mark as known"}</button>
+      ${idx>0?`<button class="btn" data-term="${list[idx-1]}">← Previous</button>`:""}
+      ${idx>-1&&idx<list.length-1?`<button class="btn" data-term="${list[idx+1]}">Next →</button>`:""}
+      ${idx>-1?`<span class="muted" style="font-size:13px;align-self:center">${idx+1} of ${list.length} in set</span>`:""}
+    </div>`;
+  panel.parentElement.scrollTop=0;
+}
+function renderChain(c){
+  panel.innerHTML=`
+    <span class="pill">Chain · ${c.steps.length} steps</span>
+    <h2>${esc(c.title)}</h2><p class="def">${esc(c.summary)}</p>
+    <ol class="steps">${c.steps.map(([id,note])=>`<li><div>${tlink(byId[id])}<p>${esc(note)}</p></div></li>`).join("")}</ol>
+    ${c.calc?calcHTML():""}`;
+  panel.parentElement.scrollTop=0;if(c.calc)bindCalc();
+}
+function calcHTML(){return `<div class="calc"><h3>Try it: European waterfall</h3><div class="grid">
+  <label for="c-paid">Paid-in (€m)<input id="c-paid" type="number" min="0" step="1" value="100"></label>
+  <label for="c-dist">Total proceeds (€m)<input id="c-dist" type="number" min="0" step="1" value="250"></label>
+  <label for="c-years">Years held<input id="c-years" type="number" min="0" step="0.5" value="6"></label>
+  <label for="c-hurdle">Hurdle (%)<input id="c-hurdle" type="number" min="0" step="0.5" value="8"></label>
+  <label for="c-carry">Carry (%)<input id="c-carry" type="number" min="0" max="50" step="1" value="20"></label></div>
+  <table><thead><tr><th>Tier</th><th>LPs</th><th>GP</th></tr></thead><tbody id="c-body"></tbody><tfoot id="c-foot"></tfoot></table>
+  <p class="muted" style="font-size:12px;margin:8px 0 0">Simplified: all capital drawn on day one, one exit at the end, full catch-up. Real waterfalls run on dated cash flows.</p></div>`}
+function waterfall(P,D,y,h,c){let r=Math.max(0,D);const roc=Math.min(r,P);r-=roc;const pref=P*(Math.pow(1+h,y)-1);const t2=Math.min(r,pref);r-=t2;
+  const cu=c<1?c*t2/(1-c):0;const t3=Math.min(r,cu);r-=t3;return{roc,t2,t3,lp4:r*(1-c),gp4:r*c,lp:roc+t2+r*(1-c),gp:t3+r*c,profit:D-P}}
+const fm=v=>"€"+v.toFixed(1)+"m";
+function bindCalc(){const ids=["c-paid","c-dist","c-years","c-hurdle","c-carry"];
+  const run=()=>{const [P,D,y,h,c]=ids.map(i=>parseFloat(document.getElementById(i).value)||0);const cc=Math.min(c,99);const w=waterfall(P,D,y,h/100,cc/100);
+    document.getElementById("c-body").innerHTML=`<tr><td>1 · Return of capital</td><td>${fm(w.roc)}</td><td>–</td></tr><tr><td>2 · Preferred return</td><td>${fm(w.t2)}</td><td>–</td></tr><tr><td>3 · GP catch-up</td><td>–</td><td>${fm(w.t3)}</td></tr><tr><td>4 · ${100-cc}/${cc} split</td><td>${fm(w.lp4)}</td><td>${fm(w.gp4)}</td></tr>`;
+    document.getElementById("c-foot").innerHTML=`<tr><td>Total</td><td>${fm(w.lp)}</td><td>${fm(w.gp)}</td></tr><tr><td colspan="3" style="text-align:left;font-weight:400;color:var(--muted);font-family:var(--body)">GP share: ${w.profit>0?(w.gp/w.profit*100).toFixed(1)+"% of profit":"no profit"}. LP net multiple ${P>0?(w.lp/P).toFixed(2)+"x":"–"}.</td></tr>`};
+  ids.forEach(i=>document.getElementById(i).addEventListener("input",run));run()}
+
+/* ---------- Actions ---------- */
+function setHash(h){try{history.replaceState(null,"",h?"#"+h:location.pathname+location.search)}catch(e){}}
+function selectTerm(id,keepList){
+  const n=byId[id];if(!n)return;
+  if(!keepList&&state.studyList&&!state.studyList.includes(id))state.studyList=null;
+  state.selected=n;state.chain=null;document.getElementById("chainbar").classList.remove("on");
+  if(!state.cats.has(n.cat)){state.cats=new Set(Object.keys(CATS));renderFilters()}
+  renderTerm(n);setHash(n.id);openSheet();
+  if(state.view==="graph")centerOn(n);else redraw();
+}
+function selectChain(id,toGraph){
+  const c=CHAINS.find(x=>x.id===id);if(!c)return;
+  state.chain=c;state.selected=null;state.cats=new Set(Object.keys(CATS));renderFilters();
+  document.getElementById("chainName").textContent=c.title;document.getElementById("chainbar").classList.add("on");
+  renderChain(c);setHash("chain-"+c.id);if(toGraph)setView("graph");openSheet();
+  requestAnimationFrame(()=>fit(true,c.steps.map(s=>byId[s[0]]).filter(Boolean)));
+}
+document.getElementById("chainClear").onclick=()=>{state.chain=null;document.getElementById("chainbar").classList.remove("on");renderIntro();setHash("graph");fit(true)};
+function toggleLearned(id){status[id]==="known"?delete status[id]:status[id]="known";saveStatus();
+  if(state.selected&&state.selected.id===id)renderTerm(state.selected);if(state.view==="learn")renderLearn();redraw()}
+
+document.addEventListener("click",e=>{
+  const rv=e.target.closest("[data-reveal]");if(rv){const el=document.getElementById(rv.dataset.reveal);el.classList.toggle("open");rv.textContent=el.classList.contains("open")?"Hide":"Show what happens";return}
+  const lr=e.target.closest("[data-learn]");if(lr){toggleLearned(lr.dataset.learn);return}
+  const t=e.target.closest("[data-term]");if(t&&!t.closest(".results")){selectTerm(t.dataset.term,true);return}
+  const c=e.target.closest("[data-chain]");if(c){selectChain(c.dataset.chain,true);return}
+  const cr=e.target.closest("[data-chain-read]");if(cr){selectChain(cr.dataset.chainRead,false);return}
+  const st=e.target.closest("[data-stage]");if(st){const i=LIFE.stages.findIndex(s=>s.id===st.dataset.stage);if(i>-1){state.lifeStage=i;setView("lifecycle")}return}
+});
+
+/* ---------- Views ---------- */
+const VIEWS=(MODE==="learn"?["graph","chains","learn","lifecycle","legal"]:["news","markets","dir","graph","chains","learn","lifecycle","legal","library"]);
+const HOME=MODE==="learn"?"learn":"news";
+function setView(v){
+  state.view=v;
+  VIEWS.forEach(k=>{document.getElementById("view-"+k).classList.toggle("on",k===v);document.getElementById("tab-"+k).setAttribute("aria-pressed",String(k===v))});
+  document.getElementById("filters").style.display=v==="graph"?"":"none";
+  if(!ready)return;
+  if(v==="graph")requestAnimationFrame(resize);
+  if(v==="learn"){renderLearn();if(!state.selected&&!state.chain)renderLearnHelp()}
+  if(v==="lifecycle")renderLife();
+  if(v==="legal")renderLegal();
+  if(v==="news")renderNews();
+  if(v==="markets")renderMarkets();
+  if(v==="dir")renderDir();
+  if(v==="library")renderLibrary();
+  const tb=document.getElementById("tab-"+v);if(tb&&tb.scrollIntoView)tb.scrollIntoView({block:"nearest",inline:"nearest"});
+  if(v!=="graph"&&isMobile())window.scrollTo(0,0);
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{closeSheet();setView(b.dataset.view);setHash(b.dataset.view===HOME?"":b.dataset.view)});
+
+function renderFilters(){
+  const all=state.cats.size===Object.keys(CATS).length;
+  document.getElementById("filters").innerHTML=`<button class="chip all" data-cat="__all" aria-pressed="${all}">All areas</button>`+
+    Object.entries(CATS).map(([k,c])=>`<button class="chip" data-cat="${k}" aria-pressed="${state.cats.has(k)}">${dot(k)}${esc(c.name)}</button>`).join("");
+}
+document.getElementById("filters").addEventListener("click",e=>{
+  const b=e.target.closest(".chip");if(!b)return;const k=b.dataset.cat,keys=Object.keys(CATS);
+  if(k==="__all")state.cats=new Set(keys);else if(state.cats.size===keys.length)state.cats=new Set([k]);
+  else{state.cats.has(k)?state.cats.delete(k):state.cats.add(k);if(!state.cats.size)state.cats=new Set(keys)}
+  renderFilters();if(state.view==="graph")fit(true);if(state.view==="learn")renderLearn();
+});
+
+function renderCards(){
+  document.getElementById("cards").innerHTML=CHAINS.map(c=>`<div class="card"><h3>${esc(c.title)}</h3><p>${esc(c.summary)}</p>
+    <div class="steps">${c.steps.map(s=>esc(byId[s[0]]?.label||s[0])).join(" → ")}</div>
+    <div class="row"><button class="btn primary" data-chain="${c.id}">Show on graph</button>${c.calc?`<button class="btn" data-chain-read="${c.id}">Open calculator</button>`:""}</div></div>`).join("");
+}
+
+/* ---------- Learn ---------- */
+const ORDER=["structure","parties","docs","raise","capital","econ","metrics","deal","exit","reg","venture","credit","real","hedge","lpside","ops"];
+const LEVEL_DESC={
+  1:"Start here. The vocabulary anyone working around a fund needs: who is who, how money moves in and out, and how returns are measured.",
+  2:"Terms that come up when negotiating fund documents, doing deals and running a fund day to day.",
+  3:"Specialist terms: structuring, regulation, secondaries and niche strategies."
+};
+const LS={mode:"home",level:store.get("level",1),title:"",list:[],i:0,cat:null,lvl:null,quiz:null,filter:"",browseOpen:false};
+const modTerms=(cat,lvl)=>nodes.filter(n=>n.cat===cat&&n.lvl===lvl).sort((a,b)=>a.label.localeCompare(b.label));
+const countKnown=ids=>ids.filter(id=>status[id]==="known").length;
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function nextModule(){for(const lvl of [1,2,3])for(const c of ORDER){const t=modTerms(c,lvl);if(t.length&&countKnown(t.map(n=>n.id))<t.length)return{c,lvl}}return null}
+const learnEl=()=>document.getElementById("learn");
+const learnTop=()=>{const s=learnEl().closest(".scroll");if(s)s.scrollTop=0};
+function renderLearn(){({home:learnHome,study:learnStudy,done:learnDone,quiz:learnQuiz}[LS.mode]||learnHome)()}
+
+function learnHome(){
+  const el=learnEl(),tot=nodes.length;
+  const vals=Object.values(status),known=vals.filter(s=>s==="known").length,rev=vals.filter(s=>s==="review").length;
+  const nm=nextModule(),lv=LS.level;
+  const mods=ORDER.map(c=>({c,t:modTerms(c,lv)})).filter(m=>m.t.length);
+  const lvCount=l=>{const ids=nodes.filter(n=>n.lvl===l).map(n=>n.id);return[countKnown(ids),ids.length]};
+  const nmT=nm?modTerms(nm.c,nm.lvl):[];
+  el.innerHTML=`
+    <h2 class="sec-title">Learn fund terms</h2>
+    <p class="lead">Short modules, one area at a time. For each term, read it, think through the two scenarios before revealing what happens, then say whether you know it. Each module ends with a quick quiz.</p>
+    <div class="overall">
+      <div class="ov-bar" role="img" aria-label="${known} known, ${rev} still learning, ${tot-known-rev} not started"><i class="k" style="width:${known/tot*100}%"></i><i class="r" style="width:${rev/tot*100}%"></i></div>
+      <div class="ov-legend"><span><span class="sw k"></span>${known} known</span><span><span class="sw r"></span>${rev} still learning</span><span><span class="sw n"></span>${tot-known-rev} not started</span></div>
+    </div>
+    ${nm?`<div class="continue"><div><span class="muted">${known||rev?"Pick up where you left off":"Suggested first module"}</span><b>${esc(CATS[nm.c].name)} · ${LEVELS[nm.lvl]}</b><span class="muted">${countKnown(nmT.map(n=>n.id))} of ${nmT.length} terms known</span></div><button class="btn primary big" data-study="${nm.c}|${nm.lvl}">${known||rev?"Continue":"Start learning"} →</button></div>`
+        :`<div class="continue"><div><b>Every term is marked as known.</b><span class="muted">Test yourself across all areas.</span></div><button class="btn primary" data-quizall>Quiz me on everything</button></div>`}
+    ${rev?`<div class="continue alt"><div><b>${rev} term${rev>1?"s":""} to review</b><span class="muted">Terms you marked "Still learning" or missed in a quiz.</span></div><button class="btn" data-review>Review now</button></div>`:""}
+    <h3 class="h-sub">Choose a level</h3>
+    <div class="levels" role="group" aria-label="Level">${[1,2,3].map(l=>{const [a,b]=lvCount(l);return`<button data-level="${l}" aria-pressed="${l===lv}"><b>${l}. ${LEVELS[l]}</b><span>${a} of ${b} known</span><span class="mini"><i style="width:${b?a/b*100:0}%"></i></span></button>`}).join("")}</div>
+    <p class="level-desc">${LEVEL_DESC[lv]}</p>
+    <div class="mods">${mods.map((m,i)=>{const ids=m.t.map(n=>n.id),k=countKnown(ids),done=k===ids.length,started=ids.some(id=>status[id]);
+      return`<div class="mod${done?" done":""}">
+        <div class="mod-top"><span class="num">${String(i+1).padStart(2,"0")}</span>${dot(m.c)}<b>${esc(CATS[m.c].name)}</b></div>
+        <p class="mod-meta">${ids.length} terms · ${done?"all known ✓":k?`${k} known`:"not started"}</p>
+        <div class="bar"><i style="width:${k/ids.length*100}%"></i></div>
+        <p class="mod-peek">${m.t.slice(0,4).map(n=>esc(n.label)).join(", ")}${m.t.length>4?`, +${m.t.length-4} more`:""}</p>
+        ${(VID.cats[m.c]||[])[0]?`<a class="mvid" href="${ytUrl(VID.cats[m.c][0])}" target="_blank" rel="noopener"><span class="play sm" aria-hidden="true"></span>${esc(VID.videos[VID.cats[m.c][0]])}</a>`:""}
+        <div class="row"><button class="btn ${done?"":"primary"}" data-study="${m.c}|${lv}">${done?"Revise":started?"Continue":"Start"}</button>${ids.length>=2?`<button class="btn" data-quiz="${m.c}|${lv}">Quiz</button>`:""}</div>
+      </div>`}).join("")}</div>
+    <details class="browse" ${LS.browseOpen?"open":""}><summary>Browse all ${tot} terms</summary>
+      <input id="lfilter" type="search" placeholder="Filter by name or meaning" value="${esc(LS.filter)}" aria-label="Filter terms">
+      <div class="tlist" id="blist"></div>
+    </details>`;
+  const det=el.querySelector(".browse");det.addEventListener("toggle",()=>{LS.browseOpen=det.open;if(det.open)renderBrowse()});
+  el.querySelector("#lfilter").addEventListener("input",e=>{LS.filter=e.target.value;renderBrowse()});
+  if(LS.browseOpen)renderBrowse();
+}
+function renderBrowse(){
+  const q=LS.filter.toLowerCase();
+  const set=nodes.filter(n=>!q||(n.label+" "+n.aka+" "+n.def).toLowerCase().includes(q)).sort((a,b)=>a.label.localeCompare(b.label));
+  const badge=id=>status[id]==="known"?`<span class="ok">✓ known</span>`:status[id]==="review"?`<span class="rv">learning</span>`:"";
+  document.getElementById("blist").innerHTML=set.length?set.map(n=>`<button class="titem" data-lterm="${n.id}">${dot(n.cat)}<b>${esc(n.label)}</b>${badge(n.id)||`<span class="lvl">${LEVELS[n.lvl]}</span>`}<p>${esc(firstSentence(n.def))}</p></button>`).join(""):`<p class="empty-note">No terms match that filter.</p>`;
+}
+
+function startStudy(cat,lvl,startId){
+  const t=modTerms(cat,lvl);LS.list=t.map(n=>n.id);LS.title=`${CATS[cat].name} · ${LEVELS[lvl]}`;LS.cat=cat;LS.lvl=lvl;
+  let i=startId?LS.list.indexOf(startId):LS.list.findIndex(id=>status[id]!=="known");LS.i=i<0?0:i;LS.mode="study";renderLearn();learnTop();
+}
+function startList(ids,title){LS.list=ids;LS.title=title;LS.cat=null;LS.lvl=null;LS.i=0;LS.mode=ids.length?"study":"home";renderLearn();learnTop()}
+function learnStudy(){
+  const el=learnEl(),id=LS.list[LS.i],n=byId[id];
+  if(!n){LS.mode="done";return renderLearn()}
+  const st=status[id];
+  el.innerHTML=`
+    <div class="study-top"><button class="btn" data-lhome>← All modules</button><b>${esc(LS.title)}</b><span class="mono">Term ${LS.i+1} of ${LS.list.length}</span></div>
+    <div class="bar big"><i style="width:${LS.i/LS.list.length*100}%"></i></div>
+    <article class="fcard">
+      <div class="fc-head"><span class="pill">${dot(n.cat)}${esc(CATS[n.cat].name)} · ${LEVELS[n.lvl]}</span>${st?`<span class="badge ${st}">${st==="known"?"You marked this known":"Still learning"}</span>`:""}</div>
+      <h2>${esc(n.label)}</h2>
+      ${n.aka?`<p class="aka">Also called: ${esc(n.aka)}</p>`:""}
+      <p class="def">${esc(n.def)}</p>
+      <h3>Examples</h3>
+      <div class="exs">${n.ex.map((e,i)=>`<div class="ex"><b>Example ${i+1}</b>${esc(e)}</div>`).join("")}</div>
+      <h3>Think it through</h3>
+      <p class="muted small">Decide what you would expect, then reveal the answer.</p>
+      ${n.sc.map((s,i)=>`<div class="scen" id="fs${i}"><p><b>Scenario ${i+1}.</b> ${esc(s[0])}</p><button class="btn" data-reveal="fs${i}">Show what happens</button><div class="out">${esc(s[1])}</div></div>`).join("")}
+      ${termVideoBlock(n)}
+      <div class="fc-q">Do you know this term?</div>
+      <div class="fc-actions"><button class="btn big" data-mark="review">Still learning <kbd>R</kbd></button><button class="btn primary big" data-mark="known">I know this <kbd>K</kbd></button></div>
+      <div class="fc-nav">${LS.i>0?`<button class="linkbtn" data-step="-1">← Previous</button>`:"<span></span>"}<button class="linkbtn" data-graph="${n.id}">See its connections on the graph</button><button class="linkbtn" data-step="1">Skip →</button></div>
+    </article>`;
+}
+function markCur(s){const id=LS.list[LS.i];if(!id)return;status[id]=s;saveStatus();step(1)}
+function step(d){LS.i=Math.max(0,LS.i+d);if(LS.i>=LS.list.length)LS.mode="done";renderLearn();learnTop()}
+function learnDone(){
+  const el=learnEl(),ids=LS.list,k=countKnown(ids),rv=ids.filter(id=>status[id]==="review"),nm=nextModule();
+  el.innerHTML=`
+    <div class="study-top"><button class="btn" data-lhome>← All modules</button><b>${esc(LS.title)}</b><span></span></div>
+    <article class="fcard done-card">
+      <h2>Set finished</h2>
+      <p class="def">You know <b>${k} of ${ids.length}</b> terms in this set${rv.length?`. <b>${rv.length}</b> still need work.`:". Nice work."}</p>
+      <div class="bar big"><i style="width:${ids.length?k/ids.length*100:0}%"></i></div>
+      <div class="fc-actions left">
+        ${rv.length?`<button class="btn primary" data-redo>Go over the ${rv.length} I'm still learning</button>`:""}
+        ${LS.cat&&ids.length>=2?`<button class="btn ${rv.length?"":"primary"}" data-quiz="${LS.cat}|${LS.lvl}">Take the quiz</button>`:""}
+        ${nm?`<button class="btn" data-study="${nm.c}|${nm.lvl}">Next module: ${esc(CATS[nm.c].name)} · ${LEVELS[nm.lvl]}</button>`:""}
+        <button class="btn" data-lhome>All modules</button>
+      </div>
+    </article>`;
+}
+
+function mask(n){
+  let ss=n.def.split(/(?<=\.)\s/);
+  const acr=/^[A-Z0-9][A-Z0-9 .&\/-]{1,7}$/.test(n.label.replace(/\s*\(.*?\)/g,"").trim());
+  if(acr&&ss.length>1&&ss[0].split(/\s+/).length<=8)ss=ss.slice(1);
+  let t=ss.slice(0,2).join(" ");
+  if(acr){const m=t.match(/^([^.:]{0,60}):\s*/);if(m&&m[1][0].toUpperCase()===n.label[0].toUpperCase()&&m[1].split(/\s+/).length<=5)t=t.slice(m[0].length);t=t.charAt(0).toUpperCase()+t.slice(1)}
+  const words=[n.label,n.label.replace(/\s*\(.*?\)\s*/g," ").trim(),...(n.label.match(/\((.*?)\)/)||[]).slice(1),...n.aka.split(/,\s*/)].filter(w=>w&&w.length>2).sort((a,b)=>b.length-a.length);
+  words.forEach(w=>{t=t.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"),"_____")});
+  return t;
+}
+function startQuiz(cat,lvl,pool){
+  const terms=shuffle([...(pool||modTerms(cat,lvl))]).slice(0,8);
+  const qs=terms.map(n=>{
+    let same=nodes.filter(m=>m.cat===n.cat&&m.id!==n.id);
+    if(same.length<3)same=same.concat(nodes.filter(m=>m.lvl===n.lvl&&m.cat!==n.cat));
+    return{id:n.id,prompt:mask(n),opts:shuffle([n.id,...shuffle(same).slice(0,3).map(m=>m.id)])};
+  });
+  LS.quiz={qs,i:0,score:0,answer:null,missed:[],title:pool?"Mixed quiz":`${CATS[cat].name} · ${LEVELS[lvl]}`,cat,lvl,mixed:!!pool};
+  LS.mode="quiz";renderLearn();learnTop();
+}
+function learnQuiz(){
+  const el=learnEl(),Q=LS.quiz;
+  if(Q.i>=Q.qs.length)return quizEnd();
+  const q=Q.qs[Q.i],a=Q.answer,right=a===q.id;
+  el.innerHTML=`
+    <div class="study-top"><button class="btn" data-lhome>← All modules</button><b>Quiz · ${esc(Q.title)}</b><span class="mono">Question ${Q.i+1} of ${Q.qs.length}</span></div>
+    <div class="bar big"><i style="width:${Q.i/Q.qs.length*100}%"></i></div>
+    <article class="fcard">
+      <p class="muted">Which term matches this description?</p>
+      <p class="qprompt">${esc(q.prompt)}</p>
+      <div class="opts">${q.opts.map((o,i)=>{let cls="";if(a){if(o===q.id)cls="right";else if(o===a)cls="wrong"}return`<button class="opt ${cls}" data-ans="${o}" ${a?"disabled":""}><kbd>${i+1}</kbd>${esc(byId[o].label)}</button>`}).join("")}</div>
+      ${a?`<div class="feedback ${right?"ok":"no"}"><b>${right?"Correct.":"Not quite. The answer is "+esc(byId[q.id].label)+"."}</b> ${esc(byId[q.id].def)}</div>
+      <div class="fc-actions"><button class="btn primary big" data-qnext>${Q.i<Q.qs.length-1?"Next question":"See results"} <kbd>Enter</kbd></button></div>`:""}
+    </article>`;
+}
+function answer(o){const Q=LS.quiz;if(!Q||Q.answer)return;const q=Q.qs[Q.i];Q.answer=o;
+  if(o===q.id){Q.score++;status[q.id]="known"}else{status[q.id]="review";Q.missed.push(q.id)}saveStatus();renderLearn()}
+function qnext(){const Q=LS.quiz;Q.i++;Q.answer=null;renderLearn()}
+function quizEnd(){
+  const el=learnEl(),Q=LS.quiz,pct=Math.round(Q.score/Q.qs.length*100);
+  el.innerHTML=`
+    <div class="study-top"><button class="btn" data-lhome>← All modules</button><b>Quiz · ${esc(Q.title)}</b><span></span></div>
+    <article class="fcard done-card">
+      <h2>${Q.score} of ${Q.qs.length} correct</h2>
+      <div class="bar big"><i style="width:${pct}%"></i></div>
+      <p class="def">${pct===100?"Every answer right. Those terms are marked as known.":"Correct answers are marked as known; missed terms go to your review pile."}</p>
+      ${Q.missed.length?`<h3>Missed</h3><div class="links">${Q.missed.map(id=>`<button class="tlink" data-lterm="${id}">${dot(byId[id].cat)}${esc(byId[id].label)}</button>`).join("")}</div>`:""}
+      <div class="fc-actions left">
+        ${Q.missed.length?`<button class="btn primary" data-qmissed>Study the ones I missed</button>`:""}
+        <button class="btn" data-qretry>Try another quiz</button>
+        <button class="btn" data-lhome>All modules</button>
+      </div>
+    </article>`;
+}
+function renderLearnHelp(){
+  panel.innerHTML=`
+    <span class="pill">Learn</span>
+    <h2>How it works</h2>
+    <ol class="howto">
+      <li><b>Pick a level.</b> Start with Foundation unless you already know the basics.</li>
+      <li><b>Open a module.</b> Each covers one area, such as fees and carry, at that level.</li>
+      <li><b>Study one term at a time.</b> Read the meaning and examples, guess the scenarios, then reveal them.</li>
+      <li><b>Mark it.</b> "I know this" moves it to known. "Still learning" puts it in your review pile.</li>
+      <li><b>Take the quiz.</b> Match descriptions to terms. Right answers count as known; misses go to review.</li>
+    </ol>
+    <h3>Keyboard</h3>
+    <table class="kv"><tr><td><kbd>K</kbd></td><td>I know this</td></tr><tr><td><kbd>R</kbd></td><td>Still learning</td></tr><tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Previous / skip</td></tr><tr><td><kbd>1</kbd>–<kbd>4</kbd></td><td>Answer a quiz question</td></tr><tr><td><kbd>Enter</kbd></td><td>Next question</td></tr></table>
+    <p class="muted" style="font-size:12.5px;margin-top:16px">${sync.ok?"Your progress is saved to your account and follows you between devices, including your phone. Only you can see it.":(window.claude?"Progress is saved in this browser. Sign in to claude.ai to keep it in step across your devices.":"Progress is saved in this browser on this device.")}</p>`;
+}
+learnEl().addEventListener("click",e=>{
+  const g=a=>e.target.closest(`[${a}]`);let b;
+  if(b=g("data-study")){const [c,l]=b.dataset.study.split("|");startStudy(c,+l);return}
+  if(b=g("data-quiz")){const [c,l]=b.dataset.quiz.split("|");startQuiz(c,+l);return}
+  if(g("data-quizall")){startQuiz(null,null,nodes);return}
+  if(g("data-review")){startList(nodes.filter(n=>status[n.id]==="review").map(n=>n.id),"Review pile");return}
+  if(b=g("data-level")){LS.level=+b.dataset.level;store.set("level",LS.level);renderLearn();return}
+  if(g("data-lhome")){LS.mode="home";renderLearn();learnTop();return}
+  if(b=g("data-mark")){markCur(b.dataset.mark);return}
+  if(b=g("data-step")){step(+b.dataset.step);return}
+  if(b=g("data-graph")){setView("graph");selectTerm(b.dataset.graph);return}
+  if(b=g("data-lterm")){const n=byId[b.dataset.lterm];startStudy(n.cat,n.lvl,n.id);return}
+  if(g("data-redo")){startList(LS.list.filter(id=>status[id]==="review"),LS.title+" · still learning");return}
+  if(b=g("data-ans")){answer(b.dataset.ans);return}
+  if(g("data-qnext")){qnext();return}
+  if(g("data-qretry")){const Q=LS.quiz;Q.mixed?startQuiz(null,null,nodes):startQuiz(Q.cat,Q.lvl);return}
+  if(g("data-qmissed")){startList([...LS.quiz.missed],"Missed in quiz");return}
+});
+document.addEventListener("keydown",e=>{
+  if(state.view!=="learn"||e.target.matches("input,textarea,select")||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(LS.mode==="study"){
+    if(e.key==="k"||e.key==="K"){e.preventDefault();markCur("known")}
+    else if(e.key==="r"||e.key==="R"){e.preventDefault();markCur("review")}
+    else if(e.key==="ArrowRight"){e.preventDefault();step(1)}
+    else if(e.key==="ArrowLeft"){e.preventDefault();step(-1)}
+  }else if(LS.mode==="quiz"){
+    const Q=LS.quiz;
+    if(!Q.answer&&/^[1-4]$/.test(e.key)){const o=Q.qs[Q.i].opts[+e.key-1];if(o)answer(o)}
+    else if(Q.answer&&e.key==="Enter"){e.preventDefault();qnext()}
+  }
+});
+
+/* ---------- Lifecycle ---------- */
+function list(arr){return`<ul>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`}
+function renderLife(){
+  const el=document.getElementById("life"),S=LIFE.stages,s=S[state.lifeStage];
+  const ck=checks["life:"+s.id]||[];
+  el.innerHTML=`
+    <h2 class="sec-title">Fund lifecycle</h2>
+    <p class="lead">${esc(LIFE.intro)}</p>
+    <div class="stepper" role="group" aria-label="Lifecycle stages">${S.map((x,i)=>`<button class="step" data-si="${i}" aria-pressed="${i===state.lifeStage}"><span class="num">${String(i+1).padStart(2,"0")}</span><b>${esc(x.n)}</b><small>${esc(x.when)}</small></button>`).join("")}</div>
+    <div class="stage-head"><h2>${esc(s.n)}</h2><div class="meta"><span>${esc(s.when)}</span><span>Duration: ${esc(s.dur)}</span><span>Stage ${state.lifeStage+1} of ${S.length}</span></div></div>
+    <p class="goal">${esc(s.goal)}</p>
+    <p style="max-width:75ch;margin:0">${esc(s.summary)}</p>
+    <div class="box vbox">${videoBlock(VID.stages[s.id],STAGE_Q[s.id]||s.n,"Watch: "+s.n.toLowerCase())}</div>
+    <div class="grid2">
+      <div class="box"><h3>What happens</h3>${list(s.activities)}</div>
+      <div class="box"><h3>Documents</h3>${list(s.documents)}<h3 style="margin-top:10px">Who is involved</h3>${list(s.people)}</div>
+      <div class="box"><h3>Decisions to make</h3>${list(s.decisions)}</div>
+      <div class="box"><h3>What to measure</h3>${list(s.kpis)}</div>
+      <div class="box warn"><h3>Common mistakes</h3>${list(s.pitfalls)}</div>
+      <div class="box comp"><h3>Legal and compliance checkpoints</h3>${list(s.compliance)}</div>
+      <div class="box"><h3>Industry references</h3>${list(s.refs)}</div>
+      <div class="box checks"><h3>Checklist</h3>${s.checklist.map((c,i)=>`<label><input type="checkbox" id="lc-${s.id}-${i}" data-ck="life:${s.id}" data-ci="${i}" ${ck.includes(i)?"checked":""}> ${esc(c)}</label>`).join("")}</div>
+    </div>
+    <div class="box" style="margin-top:12px"><h3>Key terms at this stage</h3><div class="links">${s.terms.map(id=>tlink(byId[id])).join("")}</div></div>
+    <div class="nav-row">${state.lifeStage>0?`<button class="btn" data-nav="-1">← ${esc(S[state.lifeStage-1].n)}</button>`:"<span></span>"}${state.lifeStage<S.length-1?`<button class="btn primary" data-nav="1">${esc(S[state.lifeStage+1].n)} →</button>`:""}</div>`;
+  el.querySelectorAll("[data-si]").forEach(b=>b.onclick=()=>{state.lifeStage=+b.dataset.si;renderLife();el.parentElement.scrollTop=0});
+  el.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>{state.lifeStage+= +b.dataset.nav;renderLife();el.parentElement.scrollTop=0});
+  bindChecks(el);
+  const cur=el.querySelector('.step[aria-pressed="true"]');if(cur)cur.scrollIntoView({block:"nearest",inline:"center"});
+}
+function bindChecks(el){el.querySelectorAll("[data-ck]").forEach(cb=>cb.onchange=()=>{const k=cb.dataset.ck,i=+cb.dataset.ci;const a=new Set(checks[k]||[]);cb.checked?a.add(i):a.delete(i);checks[k]=[...a];store.set("checks",checks);markUpdated()})}
+
+/* ---------- Legal ---------- */
+function renderLegal(){
+  const el=document.getElementById("legal"),L=LEGAL;
+  const tabs=[["jur","By jurisdiction"],["matrix","Topic × jurisdiction"],["cal","Compliance calendar"],["checks","Checklists"]];
+  let body="";
+  if(state.legalTab==="jur"){
+    const j=L.jurisdictions.find(x=>x.id===state.jur)||L.jurisdictions[0];
+    body=`<div class="jpills" role="group" aria-label="Jurisdiction">${L.jurisdictions.map(x=>`<button data-jur="${x.id}" aria-pressed="${x.id===j.id}">${esc(x.name)}</button>`).join("")}</div>
+      <div class="stage-head"><h2>${esc(j.name)}</h2><div class="meta"><span>Regulator: ${esc(j.regulator)}</span></div></div>
+      <p style="max-width:75ch;margin:4px 0 0">${esc(j.summary)}</p>
+      <div class="grid2">
+        <div class="box"><h3>Main laws and rules</h3>${list(j.laws)}</div>
+        <div class="box"><h3>Vehicles</h3>${list(j.vehicles)}</div>
+        <div class="box comp"><h3>Manager licensing</h3><p style="margin:0;font-size:14px">${esc(j.licensing)}</p></div>
+        <div class="box comp"><h3>Marketing</h3><p style="margin:0;font-size:14px">${esc(j.marketing)}</p></div>
+        <div class="box"><h3>Who can invest</h3><p style="margin:0;font-size:14px">${esc(j.investors)}</p></div>
+        <div class="box"><h3>Key thresholds</h3><table class="kv">${j.thresholds.map(t=>`<tr><td>${esc(t[0])}</td><td>${esc(t[1])}</td></tr>`).join("")}</table></div>
+        <div class="box"><h3>Ongoing obligations</h3>${list(j.ongoing)}</div>
+        <div class="box"><h3>Recent changes</h3><ul class="timeline">${j.recent.map(r=>`<li><b>${esc(r[0])}</b><span>${esc(r[1])}</span></li>`).join("")}</ul></div>
+        <div class="box warn"><h3>Common mistakes</h3>${list(j.pitfalls)}</div>
+        <div class="box"><h3>References</h3>${list(j.refs)}</div>
+      </div>`;
+  }else if(state.legalTab==="matrix"){
+    body=`<p class="lead">Read across a row to compare one topic in every jurisdiction, or down a column for one jurisdiction across topics.</p>
+      <div class="tmx-wrap"><table class="tmx"><thead><tr><th>Topic</th>${L.jurisdictions.map(j=>`<th>${esc(j.name)}</th>`).join("")}</tr></thead>
+      <tbody>${L.topics.map(t=>`<tr><th>${esc(t.name)}<small>${esc(t.why)}</small></th>${L.jurisdictions.map(j=>`<td>${esc(t.by[j.id]||"–")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  }else if(state.legalTab==="cal"){
+    const jn=id=>id==="all"?"All funds":(L.jurisdictions.find(j=>j.id===id)||{}).name||id;
+    const rows=L.calendar.filter(c=>state.calJur==="all"||c.jur===state.calJur||c.jur==="all");
+    body=`<p class="lead">Recurring and event-driven obligations through a fund's life. Filter by jurisdiction; items marked All funds apply everywhere as market practice or near-universal rules.</p>
+      <div class="jpills">${["all",...L.jurisdictions.map(j=>j.id)].map(id=>`<button data-cal="${id}" aria-pressed="${state.calJur===id}">${esc(id==="all"?"Everything":jn(id))}</button>`).join("")}</div>
+      <div class="cal">${rows.map(c=>`<div class="calrow"><div><div class="when">${esc(c.when)}</div><span class="tag">${esc(c.freq)}</span></div><div class="tag">${esc(jn(c.jur))}</div><div>${esc(c.item)}<small>${esc(c.ref)}</small></div></div>`).join("")}</div>`;
+  }else{
+    body=`<p class="lead">Working checklists. Ticks are saved in this browser only.</p><div class="grid2">${L.checklists.map(cl=>{const ck=checks["legal:"+cl.id]||[];
+      return`<div class="box checks"><h3>${esc(cl.name)}</h3>${cl.items.map((it,i)=>`<label><input type="checkbox" id="lg-${cl.id}-${i}" data-ck="legal:${cl.id}" data-ci="${i}" ${ck.includes(i)?"checked":""}> ${esc(it)}</label>`).join("")}</div>`}).join("")}</div>`;
+  }
+  el.innerHTML=`<h2 class="sec-title">Legal &amp; compliance</h2>
+    <div class="subtabs" role="group" aria-label="Legal sections">${tabs.map(t=>`<button data-lt="${t[0]}" aria-pressed="${state.legalTab===t[0]}">${t[1]}</button>`).join("")}</div>
+    ${body}<p class="note">${esc(L.note)} Checked as of ${esc(L.asof)}.</p>`;
+  el.querySelectorAll("[data-lt]").forEach(b=>b.onclick=()=>{state.legalTab=b.dataset.lt;renderLegal()});
+  el.querySelectorAll("[data-jur]").forEach(b=>b.onclick=()=>{state.jur=b.dataset.jur;renderLegal()});
+  el.querySelectorAll("[data-cal]").forEach(b=>b.onclick=()=>{state.calJur=b.dataset.cal;renderLegal()});
+  bindChecks(el);
+}
+
+/* ---------- Search ---------- */
+const q=document.getElementById("q"),res=document.getElementById("results");let hits=[],hi=0;
+function score(n,s){const l=n.label.toLowerCase(),a=n.aka.toLowerCase();
+  if(l===s)return 100;if(l.startsWith(s))return 80;if(a.split(/,\s*/).some(x=>x===s))return 78;if(l.includes(s))return 60;if(a.includes(s))return 50;if(n.def.toLowerCase().includes(s))return 20;return 0}
+function search(){
+  const s=q.value.trim().toLowerCase();if(!s||!ready){res.classList.remove("open");return}
+  hits=nodes.map(n=>[n,score(n,s)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]||a[0].label.localeCompare(b[0].label)).slice(0,9).map(x=>x[0]);hi=0;
+  res.innerHTML=hits.length?hits.map((n,i)=>`<button role="option" aria-selected="${i===hi}" data-pick="${n.id}">${dot(n.cat)}<span>${esc(n.label)}</span><small>${esc(CATS[n.cat].name)}</small></button>`).join(""):`<div style="padding:8px;color:var(--muted);font-size:14px">No matching terms</div>`;
+  res.classList.add("open");
+}
+q.addEventListener("input",search);
+q.addEventListener("keydown",e=>{
+  if(!res.classList.contains("open")||!hits.length){if(e.key==="Escape")q.blur();return}
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();hi=(hi+(e.key==="ArrowDown"?1:-1)+hits.length)%hits.length;[...res.children].forEach((b,i)=>b.setAttribute("aria-selected",String(i===hi)))}
+  if(e.key==="Enter"){e.preventDefault();pick(hits[hi].id)}
+  if(e.key==="Escape")res.classList.remove("open");
+});
+function pick(id){res.classList.remove("open");q.blur();if(state.view==="chains")setView("graph");state.studyList=null;selectTerm(id)}
+res.addEventListener("mousedown",e=>{const b=e.target.closest("[data-pick]");if(b){e.preventDefault();pick(b.dataset.pick)}});
+q.addEventListener("blur",()=>setTimeout(()=>res.classList.remove("open"),120));
+q.addEventListener("focus",()=>{if(q.value.trim())search()});
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();q.focus();q.select()}});
+
+/* ---------- Desk: news, markets, directory, library ---------- */
+let NEWS=null,DESK=null,TERM_RX=[];
+const gnews=q=>"https://news.google.com/search?q="+encodeURIComponent(q);
+const ext=(u,t,cls="")=>`<a ${cls?`class="${cls}" `:""}href="${esc(u)}" target="_blank" rel="noopener">${t}</a>`;
+function buildMatcher(){
+  const skip=new Set(["fund","exit","distribution","commitment","sourcing","screening","dilution","syndicate","lp","gp","manager","consultant"]);
+  const pairs=[];
+  nodes.forEach(n=>{
+    const names=[n.label.replace(/\s*\(.*?\)/g,"").trim(),...(n.label.match(/\((.*?)\)/)||[]).slice(1),...n.aka.split(/,\s*/)];
+    names.forEach(s=>{s=(s||"").trim();if(!s)return;const acr=/^[A-Z0-9&+]{2,6}$/.test(s);if(!acr&&s.length<4)return;if(skip.has(n.id)&&!acr)return;pairs.push([s,n.id,acr])});
+  });
+  const STOP=new Set(["discount","cap","PAI","pref","promote","reserves","warrants","core","IR","AI","PE","DD","FoF","CV fund"]);
+  for(let i=pairs.length-1;i>=0;i--)if(STOP.has(pairs[i][0]))pairs.splice(i,1);
+  [["secondaries","secondary-fund"],["oversubscribed","oversubscription"],["fundraising","fundraising-period"],["value creation","value-creation-plan"],["GP-led","gp-secondary"],["GP-leds","gp-secondary"],["single-asset","continuation-vehicle"],["take-private","take-private"],["NAV discount","secondary-pricing"]].forEach(([s,id])=>{if(byId[id])pairs.push([s,id,false])});
+  pairs.sort((a,b)=>b[0].length-a[0].length);
+  TERM_RX=pairs.map(([s,id,acr])=>[new RegExp("(^|[^A-Za-z])"+s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+(acr?"s?":"(s|es)?")+"(?=$|[^A-Za-z])",acr?"":"i"),id]);
+}
+function termsIn(text){const found=[];let t=" "+text+" ";for(const [rx,id] of TERM_RX){if(found.includes(id))continue;if(rx.test(t)){found.push(id);t=t.replace(rx,"$1 ");if(found.length>=3)break}}return found}
+const termChips=text=>{const ids=termsIn(text);return ids.length?`<div class="tchips">${ids.map(id=>`<button class="tchip" data-term="${id}">${dot(byId[id].cat)}${esc(byId[id].label)}</button>`).join("")}</div>`:""};
+const newsItem=o=>`<div class="item">${ext(o.u,esc(o.t))}<div class="d">${esc(o.d||"")}</div>${termChips(o.t)}</div>`;
+
+function renderNews(){
+  const el=document.getElementById("news"),N=NEWS;
+  const f=state.newsSrc||"all",rg=state.newsRegion||"asia";
+  const srcs=N.sources.filter(s=>f==="all"||s.id===f);
+  const reg=DESK.regions.find(r=>r.id===rg)||DESK.regions[0];
+  const regItems=N.sources.flatMap(s=>s.items.filter(i=>i.r===reg.id).map(i=>({...i,src:s.name})));
+  el.innerHTML=`
+    <h2 class="sec-title">News</h2>
+    <p class="lead">Headlines checked ${esc(N.asof)}. Fund terms that appear in a headline are tagged under it; tap one to read what it means. Open a source for anything newer.</p>
+    <div class="jpills" role="group" aria-label="Source">${[["all","All sources"],...N.sources.map(s=>[s.id,s.tag==="Regulation"?s.name.replace(/ \(.*\)/,""):s.tag])].map(([id,l])=>`<button data-nsrc="${id}" aria-pressed="${f===id}">${esc(l)}</button>`).join("")}</div>
+    <div class="ngrid">${srcs.map(s=>`<div class="ncard"><div class="ntag">${esc(s.tag)}</div><h3>${esc(s.name)}</h3>${s.items.map(newsItem).join("")}<div class="nfoot">${ext(s.url,"Open "+esc(s.name)+" →")}</div></div>`).join("")}</div>
+    <h3 class="h-sub">Regional desks</h3>
+    <div class="jpills" role="group" aria-label="Region">${DESK.regions.map(r=>`<button data-nreg="${r.id}" aria-pressed="${r.id===reg.id}">${esc(r.name)}</button>`).join("")}</div>
+    <div class="ncard wide">
+      <h3>${esc(reg.name)}</h3>
+      <div class="gchips">${reg.chips.map(c=>ext(gnews(c[1]),esc(c[0]),"gchip")).join("")}</div>
+      <p class="muted small">Topic chips open a live Google News search.</p>
+      ${regItems.length?`<div class="ntag" style="margin-top:10px">From the headlines above</div>${regItems.map(newsItem).join("")}`:`<p class="muted small">No regional items in this round of headlines. Use the topic chips for live coverage.</p>`}
+      <div class="ntag" style="margin-top:12px">Sources</div>
+      <div class="srcs">${reg.sources.map(s=>ext(s[1],esc(s[0]))).join("")}</div>
+    </div>`;
+  el.querySelectorAll("[data-nsrc]").forEach(b=>b.onclick=()=>{state.newsSrc=b.dataset.nsrc;renderNews()});
+  el.querySelectorAll("[data-nreg]").forEach(b=>b.onclick=()=>{state.newsRegion=b.dataset.nreg;renderNews()});
+}
+function renderMarkets(){
+  const el=document.getElementById("markets"),D=DESK;
+  el.innerHTML=`
+    <h2 class="sec-title">Markets</h2>
+    <p class="lead">Each tile opens the live quote in your browser. Prices cannot be embedded here, so they are always one tap away and always current.</p>
+    ${D.markets.map(g=>`<h3 class="h-sub">${esc(g.g)}</h3><div class="mgrid">${g.t.map(t=>`<a class="mtile" href="${esc(t[2])}" target="_blank" rel="noopener"><b>${esc(t[0])}</b><span>${esc(t[1])}</span></a>`).join("")}</div>`).join("")}
+    <h3 class="h-sub">Largest listed companies</h3>
+    <div class="rtable"><table><thead><tr><th>Company</th><th>Ticker</th><th>Links</th></tr></thead><tbody>
+    ${D.companies.map(c=>`<tr><td data-l="Company"><b>${esc(c[0])}</b></td><td data-l="Ticker">${esc(c[1])}</td><td data-l="Links"><span>${ext("https://www.google.com/finance/quote/"+c[2],"Quote")} · ${ext(gnews(c[0]+" stock"),"News","newslink")}</span></td></tr>`).join("")}
+    </tbody></table></div>
+    <p class="note">Roughly the world's largest listed companies by market value (the order shifts daily), plus India's two largest.</p>
+    <h3 class="h-sub">Fund NAVs</h3>
+    <div class="lgrid">${D.navs.map(g=>`<div class="box"><h3>${esc(g.g)}</h3>${g.l.map(l=>`<div>${ext(l[1],esc(l[0]))}</div>`).join("")}</div>`).join("")}
+      <div class="box"><h3>Private funds</h3><p style="margin:0;font-size:14px">Private funds, including RAIFs, have no public NAV. The administrator calculates it quarterly and reports it to LPs. ${tlink(byId["nav"])}</p></div></div>
+    <h3 class="h-sub">Markets news</h3>
+    <div class="gchips">${D.marketnews.map(m=>ext(gnews(m[1]),esc(m[0]),"gchip")).join("")}</div>`;
+}
+function renderDir(){
+  const el=document.getElementById("dir"),D=DESK,t=state.dirTab||"global",q=(state.dirQ||"").toLowerCase();
+  const tabs=[["global","Global top 15"],["india","India top 10"],["fo","Family offices"]];
+  let rows="",head="";
+  if(t==="fo"){
+    const list=D.fo.filter(r=>!q||(r.name+" "+r.family+" "+r.hq).toLowerCase().includes(q));
+    head="<th>Family office</th><th>Family / wealth source</th><th>HQ</th><th>Est. scale*</th><th>Links</th>";
+    rows=list.map(r=>`<tr><td data-l="Family office"><b>${esc(r.name)}</b></td><td data-l="Family">${esc(r.family)}</td><td data-l="HQ">${esc(r.hq)}</td><td data-l="Scale" class="num">${esc(r.scale)}</td><td data-l="Links"><span>${r.site?ext(r.site,"Site")+" · ":""}${ext(gnews('"'+(r.q||r.name.split(" / ")[0])+'"'),"News","newslink")}</span></td></tr>`).join("");
+  }else{
+    const list=D[t].filter(r=>!q||(r.name+" "+r.hq+" "+r.focus).toLowerCase().includes(q));
+    head="<th>#</th><th>Manager</th><th>HQ</th><th>AUM (approx.)</th><th>Focus</th><th>Links</th>";
+    rows=list.map(r=>`<tr><td data-l="#">${D[t].indexOf(r)+1}</td><td data-l="Manager"><b>${esc(r.name)}</b></td><td data-l="HQ">${esc(r.hq)}</td><td data-l="AUM" class="num">${esc(r.aum)}</td><td data-l="Focus">${esc(r.focus)}</td><td data-l="Links"><span>${r.site?ext(r.site,"Site")+" · ":""}${ext(gnews('"'+r.name+'"'),"News","newslink")}</span></td></tr>`).join("");
+  }
+  el.innerHTML=`
+    <h2 class="sec-title">Directory</h2>
+    <p class="lead">Managers and family offices worth tracking. Figures are approximate, from public sources, and change every quarter.</p>
+    <div class="subtabs" role="group" aria-label="Directory">${tabs.map(x=>`<button data-dt="${x[0]}" aria-pressed="${t===x[0]}">${x[1]}</button>`).join("")}</div>
+    <input class="dsearch" id="dq" type="search" placeholder="Search by name, family or region" value="${esc(state.dirQ||"")}" aria-label="Search directory">
+    <div class="rtable"><table><thead><tr>${head}</tr></thead><tbody>${rows||`<tr><td colspan="6" class="muted">No matches.</td></tr>`}</tbody></table></div>
+    <p class="note">${t==="fo"?"*Indicative estimates of family wealth or managed assets from public rankings; family offices rarely disclose. ":"AUM figures are approximate latest-reported totals. "}"News" opens a live Google News search. ${tlink(byId["family-office"])} ${tlink(byId["lp"])}</p>`;
+  el.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{state.dirTab=b.dataset.dt;renderDir()});
+  const inp=el.querySelector("#dq");inp.oninput=()=>{state.dirQ=inp.value;const p=inp.selectionStart;renderDir();const n=document.getElementById("dq");n.focus();n.setSelectionRange(p,p)};
+}
+function renderLibrary(){
+  document.getElementById("library").innerHTML=`
+    <h2 class="sec-title">Library</h2>
+    <p class="lead">Standards bodies, regulators and reading. The Legal tab lists the specific laws and guidelines behind each rule.</p>
+    <div class="lgrid">${DESK.library.map(g=>`<div class="box"><h3>${esc(g.g)}</h3>${g.l.map(l=>`<div class="lib">${ext(l[1],esc(l[0]))}</div>`).join("")}</div>`).join("")}</div>`;
+}
+
+/* ---------- Mobile sheet ---------- */
+const asideEl=document.querySelector("aside"),backdrop=document.getElementById("backdrop");
+const isMobile=()=>matchMedia("(max-width: 960px)").matches;
+function openSheet(){if(isMobile()){asideEl.classList.add("open");backdrop.classList.add("open");asideEl.scrollTop=0}}
+function closeSheet(){asideEl.classList.remove("open");backdrop.classList.remove("open")}
+document.getElementById("sheetClose").onclick=closeSheet;
+backdrop.onclick=closeSheet;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&asideEl.classList.contains("open"))closeSheet()});
+
+/* ---------- Progress sync across devices ---------- */
+const sync={ref:null,ok:false,timer:null,busy:false,again:false};
+const markUpdated=()=>{store.set("updated",Date.now());queueSync()};
+function queueSync(){if(!sync.ref)return;clearTimeout(sync.timer);sync.timer=setTimeout(writeSync,1500)}
+async function writeSync(){if(sync.busy){sync.again=true;return}sync.busy=true;
+  try{await sync.ref.set({status,checks,updated:store.get("updated",Date.now())})}catch(e){console.warn("sync write",e)}
+  sync.busy=false;if(sync.again){sync.again=false;writeSync()}}
+const readSnap=s=>{if(!s)return null;if(typeof s.data==="function")return s.data();if(s.exists===false)return null;if(s.data&&typeof s.data==="object")return s.data;return s};
+async function initSync(){
+  try{
+    if(!window.claude||typeof claude.use!=="function")return;
+    const [db,user]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!db||!user)return;
+    const id=await user.id();if(!id)return;
+    sync.ref=db.collection("data/users/"+id).doc("progress");
+    const snap=await Promise.race([sync.ref.get(),new Promise((_,r)=>setTimeout(()=>r(new Error("timeout")),10000))]);
+    const data=readSnap(snap);
+    if(data&&data.updated&&data.updated>store.get("updated",0)){
+      status=data.status||{};checks=data.checks||{};store.set("status",status);store.set("checks",checks);store.set("updated",data.updated);
+      if(ready){if(state.view==="learn")renderLearn();if(state.view==="lifecycle")renderLife();if(state.view==="legal")renderLegal();redraw()}
+    }else if(Object.keys(status).length||Object.keys(checks).length)queueSync();
+    sync.ok=true;
+    if(ready&&state.view==="learn"&&!state.selected&&!state.chain)renderLearnHelp();
+  }catch(e){console.warn("sync",e)}
+}
+
+/* ---------- Theme & hash ---------- */
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",redraw);
+new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+document.fonts&&document.fonts.ready.then(redraw);
+function fromHash(){
+  const h=decodeURIComponent(location.hash.slice(1));
+  if(VIEWS.includes(h)){renderIntro();setView(h);return}
+  if(h.startsWith("chain-")&&CHAINS.some(c=>"chain-"+c.id===h)){selectChain(h.slice(6),true);return}
+  if(byId[h]){setView("graph");selectTerm(h);return}
+  renderIntro();setView(HOME);
+}
+window.addEventListener("hashchange",()=>{if(ready)fromHash()});
+renderIntro();
+load();
+</script>
+</body>
+</html>

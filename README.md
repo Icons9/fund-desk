@@ -4,6 +4,7 @@ Private-markets intelligence desk: curated headlines (live-refreshed on every vi
 
 - `index.html` — the full desk app
 - `markets.html` — standalone live-markets page
+- `learn/` — fund terms learning section: 409-term map, learning modules with quizzes, fund lifecycle (13 stages), legal & compliance across eight jurisdictions, curated YouTube videos. Static; data in `learn/data/*.json`. Progress is saved in the visitor's browser.
 
 Static site. Headlines refresh client-side on each page load; markets stream live. Internal / partner use.
 

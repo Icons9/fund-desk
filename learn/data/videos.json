@@ -1,0 +1,358 @@
+{
+"asof": "18 November 2026",
+"videos": {
+"XPiaLV-woZk": "From Zero to Fund One: Lessons from 1st time fund manager",
+"ct9ZmyVim7w": "How to Raise a Venture Capital Fund w/ Charles Hudson",
+"UGOABr7tsNM": "New and Emerging Venture Capital Managers Workshop (StartOut & VC Lab)",
+"PLQkiYvUCwsTGtLFaO7gW0tX-XGvjVaCqI": "Venture Capital 101 (course playlist)",
+"zvUwx3UbkxQ": "How Private Equity Really Works: Complete Fund Structure Explained Step-by-Step",
+"kFtqLRfWXt0": "Carta VC 101, Chapter 4: the LPA and the management company",
+"wnECpCzYY74": "How do Limited Partnership Agreements Work?",
+"Rzhm59Dd7iE": "UCITS, SIF, RAIF, SICAR … Explained in 8 minutes (Luxembourg Funds Guide)",
+"cVQaZSnfyqE": "How to Survive Raising Your First Private Equity Fund",
+"zSaXQlzMrqM": "Fundraising Part IV: Interview with an LP",
+"R35NGwyFApk": "7 things to consider when conducting due diligence on a PE fund",
+"NgktgoQrYTw": "Capital Call – Private Equity",
+"Jo63WSGC15k": "How PE funds use subscription lines of credit",
+"osvK66Jc16w": "Subscription Lines of Credit in Private Equity",
+"fbGzuWv5mLI": "How do you approach private equity fundraising during turbulent times?",
+"Dr_F3qO-6aE": "How Do Private Equity and LBO Deals Really Work?",
+"88wBsbQAml4": "Private Equity Leveraged Buyout (LBO) Explained",
+"DHqlRNBeE08": "How to apply IPEV guidelines to portfolio valuations?",
+"-4eF86gcVLw": "Portfolio Value Creation Explained",
+"yTwbP01tNgo": "VC Fund Performance: New Benchmarks (Carta data)",
+"TTkvixTQUaE": "What Exit Options do Private Equity Firms have for their Portfolio Companies?",
+"O9OsKk5Atbs": "Private equity exit strategies (CFA Level 1)",
+"OLDaS2E98o8": "A Guide To: Investment Fund Waterfalls",
+"cII8zUoWaeE": "Continuation Vehicles 101 with Houlihan Lokey",
+"u0Sm5OcCE9o": "LP-Led and GP-Led transactions",
+"VmmtpDhc_VY": "Continuation vehicle in private equity",
+"Q1rYhOBNDYg": "Hedge Funds Nuts & Bolts: Winding Down a Hedge Fund",
+"Le_D2x06Ouo": "Private Equity Waterfalls: The Truth About Pref, Catch Ups & Clawbacks",
+"tZT4T0Ex2vQ": "Announcing Foundry Group's Final Fund and Winding Down",
+"JOKJ6DaVBgc": "How to measure Net IRR, TVPI, DPI and RVPI for a PE fund",
+"r-9NEKpZkyQ": "Private Equity Industry Overview – Fund Lifecycle",
+"MH71GQ9XBjI": "Limited Partners vs. General Partners Explained",
+"gXhjlnbTv78": "ILPA's Limited Partnership Agreement – Whole of Fund Waterfall",
+"iyafd0-5rJA": "Hurdle & Catch-Up Explained Clearly",
+"Kz_opneLNSk": "Carry Calculation & Waterfall with Preferred Return, GP LP Split & GP Catch Up",
+"NiD_SfFos9M": "Distribution Waterfall – Catch-Up Calculation Whiteboard (Part 3 of 5)",
+"Ci9A3Gzqj0w": "Catch Up Payment",
+"2ka_2zEQ1eM": "Decoding Private Equity Metrics: NAV, TVPI, IRR, DPI, RVPI Explained",
+"6cvE6n4g2N4": "DPI, TVPI, RVPI Explained Simply",
+"szoBenQ8bos": "Is IRR a Good Performance Metric?",
+"Dk6JNTDec9I": "Understanding SAFEs and Priced Equity Rounds by Kirsty Nathoo (Y Combinator)",
+"tl8EfZ6KADI": "How the Post-Money SAFE works",
+"lTV_neMV1Kw": "How discounts and caps work for convertible notes, pre-money and post-money SAFEs",
+"6r3RpEFWvYc": "Pre-money and post-money valuations",
+"RJ81SG7ZOrY": "How to Invest in Private Credit / Direct Lending",
+"72llixuBtCg": "The Boom in Private Credit",
+"MoFXX7-EWMw": "Cap Rate, Explained",
+"VjDnl3DLdKI": "Commercial Real Estate – NOI, Cap Rate & Price",
+"G6MhW-G8eCc": "Fundamentals of Fee Calculations in Hedge Funds (hurdle and high water mark)",
+"3ZW6BPYSBjE": "What Is a High-Water Mark & Why Does It Matter to Investors?",
+"n8IvrDNc59Q": "Commitment pacing in investing in private markets",
+"P1WpjEtS66Y": "Denominator Effect in Private Equity",
+"c5jQqdFT8pk": "Capital Commitment – Elise Gourier and Ludovic Phalippou",
+"kg4gcbIGPAI": "Private Equity Fund Accounting – Basics of Accounting Rules and Concepts",
+"PeWS1vMWfhg": "Fund Administration vs Fund Accounting",
+"Gf1gDQdxId0": "Alternative Investment Funds Explained: Categories, Eligibility & Benefits (India)",
+"g5e-bWHQ0C4": "AIFMD II: Loan-Originating Funds and the SCSp in Luxembourg",
+"_WOWF86wk88": "RAIF in Luxembourg",
+"JwhCI6SMsi8": "The Reserved Alternative Investment Fund",
+"c36wxgtqi3E": "IPEV and ILPA in private equity",
+"mM8wbykost0": "The Rulebook of the Fund: What an LPA Actually Does"
+},
+"stages": {
+"pre-conception": [
+"XPiaLV-woZk",
+"ct9ZmyVim7w",
+"UGOABr7tsNM"
+],
+"design": [
+"PLQkiYvUCwsTGtLFaO7gW0tX-XGvjVaCqI",
+"zvUwx3UbkxQ"
+],
+"formation": [
+"kFtqLRfWXt0",
+"wnECpCzYY74",
+"Rzhm59Dd7iE"
+],
+"marketing": [
+"cVQaZSnfyqE",
+"zSaXQlzMrqM",
+"R35NGwyFApk"
+],
+"first-close": [
+"NgktgoQrYTw",
+"Jo63WSGC15k"
+],
+"closes": [
+"fbGzuWv5mLI"
+],
+"investing": [
+"Dr_F3qO-6aE",
+"88wBsbQAml4"
+],
+"managing": [
+"DHqlRNBeE08",
+"-4eF86gcVLw"
+],
+"successor": [
+"yTwbP01tNgo",
+"ct9ZmyVim7w"
+],
+"harvest": [
+"TTkvixTQUaE",
+"O9OsKk5Atbs",
+"OLDaS2E98o8"
+],
+"tail": [
+"cII8zUoWaeE",
+"u0Sm5OcCE9o"
+],
+"windup": [
+"Q1rYhOBNDYg",
+"Le_D2x06Ouo"
+],
+"after": [
+"tZT4T0Ex2vQ",
+"JOKJ6DaVBgc"
+]
+},
+"cats": {
+"structure": [
+"r-9NEKpZkyQ",
+"zvUwx3UbkxQ"
+],
+"parties": [
+"MH71GQ9XBjI"
+],
+"docs": [
+"wnECpCzYY74",
+"gXhjlnbTv78"
+],
+"raise": [
+"ct9ZmyVim7w",
+"zSaXQlzMrqM"
+],
+"capital": [
+"NgktgoQrYTw",
+"Jo63WSGC15k"
+],
+"econ": [
+"OLDaS2E98o8",
+"iyafd0-5rJA"
+],
+"metrics": [
+"2ka_2zEQ1eM",
+"szoBenQ8bos"
+],
+"deal": [
+"Dr_F3qO-6aE",
+"88wBsbQAml4"
+],
+"venture": [
+"Dk6JNTDec9I",
+"PLQkiYvUCwsTGtLFaO7gW0tX-XGvjVaCqI"
+],
+"exit": [
+"TTkvixTQUaE",
+"u0Sm5OcCE9o"
+],
+"credit": [
+"RJ81SG7ZOrY",
+"72llixuBtCg"
+],
+"real": [
+"MoFXX7-EWMw",
+"VjDnl3DLdKI"
+],
+"hedge": [
+"G6MhW-G8eCc",
+"3ZW6BPYSBjE"
+],
+"lpside": [
+"n8IvrDNc59Q",
+"P1WpjEtS66Y",
+"c5jQqdFT8pk"
+],
+"ops": [
+"kg4gcbIGPAI",
+"PeWS1vMWfhg"
+],
+"reg": [
+"Rzhm59Dd7iE",
+"Gf1gDQdxId0",
+"g5e-bWHQ0C4"
+]
+},
+"terms": {
+"carry": [
+"Kz_opneLNSk"
+],
+"waterfall": [
+"OLDaS2E98o8",
+"NiD_SfFos9M"
+],
+"catch-up": [
+"iyafd0-5rJA",
+"Ci9A3Gzqj0w"
+],
+"hurdle": [
+"iyafd0-5rJA"
+],
+"clawback": [
+"Le_D2x06Ouo"
+],
+"european-waterfall": [
+"gXhjlnbTv78"
+],
+"return-of-capital": [
+"OLDaS2E98o8"
+],
+"safe": [
+"Dk6JNTDec9I",
+"tl8EfZ6KADI"
+],
+"valuation-cap": [
+"lTV_neMV1Kw"
+],
+"conversion-discount": [
+"lTV_neMV1Kw"
+],
+"convertible-note": [
+"lTV_neMV1Kw"
+],
+"valuation-deal": [
+"6r3RpEFWvYc"
+],
+"priced-round": [
+"Dk6JNTDec9I"
+],
+"continuation-vehicle": [
+"cII8zUoWaeE",
+"VmmtpDhc_VY"
+],
+"gp-secondary": [
+"u0Sm5OcCE9o",
+"cII8zUoWaeE"
+],
+"lp-secondary": [
+"u0Sm5OcCE9o"
+],
+"capital-call": [
+"NgktgoQrYTw"
+],
+"call-notice": [
+"NgktgoQrYTw"
+],
+"subscription-line": [
+"Jo63WSGC15k",
+"osvK66Jc16w"
+],
+"tvpi": [
+"2ka_2zEQ1eM",
+"6cvE6n4g2N4"
+],
+"dpi": [
+"6cvE6n4g2N4",
+"2ka_2zEQ1eM"
+],
+"rvpi": [
+"6cvE6n4g2N4"
+],
+"nav": [
+"2ka_2zEQ1eM"
+],
+"irr": [
+"szoBenQ8bos"
+],
+"net-irr": [
+"JOKJ6DaVBgc"
+],
+"lpa": [
+"wnECpCzYY74",
+"mM8wbykost0"
+],
+"ilpa-model-lpa": [
+"gXhjlnbTv78"
+],
+"lbo": [
+"88wBsbQAml4"
+],
+"cap-rate": [
+"MoFXX7-EWMw"
+],
+"noi": [
+"VjDnl3DLdKI"
+],
+"high-water-mark": [
+"3ZW6BPYSBjE",
+"G6MhW-G8eCc"
+],
+"performance-fee": [
+"G6MhW-G8eCc"
+],
+"denominator-effect": [
+"P1WpjEtS66Y"
+],
+"commitment-pacing": [
+"n8IvrDNc59Q"
+],
+"raif": [
+"_WOWF86wk88",
+"JwhCI6SMsi8"
+],
+"sif": [
+"Rzhm59Dd7iE"
+],
+"sicar": [
+"Rzhm59Dd7iE"
+],
+"aif-categories": [
+"Gf1gDQdxId0"
+],
+"ipev": [
+"DHqlRNBeE08",
+"c36wxgtqi3E"
+],
+"ilpa": [
+"c36wxgtqi3E"
+],
+"direct-lending": [
+"RJ81SG7ZOrY"
+],
+"exit": [
+"TTkvixTQUaE"
+],
+"first-time-fund": [
+"XPiaLV-woZk",
+"ct9ZmyVim7w"
+],
+"fund-accounting": [
+"kg4gcbIGPAI"
+],
+"administrator": [
+"PeWS1vMWfhg"
+],
+"gp": [
+"MH71GQ9XBjI"
+],
+"lp": [
+"MH71GQ9XBjI"
+],
+"loan-origination": [
+"g5e-bWHQ0C4"
+],
+"due-diligence": [
+"R35NGwyFApk"
+],
+"scsp": [
+"g5e-bWHQ0C4"
+],
+"valuation-policy": [
+"DHqlRNBeE08"
+]
+}
+}

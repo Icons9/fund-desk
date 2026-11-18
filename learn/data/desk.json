@@ -1,0 +1,1033 @@
+{
+ "asof": "18 November 2026",
+ "global": [
+  {
+   "name": "Blackstone",
+   "hq": "New York",
+   "aum": "~$1.2tn",
+   "focus": "PE, credit, real assets",
+   "site": "https://www.blackstone.com"
+  },
+  {
+   "name": "Brookfield Asset Management",
+   "hq": "Toronto",
+   "aum": "~$1.0tn",
+   "focus": "Infra, RE, PE, credit",
+   "site": "https://www.brookfield.com"
+  },
+  {
+   "name": "Apollo Global Management",
+   "hq": "New York",
+   "aum": "~$790bn",
+   "focus": "Credit, PE, retirement",
+   "site": "https://www.apollo.com"
+  },
+  {
+   "name": "KKR",
+   "hq": "New York",
+   "aum": "~$660bn",
+   "focus": "PE, infra, credit",
+   "site": "https://www.kkr.com"
+  },
+  {
+   "name": "Ares Management",
+   "hq": "Los Angeles",
+   "aum": "~$490bn",
+   "focus": "Private credit",
+   "site": "https://www.aresmgmt.com"
+  },
+  {
+   "name": "The Carlyle Group",
+   "hq": "Washington DC",
+   "aum": "~$450bn",
+   "focus": "PE, credit, solutions",
+   "site": "https://www.carlyle.com"
+  },
+  {
+   "name": "EQT",
+   "hq": "Stockholm",
+   "aum": "~€270bn",
+   "focus": "PE, infra (Europe/Asia)",
+   "site": "https://eqtgroup.com"
+  },
+  {
+   "name": "TPG",
+   "hq": "Fort Worth",
+   "aum": "~$260bn",
+   "focus": "PE, growth, impact, credit",
+   "site": "https://www.tpg.com"
+  },
+  {
+   "name": "CVC Capital Partners",
+   "hq": "Luxembourg",
+   "aum": "~€200bn",
+   "focus": "PE, credit, secondaries",
+   "site": "https://www.cvc.com"
+  },
+  {
+   "name": "Bain Capital",
+   "hq": "Boston",
+   "aum": "~$185bn",
+   "focus": "PE, credit, ventures",
+   "site": "https://www.baincapital.com"
+  },
+  {
+   "name": "Thoma Bravo",
+   "hq": "Chicago",
+   "aum": "~$184bn",
+   "focus": "Software buyouts",
+   "site": "https://www.thomabravo.com"
+  },
+  {
+   "name": "Silver Lake",
+   "hq": "Menlo Park",
+   "aum": "~$110bn",
+   "focus": "Technology PE",
+   "site": "https://www.silverlake.com"
+  },
+  {
+   "name": "Vista Equity Partners",
+   "hq": "Austin",
+   "aum": "~$100bn",
+   "focus": "Enterprise software PE",
+   "site": "https://www.vistaequitypartners.com"
+  },
+  {
+   "name": "Advent International",
+   "hq": "Boston",
+   "aum": "~$95bn",
+   "focus": "Global buyouts",
+   "site": "https://www.adventinternational.com"
+  },
+  {
+   "name": "Warburg Pincus",
+   "hq": "New York",
+   "aum": "~$90bn",
+   "focus": "Growth investing",
+   "site": "https://warburgpincus.com"
+  }
+ ],
+ "india": [
+  {
+   "name": "Kotak Alternate Asset Managers",
+   "hq": "Mumbai",
+   "aum": "~$18bn",
+   "focus": "Credit, RE, PE, infra",
+   "site": "https://www.kotakalternateassets.com"
+  },
+  {
+   "name": "Peak XV Partners",
+   "hq": "Bengaluru",
+   "aum": "~$9bn",
+   "focus": "Venture & growth",
+   "site": "https://www.peakxv.com"
+  },
+  {
+   "name": "EAAA Alternatives (Edelweiss)",
+   "hq": "Mumbai",
+   "aum": "~$7.5bn",
+   "focus": "Private credit, real assets",
+   "site": "https://www.eaaa.in"
+  },
+  {
+   "name": "Kedaara Capital",
+   "hq": "Mumbai",
+   "aum": "~$6bn",
+   "focus": "Buyouts & growth",
+   "site": "https://www.kedaara.com"
+  },
+  {
+   "name": "ChrysCapital",
+   "hq": "New Delhi",
+   "aum": "~$5bn+",
+   "focus": "Growth PE",
+   "site": "https://www.chryscapital.com"
+  },
+  {
+   "name": "ICICI Venture",
+   "hq": "Mumbai",
+   "aum": "~$5bn",
+   "focus": "PE, RE, special situations",
+   "site": "https://www.iciciventure.com"
+  },
+  {
+   "name": "NIIF",
+   "hq": "Mumbai",
+   "aum": "~$4.9bn",
+   "focus": "Infrastructure & growth",
+   "site": "https://niifindia.in"
+  },
+  {
+   "name": "True North",
+   "hq": "Mumbai",
+   "aum": "~$3bn",
+   "focus": "Mid-market PE",
+   "site": "https://www.truenorthco.in"
+  },
+  {
+   "name": "Multiples Alternate Asset Mgmt",
+   "hq": "Mumbai",
+   "aum": "~$3bn",
+   "focus": "Growth PE",
+   "site": "https://www.multiplesequity.com"
+  },
+  {
+   "name": "Motilal Oswal Alternates",
+   "hq": "Mumbai",
+   "aum": "~$2bn",
+   "focus": "Growth PE & RE",
+   "site": "https://www.motilaloswalalternates.com"
+  }
+ ],
+ "fo": [
+  {
+   "name": "Walton Enterprises / WIT",
+   "family": "Walton (Walmart)",
+   "hq": "Bentonville, US",
+   "scale": "~$270bn",
+   "site": "https://www.waltonfamilyfoundation.org",
+   "q": ""
+  },
+  {
+   "name": "Bezos Expeditions",
+   "family": "Jeff Bezos (Amazon)",
+   "hq": "Seattle, US",
+   "scale": "~$100bn+",
+   "site": "",
+   "q": ""
+  },
+  {
+   "name": "Cascade Investment",
+   "family": "Bill Gates (Microsoft)",
+   "hq": "Kirkland, US",
+   "scale": "~$100bn+",
+   "site": "",
+   "q": ""
+  },
+  {
+   "name": "Ballmer Group",
+   "family": "Steve Ballmer (Microsoft)",
+   "hq": "Bellevue, US",
+   "scale": "~$100bn+",
+   "site": "https://www.ballmergroup.org",
+   "q": ""
+  },
+  {
+   "name": "Mousse Partners",
+   "family": "Wertheimer (Chanel)",
+   "hq": "New York, US",
+   "scale": "~$90bn",
+   "site": "",
+   "q": "Mousse Partners Wertheimer"
+  },
+  {
+   "name": "1888 Management / Koch FO",
+   "family": "Koch (Koch Industries)",
+   "hq": "Wichita, US",
+   "scale": "~$100bn+",
+   "site": "",
+   "q": "Koch family office"
+  },
+  {
+   "name": "Groupe Arnault / Financière Agache",
+   "family": "Arnault (LVMH)",
+   "hq": "Paris, FR",
+   "scale": "~$150bn+",
+   "site": "",
+   "q": ""
+  },
+  {
+   "name": "Téthys Invest",
+   "family": "Bettencourt Meyers (L'Oréal)",
+   "hq": "Paris, FR",
+   "scale": "~$80bn+",
+   "site": "",
+   "q": "Téthys Bettencourt"
+  },
+  {
+   "name": "Pontegadea",
+   "family": "Amancio Ortega (Inditex/Zara)",
+   "hq": "A Coruña, ES",
+   "scale": "~$75bn+",
+   "site": "https://www.pontegadea.com",
+   "q": ""
+  },
+  {
+   "name": "KIRKBI",
+   "family": "Kirk Kristiansen (LEGO)",
+   "hq": "Billund, DK",
+   "scale": "~$25bn",
+   "site": "https://www.kirkbi.com",
+   "q": ""
+  },
+  {
+   "name": "Exor",
+   "family": "Agnelli (Fiat/Ferrari)",
+   "hq": "Amsterdam, NL",
+   "scale": "~$35bn",
+   "site": "https://www.exor.com",
+   "q": ""
+  },
+  {
+   "name": "JAB Holding",
+   "family": "Reimann (JAB/coffee)",
+   "hq": "Luxembourg",
+   "scale": "~$40bn",
+   "site": "https://www.jabholco.com",
+   "q": ""
+  },
+  {
+   "name": "Athos KG",
+   "family": "Strüngmann (Hexal/BioNTech)",
+   "hq": "Munich, DE",
+   "scale": "~$30bn",
+   "site": "",
+   "q": "Athos Strüngmann"
+  },
+  {
+   "name": "FAM / Wallenberg sphere",
+   "family": "Wallenberg (Investor AB)",
+   "hq": "Stockholm, SE",
+   "scale": "~$25bn",
+   "site": "https://www.fam.se",
+   "q": ""
+  },
+  {
+   "name": "Interogo / Ikano",
+   "family": "Kamprad (IKEA)",
+   "hq": "Zug, CH / LU",
+   "scale": "~$30bn",
+   "site": "https://www.interogofoundation.com",
+   "q": ""
+  },
+  {
+   "name": "Tetra Laval / Longbow",
+   "family": "Rausing (Tetra Pak)",
+   "hq": "Pully, CH",
+   "scale": "~$25bn",
+   "site": "",
+   "q": "Tetra Laval Rausing"
+  },
+  {
+   "name": "Quandt / Aqton",
+   "family": "Quandt-Klatten (BMW)",
+   "hq": "Bad Homburg, DE",
+   "scale": "~$45bn",
+   "site": "",
+   "q": "Quandt Klatten BMW"
+  },
+  {
+   "name": "Porsche SE",
+   "family": "Porsche-Piëch (VW)",
+   "hq": "Stuttgart, DE",
+   "scale": "~$40bn",
+   "site": "https://www.porsche-se.com",
+   "q": ""
+  },
+  {
+   "name": "Grosvenor",
+   "family": "Duke of Westminster",
+   "hq": "London, UK",
+   "scale": "~$20bn",
+   "site": "https://www.grosvenor.com",
+   "q": ""
+  },
+  {
+   "name": "Wittington Investments",
+   "family": "Weston (ABF/Primark)",
+   "hq": "London, UK",
+   "scale": "~$20bn",
+   "site": "",
+   "q": "Wittington Investments Weston"
+  },
+  {
+   "name": "COFRA / Anthos Fund & Asset Mgmt",
+   "family": "Brenninkmeijer (C&A)",
+   "hq": "Zug, CH",
+   "scale": "~$30bn",
+   "site": "https://www.cofraholding.com",
+   "q": ""
+  },
+  {
+   "name": "AFM / Mulliez family",
+   "family": "Mulliez (Auchan, Decathlon)",
+   "hq": "Lille, FR",
+   "scale": "~$45bn",
+   "site": "",
+   "q": "Mulliez family Auchan"
+  },
+  {
+   "name": "Peugeot Invest",
+   "family": "Peugeot family",
+   "hq": "Paris, FR",
+   "scale": "~$6bn",
+   "site": "https://www.peugeot-invest.com",
+   "q": ""
+  },
+  {
+   "name": "Heineken family / L'Arche Green",
+   "family": "Heineken",
+   "hq": "Amsterdam, NL",
+   "scale": "~$15bn",
+   "site": "",
+   "q": "Heineken family holding"
+  },
+  {
+   "name": "H51",
+   "family": "Hermès family",
+   "hq": "Paris, FR",
+   "scale": "~$100bn+",
+   "site": "",
+   "q": "Hermès family holding"
+  },
+  {
+   "name": "Dassault Group",
+   "family": "Dassault family",
+   "hq": "Paris, FR",
+   "scale": "~$30bn",
+   "site": "",
+   "q": "Dassault family"
+  },
+  {
+   "name": "MSD Capital / DFO",
+   "family": "Michael Dell",
+   "hq": "New York, US",
+   "scale": "~$70bn",
+   "site": "https://www.dfomgmt.com",
+   "q": ""
+  },
+  {
+   "name": "Soros Fund Management",
+   "family": "George Soros",
+   "hq": "New York, US",
+   "scale": "~$28bn",
+   "site": "https://www.soros.com",
+   "q": ""
+  },
+  {
+   "name": "Duquesne Family Office",
+   "family": "Stanley Druckenmiller",
+   "hq": "New York, US",
+   "scale": "~$15bn",
+   "site": "",
+   "q": "Druckenmiller Duquesne"
+  },
+  {
+   "name": "Point72 (family capital roots)",
+   "family": "Steven Cohen",
+   "hq": "Stamford, US",
+   "scale": "~$35bn",
+   "site": "https://www.point72.com",
+   "q": ""
+  },
+  {
+   "name": "Iconiq Capital (multi-family)",
+   "family": "Tech founders (multi)",
+   "hq": "San Francisco, US",
+   "scale": "~$80bn",
+   "site": "https://www.iconiqcapital.com",
+   "q": ""
+  },
+  {
+   "name": "Emerson Collective",
+   "family": "Laurene Powell Jobs",
+   "hq": "Palo Alto, US",
+   "scale": "~$25bn",
+   "site": "https://www.emersoncollective.com",
+   "q": ""
+  },
+  {
+   "name": "Chan Zuckerberg Initiative",
+   "family": "Zuckerberg-Chan (Meta)",
+   "hq": "Redwood City, US",
+   "scale": "~$100bn+",
+   "site": "https://chanzuckerberg.com",
+   "q": ""
+  },
+  {
+   "name": "Omidyar Network",
+   "family": "Pierre Omidyar (eBay)",
+   "hq": "Redwood City, US",
+   "scale": "~$10bn",
+   "site": "https://omidyar.com",
+   "q": ""
+  },
+  {
+   "name": "Declaration Partners",
+   "family": "David Rubenstein (Carlyle)",
+   "hq": "New York, US",
+   "scale": "~$3bn",
+   "site": "https://www.declarationpartners.com",
+   "q": ""
+  },
+  {
+   "name": "Bessemer Trust (multi-family)",
+   "family": "Phipps (Carnegie Steel)",
+   "hq": "New York, US",
+   "scale": "~$120bn (MFO)",
+   "site": "https://www.bessemertrust.com",
+   "q": ""
+  },
+  {
+   "name": "Rockefeller Capital Mgmt",
+   "family": "Rockefeller",
+   "hq": "New York, US",
+   "scale": "~$100bn (MFO)",
+   "site": "https://www.rockco.com",
+   "q": ""
+  },
+  {
+   "name": "Crown family / Henry Crown & Co",
+   "family": "Crown (General Dynamics)",
+   "hq": "Chicago, US",
+   "scale": "~$15bn",
+   "site": "",
+   "q": "Henry Crown and Company"
+  },
+  {
+   "name": "Pritzker Group",
+   "family": "Pritzker (Hyatt)",
+   "hq": "Chicago, US",
+   "scale": "~$20bn",
+   "site": "https://www.pritzkergroup.com",
+   "q": ""
+  },
+  {
+   "name": "Waycrosse / Cargill-MacMillan",
+   "family": "Cargill family",
+   "hq": "Minneapolis, US",
+   "scale": "~$50bn",
+   "site": "",
+   "q": "Cargill MacMillan family"
+  },
+  {
+   "name": "Mars family office",
+   "family": "Mars (confectionery)",
+   "hq": "McLean, US",
+   "scale": "~$100bn+",
+   "site": "",
+   "q": "Mars family Mars Incorporated"
+  },
+  {
+   "name": "Blue Pool Capital",
+   "family": "Joe Tsai (Alibaba)",
+   "hq": "Hong Kong",
+   "scale": "~$15bn",
+   "site": "",
+   "q": "Blue Pool Capital Joe Tsai"
+  },
+  {
+   "name": "Horizons Ventures",
+   "family": "Li Ka-shing",
+   "hq": "Hong Kong",
+   "scale": "~$35bn",
+   "site": "https://www.horizonsventures.com",
+   "q": ""
+  },
+  {
+   "name": "Verlinvest",
+   "family": "de Spoelberch/de Mévius (AB InBev)",
+   "hq": "Brussels, BE",
+   "scale": "~$3bn",
+   "site": "https://www.verlinvest.com",
+   "q": ""
+  },
+  {
+   "name": "Premji Invest",
+   "family": "Azim Premji (Wipro)",
+   "hq": "Bengaluru, IN",
+   "scale": "~$10bn",
+   "site": "https://www.premjiinvest.com",
+   "q": ""
+  },
+  {
+   "name": "Catamaran Ventures",
+   "family": "Narayana Murthy (Infosys)",
+   "hq": "Bengaluru, IN",
+   "scale": "~$2bn",
+   "site": "https://www.catamaran.in",
+   "q": ""
+  },
+  {
+   "name": "Claypond Capital",
+   "family": "Ranjan Pai (Manipal)",
+   "hq": "Bengaluru, IN",
+   "scale": "~$1.5bn",
+   "site": "",
+   "q": "Ranjan Pai Claypond"
+  },
+  {
+   "name": "Sharrp Ventures",
+   "family": "Mariwala (Marico)",
+   "hq": "Mumbai, IN",
+   "scale": "~$1bn",
+   "site": "",
+   "q": "Sharrp Ventures Mariwala"
+  },
+  {
+   "name": "Rising Sun Holdings (Poonawalla)",
+   "family": "Adar Poonawalla (Serum Institute)",
+   "hq": "Pune, IN",
+   "scale": "~$25bn",
+   "site": "",
+   "q": "Adar Poonawalla Rising Sun Holdings"
+  },
+  {
+   "name": "Man Capital",
+   "family": "Mansour family",
+   "hq": "London, UK / Cairo",
+   "scale": "~$10bn",
+   "site": "https://www.mancapital.com",
+   "q": ""
+  },
+  {
+   "name": "JIMCO (Jameel Investment)",
+   "family": "Abdul Latif Jameel family",
+   "hq": "Jeddah, SA",
+   "scale": "~$15bn",
+   "site": "https://jimco.co",
+   "q": ""
+  },
+  {
+   "name": "Olayan Group",
+   "family": "Olayan family",
+   "hq": "Riyadh / London",
+   "scale": "~$40bn",
+   "site": "https://www.olayan.com",
+   "q": ""
+  }
+ ],
+ "markets": [
+  {
+   "g": "India",
+   "t": [
+    [
+     "SENSEX",
+     "BSE · India",
+     "https://www.google.com/finance/quote/SENSEX:INDEXBOM"
+    ],
+    [
+     "NIFTY 50",
+     "NSE · India",
+     "https://www.google.com/finance/quote/NIFTY_50:INDEXNSE"
+    ],
+    [
+     "Bank NIFTY",
+     "NSE · banking",
+     "https://www.google.com/finance/quote/NIFTY_BANK:INDEXNSE"
+    ],
+    [
+     "INR / USD",
+     "currency",
+     "https://www.google.com/finance/quote/INR-USD"
+    ]
+   ]
+  },
+  {
+   "g": "United States",
+   "t": [
+    [
+     "S&P 500",
+     "US large-cap",
+     "https://www.google.com/finance/quote/.INX:INDEXSP"
+    ],
+    [
+     "Dow Jones",
+     "US blue-chip",
+     "https://www.google.com/finance/quote/.DJI:INDEXDJX"
+    ],
+    [
+     "Nasdaq",
+     "US tech",
+     "https://www.google.com/finance/quote/.IXIC:INDEXNASDAQ"
+    ],
+    [
+     "EUR / USD",
+     "currency",
+     "https://www.google.com/finance/quote/EUR-USD"
+    ]
+   ]
+  },
+  {
+   "g": "Europe",
+   "t": [
+    [
+     "FTSE 100",
+     "London",
+     "https://www.google.com/finance/quote/UKX:INDEXFTSE"
+    ],
+    [
+     "DAX",
+     "Frankfurt",
+     "https://www.google.com/finance/quote/DAX:INDEXDB"
+    ],
+    [
+     "CAC 40",
+     "Paris",
+     "https://www.google.com/finance/quote/PX1:INDEXEURO"
+    ],
+    [
+     "STOXX 600",
+     "Europe broad",
+     "https://www.investing.com/indices/stoxx-600"
+    ]
+   ]
+  }
+ ],
+ "companies": [
+  [
+   "NVIDIA",
+   "NVDA",
+   "NVDA:NASDAQ"
+  ],
+  [
+   "Microsoft",
+   "MSFT",
+   "MSFT:NASDAQ"
+  ],
+  [
+   "Apple",
+   "AAPL",
+   "AAPL:NASDAQ"
+  ],
+  [
+   "Alphabet",
+   "GOOGL",
+   "GOOGL:NASDAQ"
+  ],
+  [
+   "Amazon",
+   "AMZN",
+   "AMZN:NASDAQ"
+  ],
+  [
+   "Saudi Aramco",
+   "2222",
+   "2222:TADAWUL"
+  ],
+  [
+   "Meta",
+   "META",
+   "META:NASDAQ"
+  ],
+  [
+   "TSMC",
+   "TSM",
+   "TSM:NYSE"
+  ],
+  [
+   "Broadcom",
+   "AVGO",
+   "AVGO:NASDAQ"
+  ],
+  [
+   "Berkshire Hathaway",
+   "BRK.B",
+   "BRK.B:NYSE"
+  ],
+  [
+   "Reliance Industries",
+   "RELIANCE",
+   "RELIANCE:NSE"
+  ],
+  [
+   "TCS",
+   "TCS",
+   "TCS:NSE"
+  ]
+ ],
+ "navs": [
+  {
+   "g": "India mutual funds",
+   "l": [
+    [
+     "AMFI — official daily NAVs",
+     "https://www.amfiindia.com/net-asset-value"
+    ],
+    [
+     "Value Research — NAVs and ratings",
+     "https://www.valueresearchonline.com/funds/"
+    ]
+   ]
+  },
+  {
+   "g": "Global funds and ETFs",
+   "l": [
+    [
+     "Morningstar",
+     "https://www.morningstar.com"
+    ],
+    [
+     "FT Funds",
+     "https://www.ft.com/funds"
+    ]
+   ]
+  }
+ ],
+ "marketnews": [
+  [
+   "India markets today",
+   "SENSEX NIFTY today"
+  ],
+  [
+   "US markets",
+   "US stock market today"
+  ],
+  [
+   "EU markets",
+   "European stock markets"
+  ],
+  [
+   "Global movers",
+   "global markets selloff rally"
+  ]
+ ],
+ "regions": [
+  {
+   "id": "asia",
+   "name": "India & Asia",
+   "chips": [
+    [
+     "India private equity",
+     "India private equity"
+    ],
+    [
+     "India private credit",
+     "India private credit AIF"
+    ],
+    [
+     "GIFT City / IFSC",
+     "GIFT City IFSC fund"
+    ],
+    [
+     "NRI investment",
+     "NRI investment fund"
+    ],
+    [
+     "SEBI / AIF rules",
+     "SEBI AIF regulation"
+    ]
+   ],
+   "sources": [
+    [
+     "VCCircle",
+     "https://www.vccircle.com"
+    ],
+    [
+     "Economic Times — Markets",
+     "https://economictimes.indiatimes.com/markets"
+    ],
+    [
+     "IVCA",
+     "https://ivca.in"
+    ],
+    [
+     "IFSCA",
+     "https://ifsca.gov.in"
+    ],
+    [
+     "SEBI",
+     "https://www.sebi.gov.in"
+    ]
+   ]
+  },
+  {
+   "id": "eu",
+   "name": "EU · Monaco · London",
+   "chips": [
+    [
+     "Luxembourg funds",
+     "Luxembourg investment funds"
+    ],
+    [
+     "Monaco finance",
+     "Monaco finance wealth"
+    ],
+    [
+     "London private equity",
+     "London private equity"
+    ],
+    [
+     "AIFMD",
+     "AIFMD regulation"
+    ],
+    [
+     "European private credit",
+     "European private credit"
+    ]
+   ],
+   "sources": [
+    [
+     "ALFI",
+     "https://www.alfi.lu"
+    ],
+    [
+     "CSSF",
+     "https://www.cssf.lu/en/"
+    ],
+    [
+     "CCAF (Monaco)",
+     "https://ccaf.mc/en/"
+    ],
+    [
+     "Monaco Tribune",
+     "https://www.monaco-tribune.com/en/"
+    ],
+    [
+     "ESMA",
+     "https://www.esma.europa.eu"
+    ]
+   ]
+  },
+  {
+   "id": "gcc",
+   "name": "GCC · Dubai",
+   "chips": [
+    [
+     "Dubai family offices",
+     "Dubai family office"
+    ],
+    [
+     "GCC sovereign wealth",
+     "GCC sovereign wealth fund"
+    ],
+    [
+     "DIFC",
+     "DIFC funds"
+    ],
+    [
+     "ADGM",
+     "ADGM asset management"
+    ],
+    [
+     "Saudi PIF",
+     "Saudi PIF investment"
+    ],
+    [
+     "Gulf NRI wealth",
+     "NRI Gulf wealth investment"
+    ]
+   ],
+   "sources": [
+    [
+     "AGBI",
+     "https://www.agbi.com"
+    ],
+    [
+     "Zawya",
+     "https://www.zawya.com"
+    ],
+    [
+     "DIFC",
+     "https://www.difc.ae"
+    ],
+    [
+     "ADGM",
+     "https://www.adgm.com"
+    ]
+   ]
+  }
+ ],
+ "library": [
+  {
+   "g": "Standards & LP world",
+   "l": [
+    [
+     "ILPA — model LPA, DDQ, principles",
+     "https://ilpa.org"
+    ],
+    [
+     "Institutional Investor",
+     "https://www.institutionalinvestor.com"
+    ],
+    [
+     "Preqin Insights",
+     "https://www.preqin.com/insights"
+    ],
+    [
+     "PitchBook News",
+     "https://pitchbook.com/news"
+    ]
+   ]
+  },
+  {
+   "g": "Jurisdictions",
+   "l": [
+    [
+     "ALFI — Luxembourg funds",
+     "https://www.alfi.lu"
+    ],
+    [
+     "CSSF (Luxembourg)",
+     "https://www.cssf.lu/en/"
+    ],
+    [
+     "AMF (France)",
+     "https://www.amf-france.org"
+    ],
+    [
+     "CCAF (Monaco)",
+     "https://ccaf.mc/en/"
+    ],
+    [
+     "SEBI (India)",
+     "https://www.sebi.gov.in"
+    ],
+    [
+     "IFSCA (GIFT City)",
+     "https://ifsca.gov.in"
+    ],
+    [
+     "ESMA",
+     "https://www.esma.europa.eu"
+    ],
+    [
+     "FCA (UK)",
+     "https://www.fca.org.uk"
+    ]
+   ]
+  },
+  {
+   "g": "India",
+   "l": [
+    [
+     "IVCA — India PE/VC",
+     "https://ivca.in"
+    ],
+    [
+     "VCCircle",
+     "https://www.vccircle.com"
+    ],
+    [
+     "GIFT City",
+     "https://www.giftgujarat.in"
+    ]
+   ]
+  },
+  {
+   "g": "Education & emerging managers",
+   "l": [
+    [
+     "Investopedia",
+     "https://www.investopedia.com"
+    ],
+    [
+     "CAIA",
+     "https://caia.org"
+    ],
+    [
+     "Carta — fund economics",
+     "https://carta.com/learn/"
+    ],
+    [
+     "VC Lab",
+     "https://govclab.com"
+    ],
+    [
+     "Lexology — law-firm briefings",
+     "https://www.lexology.com"
+    ]
+   ]
+  }
+ ]
+}
