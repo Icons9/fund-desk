@@ -1329,6 +1329,7 @@ document.addEventListener("keydown",e=>{
     else if(e.key==="ArrowLeft"){e.preventDefault();step(-1)}
   }else if(LS.mode==="quiz"){
     const Q=LS.quiz;
+    if(!Q||Q.i>=Q.qs.length)return;
     if(!Q.answer&&/^[1-4]$/.test(e.key)){const o=Q.qs[Q.i].opts[+e.key-1];if(o)answer(o)}
     else if(Q.answer&&e.key==="Enter"){e.preventDefault();qnext()}
   }
@@ -1566,10 +1567,10 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",redraw);
 new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
 document.fonts&&document.fonts.ready.then(redraw);
 function fromHash(){
-  const h=decodeURIComponent(location.hash.slice(1));
+  let h=location.hash.slice(1);try{h=decodeURIComponent(h)}catch(e){}
   if(VIEWS.includes(h)){renderIntro();setView(h);return}
   if(h.startsWith("chain-")&&CHAINS.some(c=>"chain-"+c.id===h)){selectChain(h.slice(6),true);return}
-  if(byId[h]){setView("graph");selectTerm(h);return}
+  if(Object.prototype.hasOwnProperty.call(byId,h)){setView("graph");selectTerm(h);return}
   renderIntro();setView(HOME);
 }
 window.addEventListener("hashchange",()=>{if(ready)fromHash()});

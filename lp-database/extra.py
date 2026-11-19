@@ -405,7 +405,7 @@ Kind regards,
         auth = request.headers.get("authorization", "")
         given = auth[7:] if auth.lower().startswith("bearer ") else request.query_params.get("token", "")
         import hmac as _h
-        if not _h.compare_digest(given, token):
+        if not _h.compare_digest(given.encode(), token.encode()):
             return JSONResponse({"error": "unauthorized"}, status_code=401)
         msg = await request.json()
 

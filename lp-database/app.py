@@ -99,6 +99,45 @@ def _valid(token: str | None) -> bool:
     return hmac.compare_digest(sig, _sign(user + "|" + exp)) and int(exp) > time.time()
 
 
+SECURITY_HEADERS = {
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "same-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Strict-Transport-Security": "max-age=31536000",
+    "Content-Security-Policy": "frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+}
+
+
+async def security_headers(request: Request, call_next):
+    resp = await call_next(request)
+    for k, v in SECURITY_HEADERS.items():
+        resp.headers.setdefault(k, v)
+    if request.url.path.startswith("/api/"):
+        resp.headers.setdefault("Cache-Control", "no-store")
+    return resp
+
+
+# failed sign-ins per client IP: after 5 failures in 15 minutes, refuse further attempts until the window passes
+_FAILS: dict[str, list[float]] = {}
+FAIL_LIMIT, FAIL_WINDOW = 5, 900
+
+
+def _client_ip(request: Request) -> str:
+    fwd = request.headers.get("x-forwarded-for", "")
+    return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "?")
+
+
+def _recent_fails(ip: str) -> list[float]:
+    now = time.time()
+    lst = [t for t in _FAILS.get(ip, []) if now - t < FAIL_WINDOW]
+    if lst:
+        _FAILS[ip] = lst
+    else:
+        _FAILS.pop(ip, None)
+    return lst
+
+
 @app.middleware("http")
 async def auth(request: Request, call_next):
     path = request.url.path
@@ -119,15 +158,21 @@ def healthz():
 @app.get("/login", response_class=HTMLResponse)
 def login_page(error: int = 0):
     html = (BASE / "static" / "login.html").read_text()
-    return html.replace("{{error}}", "Wrong user name or password." if error else "")
+    msg = {1: "Wrong user name or password.", 2: "Too many failed attempts. Try again in 15 minutes."}.get(error, "")
+    return html.replace("{{error}}", msg)
 
 
 @app.post("/login")
-def login(username: str = Form(...), password: str = Form(...)):
-    ok = bool(PASSWORD) and hmac.compare_digest(username.strip(), USER) and hmac.compare_digest(password, PASSWORD)
+def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    ip = _client_ip(request)
+    if len(_recent_fails(ip)) >= FAIL_LIMIT:
+        return RedirectResponse("/login?error=2", status_code=303)
+    ok = bool(PASSWORD) and hmac.compare_digest(username.strip().encode(), USER.encode()) and hmac.compare_digest(password.encode(), PASSWORD.encode())
     if not ok:
+        _FAILS.setdefault(ip, []).append(time.time())
         time.sleep(1)
         return RedirectResponse("/login?error=1", status_code=303)
+    _FAILS.pop(ip, None)
     r = RedirectResponse("/", status_code=303)
     r.set_cookie(COOKIE, _make_token(username), max_age=SESSION_DAYS * 86400, httponly=True,
                  secure=os.environ.get("RENDER") is not None, samesite="lax")
@@ -462,3 +507,7 @@ def overlap(min_lps: int = 2):
 # ---------- extended features (family offices, signals, manager check, founder mode, exports, MCP) ----------
 import extra  # noqa: E402
 extra.register(app, globals())
+
+
+# registered last so it wraps every response, including the auth redirects
+app.middleware("http")(security_headers)

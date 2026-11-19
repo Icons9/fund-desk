@@ -103,7 +103,8 @@ textarea{width:100%;min-height:260px;padding:10px;border:1px solid var(--line);b
 
 <script>
 const $ = s => document.querySelector(s);
-const esc = v => v == null ? '' : String(v).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc = v => v == null ? '' : String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = u => /^https?:\/\//i.test(String(u||'').trim()) ? esc(String(u).trim()) : '#';
 const num = (v, d=0) => v == null || v === '' ? '' : Number(v).toLocaleString('en-US', {maximumFractionDigits:d, minimumFractionDigits:0});
 const pct = v => v == null ? '' : num(v,0) + '%';
 let FACETS = null;
@@ -223,7 +224,7 @@ const views = {
         <dt>Principal</dt><dd>${esc(f.principal)}</dd><dt>Style</dt><dd>${esc(f.style)}</dd><dt>Known fund commitments</dt><dd>${esc(f.fund_commitments)}</dd>
         <dt>Sectors</dt><dd>${esc(f.sectors)}</dd><dt>Stages</dt><dd>${esc(f.stages)}</dd><dt>Typical cheque</dt><dd>${esc(f.typical_cheque)}</dd>
         <dt>Notable direct investments</dt><dd>${esc(f.notable_directs)}</dd><dt>Website</dt><dd>${esc(f.website)}</dd><dt>General contact</dt><dd>${esc(f.general_contact)}</dd>
-        <dt>Sources</dt><dd>${(f.sources||'').split(' | ').filter(Boolean).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join('<br>')}</dd></dl>
+        <dt>Sources</dt><dd>${(f.sources||'').split(' | ').filter(Boolean).map(u=>`<a href="${safeUrl(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join('<br>')}</dd></dl>
         <button class="btn" onclick='addShort(${JSON.stringify({name:f.name,kind:"Family office",country:f.country,website:f.website,why:f.fund_commitments||f.sectors||""}).replace(/'/g,"&#39;")})'>Add to shortlist</button>`));
       el.appendChild(pager(res, load));
     };
@@ -243,7 +244,7 @@ const views = {
       <div class="card" style="margin-top:16px"><h2>Managers backed by three or more tracked LPs</h2><div id="so"></div></div>`;
     $('#sa').innerHTML = table([{h:'LP',k:'lp'},{h:'Type',k:'lp_type'},{h:'Commitments',k:'n',n:1},{h:'$m',k:'usd_m',n:1,f:r=>num(r.usd_m)},{h:'Latest',k:'latest'}], S.active_lps);
     $('#sr').innerHTML = table([{h:'Date',k:'date_committed'},{h:'LP',k:'lp'},{h:'Fund',k:'fund_name'},{h:'Manager',k:'manager'},{h:'Strategy',k:'strategy'},{h:'Themes',k:'themes'},{h:'Geography',k:'geography'},{h:'$m',k:'amount_usd_m',n:1,f:r=>num(r.amount_usd_m,1)},
-      {h:'Source',k:'source_url',f:r=>r.source_url?`<a href="${esc(r.source_url)}" target="_blank" rel="noopener">link</a>`:''}], S.recent_commitments);
+      {h:'Source',k:'source_url',f:r=>r.source_url?`<a href="${safeUrl(r.source_url)}" target="_blank" rel="noopener">link</a>`:''}], S.recent_commitments);
     const n = $('#sn'); n.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'Type',k:'fund_type'},{h:'Domicile',k:'domicile_country'},{h:'$m',k:'gav_musd',n:1,f:r=>num(r.gav_musd,1)},{h:'Investors',k:'beneficial_owners',n:1},{h:'Manager',k:'adviser_name'},{h:'First filed',k:'first_reported'}], S.new_funds, true);
     bindRows(n, S.new_funds, r => showFund(r.fund_id));
     const o = $('#so'); o.innerHTML = table([{h:'Fund',k:'fund_name'},{h:'LPs',k:'n_lps',n:1},{h:'Vintage',k:'vintage'},{h:'Total $m',k:'total_usd_m',n:1,f:r=>num(r.total_usd_m)},{h:'Which LPs',k:'lps'}], O, true);
@@ -384,7 +385,7 @@ const views = {
       el.innerHTML = table([{h:'LP',k:'lp'},{h:'Fund',k:'fund_name'},{h:'Manager',k:'manager'},{h:'Asset class',k:'asset_class'},
         {h:'Vintage',k:'vintage'},{h:'Date',k:'date_committed'},{h:'Committed $m',k:'amount_usd_m',n:1,f:r=>num(r.amount_usd_m,1)},
         {h:'IRR',k:'net_irr'},{h:'Multiple',k:'multiple'},{h:'Theme / notes',k:'theme',f:r=>esc(r.theme||r.notes||'')},
-        {h:'Source',k:'source_url',f:r=>r.source_url?`<a href="${esc(r.source_url)}" target="_blank" rel="noopener">link</a>`:''}], res.rows, true);
+        {h:'Source',k:'source_url',f:r=>r.source_url?`<a href="${safeUrl(r.source_url)}" target="_blank" rel="noopener">link</a>`:''}], res.rows, true);
       bindRows(el, res.rows, r => r.adv_fund_id ? showFund(r.adv_fund_id) : null);
       el.appendChild(pager(res, load));
     };
@@ -412,8 +413,8 @@ function lpCard(d, i){
     ${d.flags.map(f=>`<span class="flag">${esc(f)}</span>`).join('')}
     <button class="btn sm" onclick='addShort(${JSON.stringify(snap).replace(/'/g,"&#39;")})'>Shortlist</button>
     <button class="btn sm" onclick="draftEmail(${i})">Draft email</button></div>
-    <ul>${d.examples.map(e=>`<li>${esc(e.fund_name)}${e.manager?' ('+esc(e.manager)+')':''} · ${e.vintage||''} · ${e.amount_usd_m?'$'+num(e.amount_usd_m,1)+'m':''} <span class="meta">${esc(e.themes||'')} · ${esc(e.geography||'')}</span>${e.source_url?` · <a href="${esc(e.source_url)}" target="_blank" rel="noopener">source</a>`:''}</li>`).join('')}</ul>
-    ${cts.length?`<div class="contacts">${cts.map(c=>`<div>${esc(c.contact_name||c.team||'General')}${c.title?' · <span class="meta">'+esc(c.title)+'</span>':''}${c.email?' · <a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>':''}${c.phone?' · '+esc(c.phone):''}${c.source_url?' · <a href="'+esc(c.source_url)+'" target="_blank" rel="noopener">source</a>':''}</div>`).join('')}</div>`:''}
+    <ul>${d.examples.map(e=>`<li>${esc(e.fund_name)}${e.manager?' ('+esc(e.manager)+')':''} · ${e.vintage||''} · ${e.amount_usd_m?'$'+num(e.amount_usd_m,1)+'m':''} <span class="meta">${esc(e.themes||'')} · ${esc(e.geography||'')}</span>${e.source_url?` · <a href="${safeUrl(e.source_url)}" target="_blank" rel="noopener">source</a>`:''}</li>`).join('')}</ul>
+    ${cts.length?`<div class="contacts">${cts.map(c=>`<div>${esc(c.contact_name||c.team||'General')}${c.title?' · <span class="meta">'+esc(c.title)+'</span>':''}${c.email?' · <a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>':''}${c.phone?' · '+esc(c.phone):''}${c.source_url?' · <a href="'+safeUrl(c.source_url)+'" target="_blank" rel="noopener">source</a>':''}</div>`).join('')}</div>`:''}
   </div>`;
 }
 async function draftEmail(i){
