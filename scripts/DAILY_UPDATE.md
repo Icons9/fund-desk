@@ -1,6 +1,6 @@
 # Fund Desk daily update — runbook
 
-Run once a day. Goal: every dataset on the desk is current, nothing breaks, and the live site (Render, auto-deploys from `main`) and the claude.ai copy match.
+Run once a day. Goal: every dataset on the desk is current, nothing breaks, and the live site and the claude.ai copy match. The live site is served behind a sign-in by the LP Portal web service on Render (service `srv-das40ou0tbcc73do402g`, workspace `tea-d9r0u2nqj5pc73ahpkeg`), which redeploys on pushes to `main`.
 
 Research date = today. Work in the repo root. Never invent facts, figures, dates or URLs: every new or changed item needs a source you actually opened. If a step fails, skip it, keep the old data, and say so in the summary. Do not rewrite text that is still correct.
 
@@ -34,7 +34,7 @@ d. Merge: `python3 scripts/deals_add.py /tmp/deals_new.jsonl && python3 scripts/
 ## 5. Write back, check, publish
 1. `node scripts/rootdata.mjs import`
 2. `python3 scripts/validate.py` — must print "all checks passed". If not, fix or revert the offending file (`git checkout -- <file>`).
-3. Commit to `main` with a message listing what changed (counts: headlines refreshed, deals added/updated/removed, any directory or legal changes), then `git -c push.negotiate=true push origin HEAD:main`. Render deploys automatically.
+3. Commit to `main` with a message listing what changed (counts: headlines refreshed, deals added/updated/removed, any directory or legal changes), then `git -c push.negotiate=true push origin HEAD:main`. Then check Render `list_deploys` for service `srv-das40ou0tbcc73do402g`: if no deploy for the new commit has started within two minutes, call `trigger_deploy` for it, and confirm it goes live. Never change the service's environment variables (they hold the user accounts).
 4. claude.ai copy (artifact `fae8f453-ae9c-460b-b509-d3813234b466`, "Fund Desk"): if the artifact tools are available, `get_artifact` for its version, then `publish_files` in patch mode with every changed `learn/data/*.json` as `data/<name>.json`. Do not send its `index.html` unless `learn/index.html` changed; if it did, send `learn/index.html` with the `<meta name="fd-mode" content="learn">` line removed and the title set to `Fund Desk · Icons &amp; Company`.
 
 ## 6. Summary

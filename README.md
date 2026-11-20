@@ -1,6 +1,8 @@
 # Fund Desk
 
-Private-markets intelligence desk: curated headlines (live-refreshed on every visit via Google News), live markets (TradingView), manager and family-office directories, people, technology, M&A, and a seven-jurisdiction landscape analysis.
+Private-markets intelligence desk of Icons & Company, behind a sign-in (one user ID per person, same login for Fund Desk and the LP Portal). The site is served by the LP Portal app on Render (`lp-database/app.py`): `/` is Fund Desk, `/lp` the LP Portal, `/login` the sign-in page. Accounts live in the `PORTAL_USERS` environment variable on Render; make entries with `python3 lp-database/scripts/make_user.py <userid> <admin|user>`.
+
+Desk contents: curated headlines (live-refreshed on every visit via Google News), live markets (TradingView), manager and family-office directories, people, technology, M&A, and a seven-jurisdiction landscape analysis.
 
 - `index.html` — the full desk app
 - `markets.html` — standalone live-markets page

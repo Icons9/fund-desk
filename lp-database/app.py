@@ -16,9 +16,44 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Redirect
 
 BASE = Path(__file__).parent
 DATA = BASE / "data"
+SITE = BASE.parent  # repo root: the Fund Desk static site served behind the same sign-in
 USER = os.environ.get("PORTAL_USER", "icons")
 PASSWORD = os.environ.get("PORTAL_PASSWORD", "")
 SECRET = (os.environ.get("PORTAL_SECRET") or PASSWORD or "dev").encode()
+
+
+def _load_users() -> dict:
+    """PORTAL_USERS = "userid:role:pbkdf2_sha256$iterations$salt_hex$hash_hex;..." (make entries with
+    scripts/make_user.py). When it is set, the old shared PORTAL_USER/PORTAL_PASSWORD no longer work."""
+    users = {}
+    for entry in os.environ.get("PORTAL_USERS", "").split(";"):
+        parts = entry.strip().split(":", 2)
+        if len(parts) == 3 and parts[0] and parts[2].startswith("pbkdf2_sha256$"):
+            users[parts[0].strip().lower()] = {"role": parts[1].strip() or "user", "hash": parts[2].strip()}
+    return users
+
+
+USERS = _load_users()
+
+
+def _check_password(stored: str, password: str) -> bool:
+    try:
+        _, iters, salt, digest = stored.split("$")
+        calc = hashlib.pbkdf2_hmac("sha256", password.encode(), bytes.fromhex(salt), int(iters)).hex()
+        return hmac.compare_digest(calc, digest)
+    except (ValueError, TypeError):
+        return False
+
+
+def _authenticate(username: str, password: str):
+    """Return the canonical user id if the credentials are right, else None."""
+    uid = username.strip().lower()
+    if USERS:
+        u = USERS.get(uid)
+        return uid if u and _check_password(u["hash"], password) else None
+    if PASSWORD and hmac.compare_digest(username.strip().encode(), USER.encode()) and hmac.compare_digest(password.encode(), PASSWORD.encode()):
+        return USER
+    return None
 COOKIE = "lp_portal"
 SESSION_DAYS = 14
 
@@ -86,7 +121,24 @@ def _make_token(user: str) -> str:
     return f"{user}|{exp}|{_sign(user + '|' + exp)}"
 
 
+def _token_user(token: str | None):
+    """User id from a valid session cookie, else None. Removing a user from PORTAL_USERS ends their sessions."""
+    if not token:
+        return None
+    try:
+        user, exp, sig = token.split("|")
+    except ValueError:
+        return None
+    if not (hmac.compare_digest(sig, _sign(user + "|" + exp)) and int(exp) > time.time()):
+        return None
+    if USERS and user not in USERS:
+        return None
+    return user
+
+
 def _valid(token: str | None) -> bool:
+    if USERS:
+        return _token_user(token) is not None
     if not PASSWORD:
         # no password configured: open only when running locally, locked when hosted
         return os.environ.get("RENDER") is None
@@ -100,12 +152,12 @@ def _valid(token: str | None) -> bool:
 
 
 SECURITY_HEADERS = {
-    "X-Frame-Options": "DENY",
+    "X-Frame-Options": "SAMEORIGIN",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "same-origin",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     "Strict-Transport-Security": "max-age=31536000",
-    "Content-Security-Policy": "frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    "Content-Security-Policy": "frame-ancestors 'self'; base-uri 'self'; form-action 'self'",
 }
 
 
@@ -146,7 +198,8 @@ async def auth(request: Request, call_next):
     if not _valid(request.cookies.get(COOKIE)):
         if path.startswith("/api/"):
             return JSONResponse({"error": "not signed in"}, status_code=401)
-        return RedirectResponse("/login")
+        nxt = path if path.startswith("/") and not path.startswith("//") else "/"
+        return RedirectResponse("/login" + (f"?next={nxt}" if nxt not in ("/", "/login") else ""))
     return await call_next(request)
 
 
@@ -156,25 +209,27 @@ def healthz():
 
 
 @app.get("/login", response_class=HTMLResponse)
-def login_page(error: int = 0):
+def login_page(error: int = 0, next: str = "/"):
     html = (BASE / "static" / "login.html").read_text()
-    msg = {1: "Wrong user name or password.", 2: "Too many failed attempts. Try again in 15 minutes."}.get(error, "")
-    return html.replace("{{error}}", msg)
+    msg = {1: "Wrong user ID or password.", 2: "Too many failed attempts. Try again in 15 minutes."}.get(error, "")
+    safe_next = next if next.startswith("/") and not next.startswith("//") else "/"
+    return html.replace("{{error}}", msg).replace("{{next}}", safe_next.replace('"', ""))
 
 
 @app.post("/login")
-def login(request: Request, username: str = Form(...), password: str = Form(...)):
+def login(request: Request, username: str = Form(...), password: str = Form(...), next: str = Form("/")):
     ip = _client_ip(request)
     if len(_recent_fails(ip)) >= FAIL_LIMIT:
         return RedirectResponse("/login?error=2", status_code=303)
-    ok = bool(PASSWORD) and hmac.compare_digest(username.strip().encode(), USER.encode()) and hmac.compare_digest(password.encode(), PASSWORD.encode())
-    if not ok:
+    uid = _authenticate(username, password)
+    if not uid:
         _FAILS.setdefault(ip, []).append(time.time())
         time.sleep(1)
         return RedirectResponse("/login?error=1", status_code=303)
     _FAILS.pop(ip, None)
-    r = RedirectResponse("/", status_code=303)
-    r.set_cookie(COOKIE, _make_token(username), max_age=SESSION_DAYS * 86400, httponly=True,
+    dest = next if next.startswith("/") and not next.startswith("//") and not next.startswith("/login") else "/"
+    r = RedirectResponse(dest, status_code=303)
+    r.set_cookie(COOKIE, _make_token(uid), max_age=SESSION_DAYS * 86400, httponly=True,
                  secure=os.environ.get("RENDER") is not None, samesite="lax")
     return r
 
@@ -186,8 +241,16 @@ def logout():
     return r
 
 
-@app.get("/", response_class=HTMLResponse)
-def index():
+@app.get("/api/me")
+def me(request: Request):
+    uid = _token_user(request.cookies.get(COOKIE)) or (USER if not USERS else None)
+    role = USERS.get(uid, {}).get("role", "admin") if uid else None
+    return {"user": uid, "role": role}
+
+
+@app.get("/lp", response_class=HTMLResponse)
+@app.get("/lp/", response_class=HTMLResponse)
+def lp_index():
     return FileResponse(BASE / "static" / "index.html")
 
 
@@ -507,6 +570,29 @@ def overlap(min_lps: int = 2):
 # ---------- extended features (family offices, signals, manager check, founder mode, exports, MCP) ----------
 import extra  # noqa: E402
 extra.register(app, globals())
+
+
+# ---------- Fund Desk static site (repo root), served behind the same sign-in ----------
+SITE_FILES = {"index.html", "markets.html", "fo.html", "lp.html"}
+SITE_DIRS = ("learn/", "data/")
+
+
+@app.get("/", response_class=HTMLResponse)
+def desk_index():
+    return FileResponse(SITE / "index.html", headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/{path:path}")
+def desk_file(path: str):
+    rel = path.lstrip("/")
+    if rel.endswith("/") or rel == "learn":
+        rel = rel.rstrip("/") + "/index.html"
+    if not (rel in SITE_FILES or rel.startswith(SITE_DIRS)):
+        raise HTTPException(404)
+    f = (SITE / rel).resolve()
+    if SITE.resolve() not in f.parents or not f.is_file():
+        raise HTTPException(404)
+    return FileResponse(f, headers={"Cache-Control": "no-cache"})
 
 
 # registered last so it wraps every response, including the auth redirects
