@@ -1,0 +1,418 @@
+[
+ [
+  "Walton Enterprises / WIT",
+  "Walton (Walmart)",
+  "Bentonville, US",
+  "~$270bn",
+  "https://www.waltonfamilyfoundation.org",
+  ""
+ ],
+ [
+  "Bezos Expeditions",
+  "Jeff Bezos (Amazon)",
+  "Seattle, US",
+  "~$100bn+",
+  "",
+  ""
+ ],
+ [
+  "Cascade Investment",
+  "Bill Gates (Microsoft)",
+  "Kirkland, US",
+  "~$100bn+",
+  "",
+  ""
+ ],
+ [
+  "Ballmer Group",
+  "Steve Ballmer (Microsoft)",
+  "Bellevue, US",
+  "~$100bn+",
+  "https://www.ballmergroup.org",
+  ""
+ ],
+ [
+  "Mousse Partners",
+  "Wertheimer (Chanel)",
+  "New York, US",
+  "~$90bn",
+  "",
+  "Mousse Partners Wertheimer"
+ ],
+ [
+  "1888 Management / Koch FO",
+  "Koch (Koch Industries)",
+  "Wichita, US",
+  "~$100bn+",
+  "",
+  "Koch family office"
+ ],
+ [
+  "Groupe Arnault / Financière Agache",
+  "Arnault (LVMH)",
+  "Paris, FR",
+  "~$150bn+",
+  "",
+  ""
+ ],
+ [
+  "Téthys Invest",
+  "Bettencourt Meyers (L'Oréal)",
+  "Paris, FR",
+  "~$80bn+",
+  "",
+  "Téthys Bettencourt"
+ ],
+ [
+  "Pontegadea",
+  "Amancio Ortega (Inditex/Zara)",
+  "A Coruña, ES",
+  "~$75bn+",
+  "https://www.pontegadea.com",
+  ""
+ ],
+ [
+  "KIRKBI",
+  "Kirk Kristiansen (LEGO)",
+  "Billund, DK",
+  "~$25bn",
+  "https://www.kirkbi.com",
+  ""
+ ],
+ [
+  "Exor",
+  "Agnelli (Fiat/Ferrari)",
+  "Amsterdam, NL",
+  "~$35bn",
+  "https://www.exor.com",
+  ""
+ ],
+ [
+  "JAB Holding",
+  "Reimann (JAB/coffee)",
+  "Luxembourg",
+  "~$40bn",
+  "https://www.jabholco.com",
+  ""
+ ],
+ [
+  "Athos KG",
+  "Strüngmann (Hexal/BioNTech)",
+  "Munich, DE",
+  "~$30bn",
+  "",
+  "Athos Strüngmann"
+ ],
+ [
+  "FAM / Wallenberg sphere",
+  "Wallenberg (Investor AB)",
+  "Stockholm, SE",
+  "~$25bn",
+  "https://www.fam.se",
+  ""
+ ],
+ [
+  "Interogo / Ikano",
+  "Kamprad (IKEA)",
+  "Zug, CH / LU",
+  "~$30bn",
+  "https://www.interogofoundation.com",
+  ""
+ ],
+ [
+  "Tetra Laval / Longbow",
+  "Rausing (Tetra Pak)",
+  "Pully, CH",
+  "~$25bn",
+  "",
+  "Tetra Laval Rausing"
+ ],
+ [
+  "Quandt / Aqton",
+  "Quandt-Klatten (BMW)",
+  "Bad Homburg, DE",
+  "~$45bn",
+  "",
+  "Quandt Klatten BMW"
+ ],
+ [
+  "Porsche SE",
+  "Porsche-Piëch (VW)",
+  "Stuttgart, DE",
+  "~$40bn",
+  "https://www.porsche-se.com",
+  ""
+ ],
+ [
+  "Grosvenor",
+  "Duke of Westminster",
+  "London, UK",
+  "~$20bn",
+  "https://www.grosvenor.com",
+  ""
+ ],
+ [
+  "Wittington Investments",
+  "Weston (ABF/Primark)",
+  "London, UK",
+  "~$20bn",
+  "",
+  "Wittington Investments Weston"
+ ],
+ [
+  "COFRA / Anthos",
+  "Brenninkmeijer (C&A)",
+  "Zug, CH",
+  "~$30bn",
+  "https://www.cofraholding.com",
+  ""
+ ],
+ [
+  "AFM / Mulliez family",
+  "Mulliez (Auchan, Decathlon)",
+  "Lille, FR",
+  "~$45bn",
+  "",
+  "Mulliez family Auchan"
+ ],
+ [
+  "Peugeot Invest",
+  "Peugeot family",
+  "Paris, FR",
+  "~$6bn",
+  "https://www.peugeot-invest.com",
+  ""
+ ],
+ [
+  "Heineken family / L'Arche Green",
+  "Heineken",
+  "Amsterdam, NL",
+  "~$15bn",
+  "",
+  "Heineken family holding"
+ ],
+ [
+  "H51",
+  "Hermès family",
+  "Paris, FR",
+  "~$100bn+",
+  "",
+  "Hermès family holding"
+ ],
+ [
+  "Dassault Group",
+  "Dassault family",
+  "Paris, FR",
+  "~$30bn",
+  "",
+  "Dassault family"
+ ],
+ [
+  "MSD Capital / DFO",
+  "Michael Dell",
+  "New York, US",
+  "~$70bn",
+  "https://www.dfomgmt.com",
+  ""
+ ],
+ [
+  "Soros Fund Management",
+  "George Soros",
+  "New York, US",
+  "~$28bn",
+  "https://www.soros.com",
+  ""
+ ],
+ [
+  "Duquesne Family Office",
+  "Stanley Druckenmiller",
+  "New York, US",
+  "~$15bn",
+  "",
+  "Druckenmiller Duquesne"
+ ],
+ [
+  "Point72",
+  "Steven Cohen",
+  "Stamford, US",
+  "~$35bn",
+  "https://www.point72.com",
+  ""
+ ],
+ [
+  "Iconiq Capital (multi-family)",
+  "Tech founders (multi)",
+  "San Francisco, US",
+  "~$80bn",
+  "https://www.iconiqcapital.com",
+  ""
+ ],
+ [
+  "Emerson Collective",
+  "Laurene Powell Jobs",
+  "Palo Alto, US",
+  "~$25bn",
+  "https://www.emersoncollective.com",
+  ""
+ ],
+ [
+  "Chan Zuckerberg Initiative",
+  "Zuckerberg-Chan (Meta)",
+  "Redwood City, US",
+  "~$100bn+",
+  "https://chanzuckerberg.com",
+  ""
+ ],
+ [
+  "Omidyar Network",
+  "Pierre Omidyar (eBay)",
+  "Redwood City, US",
+  "~$10bn",
+  "https://omidyar.com",
+  ""
+ ],
+ [
+  "Declaration Partners",
+  "David Rubenstein (Carlyle)",
+  "New York, US",
+  "~$3bn",
+  "https://www.declarationpartners.com",
+  ""
+ ],
+ [
+  "Bessemer Trust (multi-family)",
+  "Phipps (Carnegie Steel)",
+  "New York, US",
+  "~$120bn (MFO)",
+  "https://www.bessemertrust.com",
+  ""
+ ],
+ [
+  "Rockefeller Capital Mgmt",
+  "Rockefeller",
+  "New York, US",
+  "~$100bn (MFO)",
+  "https://www.rockco.com",
+  ""
+ ],
+ [
+  "Crown family / Henry Crown & Co",
+  "Crown (General Dynamics)",
+  "Chicago, US",
+  "~$15bn",
+  "",
+  "Henry Crown and Company"
+ ],
+ [
+  "Pritzker Group",
+  "Pritzker (Hyatt)",
+  "Chicago, US",
+  "~$20bn",
+  "https://www.pritzkergroup.com",
+  ""
+ ],
+ [
+  "Waycrosse / Cargill-MacMillan",
+  "Cargill family",
+  "Minneapolis, US",
+  "~$50bn",
+  "",
+  "Cargill MacMillan family"
+ ],
+ [
+  "Mars family office",
+  "Mars (confectionery)",
+  "McLean, US",
+  "~$100bn+",
+  "",
+  "Mars family Mars Incorporated"
+ ],
+ [
+  "Blue Pool Capital",
+  "Joe Tsai (Alibaba)",
+  "Hong Kong",
+  "~$15bn",
+  "",
+  "Blue Pool Capital Joe Tsai"
+ ],
+ [
+  "Horizons Ventures",
+  "Li Ka-shing",
+  "Hong Kong",
+  "~$35bn",
+  "https://www.horizonsventures.com",
+  ""
+ ],
+ [
+  "Verlinvest",
+  "de Spoelberch/de Mévius (AB InBev)",
+  "Brussels, BE",
+  "~$3bn",
+  "https://www.verlinvest.com",
+  ""
+ ],
+ [
+  "Premji Invest",
+  "Azim Premji (Wipro)",
+  "Bengaluru, IN",
+  "~$10bn",
+  "https://www.premjiinvest.com",
+  ""
+ ],
+ [
+  "Catamaran Ventures",
+  "Narayana Murthy (Infosys)",
+  "Bengaluru, IN",
+  "~$2bn",
+  "https://www.catamaran.in",
+  ""
+ ],
+ [
+  "Claypond Capital",
+  "Ranjan Pai (Manipal)",
+  "Bengaluru, IN",
+  "~$1.5bn",
+  "",
+  "Ranjan Pai Claypond"
+ ],
+ [
+  "Sharrp Ventures",
+  "Mariwala (Marico)",
+  "Mumbai, IN",
+  "~$1bn",
+  "",
+  "Sharrp Ventures Mariwala"
+ ],
+ [
+  "Rising Sun Holdings (Poonawalla)",
+  "Adar Poonawalla (Serum Institute)",
+  "Pune, IN",
+  "~$25bn",
+  "",
+  "Adar Poonawalla Rising Sun Holdings"
+ ],
+ [
+  "Man Capital",
+  "Mansour family",
+  "London, UK / Cairo",
+  "~$10bn",
+  "https://www.mancapital.com",
+  ""
+ ],
+ [
+  "JIMCO (Jameel Investment)",
+  "Abdul Latif Jameel family",
+  "Jeddah, SA",
+  "~$15bn",
+  "https://jimco.co",
+  ""
+ ],
+ [
+  "Olayan Group",
+  "Olayan family",
+  "Riyadh / London",
+  "~$40bn",
+  "https://www.olayan.com",
+  ""
+ ]
+]
