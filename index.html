@@ -22,6 +22,11 @@ a{color:#1B3A6B;text-decoration:none;} a:hover{text-decoration:underline;}
 .nav .grp:hover{background:none;}
 #learn.show{margin:-22px -28px;position:relative;}
 #learnframe{display:block;width:100%;height:100vh;border:0;background:var(--bg);}
+#deals.show{margin:-22px -28px;position:relative;}
+#dealsframe{display:block;width:100%;height:100vh;border:0;background:var(--bg);}
+body:has(#deals.show) .foot{display:none;}
+.brand .ic{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#E6CD8E;margin-bottom:6px}
+.brand .icm{display:inline-grid;place-items:center;width:22px;height:22px;border:1.5px solid #C5A059;border-radius:2px;color:#C5A059;font-family:Georgia,serif;font-size:9.5px;letter-spacing:0;font-weight:700}
 .main{position:relative;}
 body:has(#learn.show) .foot{display:none;}
 .learnback{position:absolute;top:16px;right:24px;z-index:5;display:none;background:#fff;border:1px solid var(--gold);color:var(--navy);border-radius:16px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer;}
@@ -79,6 +84,8 @@ tr:nth-child(even) td{background:#FBFAF7;}
 @media(max-width:860px){
  #learn.show{margin:0 -28px -22px;}
  #learnframe{height:calc(100vh - 58px);height:calc(100dvh - 58px);}
+ #deals.show{margin:0 -28px -22px;}
+ #dealsframe{height:calc(100vh - 58px);height:calc(100dvh - 58px);}
  .learnback{top:26px;right:14px;}
  .side{position:fixed;left:-230px;z-index:50;transition:left .2s;}
  .side.open{left:0;}
@@ -89,7 +96,7 @@ tr:nth-child(even) td{background:#FBFAF7;}
 <body>
 <div class="app">
 <nav class="side" id="side">
- <div class="brand"><div class="t">Fund Desk</div><div class="s">Private-markets intelligence</div></div>
+ <div class="brand"><div class="ic"><span class="icm" aria-hidden="true">I&amp;C</span>Icons &amp; Company</div><div class="t">Fund Desk</div><div class="s">Private-markets intelligence</div></div>
  <ul class="nav" id="nav">
   <li data-pg="home" class="on">Dashboard</li>
   <li class="grp">News</li>
@@ -105,6 +112,10 @@ tr:nth-child(even) td{background:#FBFAF7;}
   <li data-pg="gl15">Managers — global</li>
   <li data-pg="in10">Managers — India</li>
   <li data-pg="fo">Family offices</li>
+  <li class="grp">Deals</li>
+  <li data-pg="deals" data-dv="pipeline">Deal pipeline</li>
+  <li data-pg="deals" data-dv="map">Backer linkage map</li>
+  <li data-pg="deals" data-dv="coverage">Sector × region coverage</li>
   <li class="grp">Intelligence</li>
   <li data-pg="tech">Technology</li>
   <li data-pg="people">People</li>
@@ -450,6 +461,10 @@ tr:nth-child(even) td{background:#FBFAF7;}
 </section>
 
 <p class="foot">Fund Desk · curated news as of 5 Aug 2026 · markets stream live via TradingView embeds · headlines belong to their publishers · figures indicative. Built for internal / partner use.</p>
+<!-- DEALS (pipeline from the Fund Desk app, embedded) -->
+<section class="pg" id="deals">
+ <iframe id="dealsframe" title="Deals: companies raising or due to raise, by sector and region"></iframe>
+</section>
 <!-- LEARN (embedded learning app, same design language) -->
 <section class="pg" id="learn">
  <iframe id="learnframe" title="Learn: fund terms, lifecycle, legal and compliance"></iframe>
@@ -579,9 +594,9 @@ document.getElementById('tfo').addEventListener('click',e=>{
 document.getElementById('fosearch').addEventListener('input',e=>forows(e.target.value));
 
 const nav=document.getElementById('nav');
-const PGNAME={home:'Dashboard',news:'Industry headlines',india:'India desk',eu:'EU · Monaco · London',gcc:'GCC · Dubai',mar:'Maritime',hcdt:'Healthcare · Deeptech',mkt:'Live markets',gl15:'Managers — global',in10:'Managers — India',fo:'Family offices',tech:'Technology',people:'People',ma:'M&A & trends',anlz:'Landscape analysis',lib:'Library'};
+const PGNAME={home:'Dashboard',news:'Industry headlines',india:'India desk',eu:'EU · Monaco · London',gcc:'GCC · Dubai',mar:'Maritime',hcdt:'Healthcare · Deeptech',mkt:'Live markets',gl15:'Managers — global',in10:'Managers — India',fo:'Family offices',tech:'Technology',people:'People',ma:'M&A & trends',anlz:'Landscape analysis',lib:'Library',deals:'Deals'};
 let curPg='home',curView='';
-function markNav(pg,view){document.querySelectorAll('#nav li[data-pg]').forEach(x=>x.classList.toggle('on',x.dataset.pg===pg&&(pg!=='learn'||x.dataset.view===view)));}
+function markNav(pg,view){document.querySelectorAll('#nav li[data-pg]').forEach(x=>x.classList.toggle('on',x.dataset.pg===pg&&((pg!=='learn'&&pg!=='deals')||(x.dataset.view||x.dataset.dv)===view)));}
 function showPg(pg,view){
  if(!document.getElementById(pg))pg='home';
  document.querySelectorAll('.pg').forEach(x=>x.classList.toggle('show',x.id===pg));
@@ -604,13 +619,20 @@ function openLearn(target,from){
  else{try{learnFrame.contentWindow.location.hash=target||'learn';}catch(e){learnFrame.src='learn/?embed=1'+hh;}}
 }
 learnBack.addEventListener('click',()=>{if(learnFrom)showPg(learnFrom);});
+const dealsFrame=document.getElementById('dealsframe');
+function openDeals(tab){
+ tab=['pipeline','map','coverage'].includes(tab)?tab:'pipeline';
+ showPg('deals',tab);
+ if(!dealsFrame.getAttribute('src'))dealsFrame.src='learn/?embed=1&deals=1&tab='+tab+'#deals';
+ else{try{dealsFrame.contentWindow.postMessage({fdDealsTab:tab},location.origin);}catch(e){dealsFrame.src='learn/?embed=1&deals=1&tab='+tab+'#deals';}}
+}
 window.addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||!e.data.fdLearnView)return;curView=e.data.fdLearnView;if(curPg==='learn'){markNav('learn',curView);try{localStorage.setItem('fd_view',curView);}catch(e2){}}});
 nav.addEventListener('click',e=>{
  const li=e.target.closest('li[data-pg]'); if(!li)return;
- if(li.dataset.pg==='learn')openLearn(li.dataset.view);else showPg(li.dataset.pg);
+ if(li.dataset.pg==='learn')openLearn(li.dataset.view);else if(li.dataset.pg==='deals')openDeals(li.dataset.dv);else showPg(li.dataset.pg);
 });
 try{const t=localStorage.getItem('fd_pg'),v=localStorage.getItem('fd_view');
- if(t==='learn')openLearn(v||'learn');else if(t&&document.getElementById(t))showPg(t);}catch(e){}
+ if(t==='learn')openLearn(v||'learn');else if(t==='deals')openDeals(v);else if(t&&document.getElementById(t))showPg(t);}catch(e){}
 
 /* ---- LEARN: term of the day, progress, and fund terms tagged in headlines ---- */
 const LEARN_FILES=['structure','parties-docs','raise-capital','econ-metrics','deal-venture','exit-credit-real-hedge','lp-ops-reg','extra'];

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="fd-mode" content="learn">
 <meta charset="utf-8">
+<meta name="fd-mode" content="learn">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fund Desk · Learn</title>
 <style>
@@ -434,17 +434,81 @@ html.embed .filters{background:transparent;border:0;padding:4px 24px 8px}
 html.embed .view .scroll{padding:8px 24px 40px}
 html.embed aside{background:#FCFBF8}
 @media (max-width:960px){html.embed header{padding:10px 14px 4px}html.embed .view .scroll{padding:8px 14px 40px}}
+/* ---------- Icons & Company lockup ---------- */
+.ic-lock{display:flex;align-items:center;gap:8px;margin:0 0 5px}
+.ic-mark{display:inline-grid;place-items:center;width:26px;height:26px;border:1.5px solid var(--gold);border-radius:2px;color:var(--gold);font-family:var(--display);font-size:10.5px;font-weight:700;letter-spacing:.02em;line-height:1}
+.ic-name{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--goldlt);font-weight:600;white-space:nowrap}
+.ic-loc{letter-spacing:.12em;color:#9FB0C6;font-weight:500}
+@media (max-width:960px){.ic-loc{display:none}}
+.res-kind{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px 2px}
+/* ---------- Deals: pipeline, linkage map, coverage ---------- */
+.dl-filters{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+.dl-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.dl-row>span{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;min-width:62px}
+.dl-chip{display:inline-flex;align-items:center;gap:6px;min-height:36px;border:1px solid #D8D2C6;background:var(--surface);color:var(--navy);border-radius:999px;padding:0 12px;font-size:13px;font-weight:600;cursor:pointer}
+.dl-chip small{font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.dl-chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.dl-chip[aria-pressed="true"] small{color:var(--goldlt)}
+.dl-chip.empty{color:var(--muted);font-weight:500;border-style:dashed}
+.dl-chip.empty[aria-pressed="true"]{color:#fff;border-style:solid}
+.dl-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 0 12px}
+.dl-kpi{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.dl-kpi b{font-family:var(--display);font-size:26px;color:var(--navy);font-variant-numeric:tabular-nums}
+.dl-kpi span{font-size:12.5px;color:var(--muted)}
+.dl-kpi[aria-pressed="true"]{border-color:var(--navy);box-shadow:inset 0 3px 0 var(--gold)}
+.dl-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 10px}
+.dl-tools .dsearch{margin:0}
+.dl-tools label{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--ink)}
+.sig{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.sig-A{background:#E1ECF8;color:#1F4E8C}.sig-B{background:#FBE9DD;color:#9A3412}.sig-C{background:var(--good-soft);color:#1F5C3E}.sig-D{background:#EEE8F7;color:#4E3487}
+.dl-rowbtn{display:block;width:100%;text-align:left;background:none;border:0;padding:0;cursor:pointer;font:inherit;color:var(--navy);font-weight:700}
+.dl-rowbtn:hover{text-decoration:underline}
+.rtable tr.on td{background:var(--accent-soft)}
+.dl-sub{font-size:12.5px;color:var(--muted);font-weight:400}
+.dl-launch{display:inline-block;margin-left:4px;padding:0 6px;border-radius:4px;background:#F6EBD3;color:#7A5A12;font-size:11px;font-weight:600}
+.dl-mapwrap{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.dl-mapwrap svg{display:block;width:100%;height:min(68vh,680px);background:#FCFBF8;touch-action:none}
+.dl-mapwrap .zoom{top:10px;bottom:auto}
+.dl-legend{position:absolute;left:10px;bottom:10px;display:flex;flex-wrap:wrap;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-size:12px;color:var(--muted)}
+.dl-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.dl-node{cursor:pointer}
+.dl-mx{border-collapse:collapse;width:100%;min-width:720px;font-size:13.5px}
+.dl-mx th,.dl-mx td{border-bottom:1px solid var(--line);padding:0;text-align:left}
+.dl-mx thead th{background:var(--navy);color:#fff;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;padding:8px 10px}
+.rtable .dl-mx tbody th{background:var(--surface);color:var(--navy);padding:8px 10px;font-family:var(--display);color:var(--navy);white-space:nowrap}
+.dl-cell{display:flex;flex-direction:column;gap:1px;width:100%;min-height:52px;border:0;background:none;padding:8px 10px;text-align:left;cursor:pointer;font:inherit}
+.dl-cell:hover{background:var(--accent-soft)}
+.dl-cell b{font-family:var(--display);font-size:20px;color:var(--navy);font-variant-numeric:tabular-nums}
+.dl-cell span{font-size:11.5px;color:var(--muted)}
+.dl-cell.none b{color:#B9B2A3;font-size:16px}
+.dl-empty{background:var(--surface);border:1px dashed #CFC6B3;border-radius:10px;padding:22px 20px;max-width:640px}
+.dl-empty h3{font-family:var(--display);color:var(--navy);margin:0 0 6px;font-size:20px}
+.dl-empty p{margin:0 0 6px;color:var(--muted);font-size:14px}
+.dl-list{display:flex;flex-direction:column;gap:6px}
+.dl-li{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;min-height:44px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer;font:inherit}
+.dl-li:hover{border-color:var(--accent)}
+.dl-li span{display:flex;flex-direction:column}
+.dl-li small{color:var(--muted);font-size:12px}
+.dl-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.dl-facts div{background:var(--bg);border-radius:8px;padding:8px 10px}
+.dl-facts small{display:block;font-size:11.5px;color:var(--muted)}
+.dl-facts b{font-size:14px;color:var(--ink)}
+.dl-mix{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:8px 0}
+.dl-mix div{border-radius:8px;padding:6px 8px;font-size:12px}
+.dl-mix b{display:block;font-family:var(--display);font-size:20px}
+@media (max-width:960px){.dl-row>span{min-width:0;width:100%}.dl-mapwrap svg{height:60vh}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">
+    <div class="ic-lock"><span class="ic-mark" aria-hidden="true">I&amp;C</span><span class="ic-name">Icons &amp; Company<span class="ic-loc"> · Monaco · Mumbai</span></span></div>
     <h1>Fund Desk</h1>
     <p id="sub">Loading terms…</p>
   </div>
   <div class="search">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" placeholder="Search terms, e.g. clawback, SAFE, AIFMD" autocomplete="off" aria-label="Search terms" aria-controls="results">
+    <input id="q" type="search" placeholder="Search terms, companies, backers" autocomplete="off" aria-label="Search terms, companies and backers" aria-controls="results">
     <kbd>Ctrl K</kbd>
     <div class="results" id="results" role="listbox"></div>
   </div>
@@ -452,6 +516,7 @@ html.embed aside{background:#FCFBF8}
     <button id="tab-news" aria-pressed="true" data-view="news">News</button>
     <button id="tab-markets" aria-pressed="false" data-view="markets">Markets</button>
     <button id="tab-dir" aria-pressed="false" data-view="dir">Directory</button>
+    <button id="tab-deals" aria-pressed="false" data-view="deals">Deals</button>
     <button id="tab-graph" aria-pressed="false" data-view="graph">Terms</button>
     <button id="tab-learn" aria-pressed="false" data-view="learn">Learn</button>
     <button id="tab-lifecycle" aria-pressed="false" data-view="lifecycle">Lifecycle</button>
@@ -480,6 +545,7 @@ html.embed aside{background:#FCFBF8}
     <section class="view on" id="view-news" aria-label="News"><div class="scroll"><div class="wrapw" id="news"><p class="muted">Loading headlines…</p></div></div></section>
     <section class="view" id="view-markets" aria-label="Markets"><div class="scroll"><div class="wrapw" id="markets"></div></div></section>
     <section class="view" id="view-dir" aria-label="Directory"><div class="scroll"><div class="wrapw" id="dir"></div></div></section>
+    <section class="view" id="view-deals" aria-label="Deals"><div class="scroll"><div class="wrapw" id="deals"></div></div></section>
     <section class="view" id="view-library" aria-label="Library"><div class="scroll"><div class="wrapw" id="library"></div></div></section>
     <section class="view" id="view-chains" aria-label="Chains"><div class="scroll"><div class="wrapw"><h2 class="sec-title">Chains</h2><p class="lead">Step-by-step walks through a process. Each chain highlights its path on the graph.</p><div class="cards" id="cards"></div></div></div></section>
   </div>
@@ -489,13 +555,17 @@ html.embed aside{background:#FCFBF8}
 
 <script>
 /* ---------- Config ---------- */
-const EMBED=new URLSearchParams(location.search).has("embed");
-const MODE=EMBED?"learn":((document.querySelector('meta[name="fd-mode"]')||{}).content||"full");
+const QS=new URLSearchParams(location.search);
+const EMBED=QS.has("embed");
+const MODE=EMBED?(QS.has("deals")?"deals":"learn"):((document.querySelector('meta[name="fd-mode"]')||{}).content||"full");
 if(EMBED)document.documentElement.classList.add("embed");
 if(MODE==="learn"){
-  ["news","markets","dir","library"].forEach(v=>{const t=document.getElementById("tab-"+v),s=document.getElementById("view-"+v);if(t)t.remove();if(s)s.remove()});
+  ["news","markets","dir","deals","library"].forEach(v=>{const t=document.getElementById("tab-"+v),s=document.getElementById("view-"+v);if(t)t.remove();if(s)s.remove()});
   document.querySelector(".brand h1").innerHTML='Fund Desk <span style="font-weight:500;color:var(--muted)">· Learn</span>';
   const back=document.createElement("a");back.href="../";if(EMBED)back.style.display="none";back.className="backlink";back.textContent="← Back to Fund Desk";document.querySelector(".brand").appendChild(back);
+}
+if(MODE==="deals"){
+  ["news","markets","dir","library"].forEach(v=>{const t=document.getElementById("tab-"+v),s=document.getElementById("view-"+v);if(t)t.remove();if(s)s.remove()});
 }
 const CATS = {
   structure:{name:"Vehicles & structure",color:"#2f6db5"},
@@ -845,7 +915,7 @@ async function load(){
     byId=Object.fromEntries(nodes.map(n=>[n.id,n]));
     buildEdges();layout();buildMatcher();ready=true;
     document.getElementById("loading").remove();
-    document.getElementById("sub").textContent=MODE==="learn"?`${nodes.length} fund terms · learning modules · lifecycle · legal & compliance`:`News, markets and directories · ${nodes.length} fund terms · lifecycle · legal & compliance`;
+    document.getElementById("sub").textContent=MODE==="learn"?`${nodes.length} fund terms · learning modules · lifecycle · legal & compliance`:`News, markets, deals and directories · ${nodes.length} fund terms · lifecycle · legal & compliance`;
     renderFilters();renderCards();resize();
     fromHash();initSync();
   }catch(e){
@@ -1023,6 +1093,7 @@ function renderTerm(n){
     <div class="rel">${keys.map(k=>`<h3>${esc(k)}</h3><div class="links">${groups[k].sort((a,b)=>a.label.localeCompare(b.label)).map(tlink).join("")}</div>`).join("")}</div>
     ${chains.length?`<h3 style="margin-top:16px">In chains</h3><div class="links">${chains.map(c=>`<button class="tlink" data-chain="${c.id}">${esc(c.title)}</button>`).join("")}</div>`:""}
     ${stages.length?`<h3 style="margin-top:16px">In lifecycle stages</h3><div class="links">${stages.map(s=>`<button class="tlink" data-stage="${s.id}">${esc(s.n)}</button>`).join("")}</div>`:""}
+    ${dlTermBox(n.id)}
     <div class="study">
       <button class="btn ${isL?"good":"primary"}" data-learn="${n.id}">${isL?"Known ✓ (undo)":"Mark as known"}</button>
       ${idx>0?`<button class="btn" data-term="${list[idx-1]}">← Previous</button>`:""}
@@ -1087,8 +1158,8 @@ document.addEventListener("click",e=>{
 });
 
 /* ---------- Views ---------- */
-const VIEWS=(MODE==="learn"?["graph","chains","learn","lifecycle","legal"]:["news","markets","dir","graph","chains","learn","lifecycle","legal","library"]);
-const HOME=MODE==="learn"?"learn":"news";
+const VIEWS=(MODE==="learn"?["graph","chains","learn","lifecycle","legal"]:MODE==="deals"?["deals","graph","chains","learn","lifecycle","legal"]:["news","markets","dir","deals","graph","chains","learn","lifecycle","legal","library"]);
+const HOME=MODE==="learn"?"learn":MODE==="deals"?"deals":"news";
 function setView(v){
   state.view=v;
   VIEWS.forEach(k=>{document.getElementById("view-"+k).classList.toggle("on",k===v);document.getElementById("tab-"+k).setAttribute("aria-pressed",String(k===v))});
@@ -1101,6 +1172,7 @@ function setView(v){
   if(v==="news")renderNews();
   if(v==="markets")renderMarkets();
   if(v==="dir")renderDir();
+  if(v==="deals")renderDeals();
   if(v==="library")renderLibrary();
   if(EMBED&&window.parent!==window){try{window.parent.postMessage({fdLearnView:v},location.origin)}catch(e){}}
   const tb=document.getElementById("tab-"+v);if(tb&&tb.scrollIntoView)tb.scrollIntoView({block:"nearest",inline:"nearest"});
@@ -1416,21 +1488,35 @@ function renderLegal(){
 const q=document.getElementById("q"),res=document.getElementById("results");let hits=[],hi=0;
 function score(n,s){const l=n.label.toLowerCase(),a=n.aka.toLowerCase();
   if(l===s)return 100;if(l.startsWith(s))return 80;if(a.split(/,\s*/).some(x=>x===s))return 78;if(l.includes(s))return 60;if(a.includes(s))return 50;if(n.def.toLowerCase().includes(s))return 20;return 0}
+function dlHits(s){
+  if(!DS.data){dlLoad();return[]}
+  const co=DEALS.filter(c=>c.n.toLowerCase().includes(s)).sort((a,b)=>(a.n.toLowerCase().startsWith(s)?0:1)-(b.n.toLowerCase().startsWith(s)?0:1)).slice(0,4)
+    .map(c=>({kind:"deal",id:"c:"+c.id,label:c.n,sub:"Company · "+DL_SHORT[c.sig],sig:c.sig}));
+  const inv=Object.keys(DL_BYINV).filter(i=>i.toLowerCase().includes(s)).sort((a,b)=>DL_BYINV[b].length-DL_BYINV[a].length).slice(0,3)
+    .map(i=>({kind:"deal",id:"i:"+i,label:i,sub:"Backer · "+DL_BYINV[i].length+" companies"}));
+  return co.concat(inv);
+}
 function search(){
   const s=q.value.trim().toLowerCase();if(!s||!ready){res.classList.remove("open");return}
-  hits=nodes.map(n=>[n,score(n,s)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]||a[0].label.localeCompare(b[0].label)).slice(0,9).map(x=>x[0]);hi=0;
-  res.innerHTML=hits.length?hits.map((n,i)=>`<button role="option" aria-selected="${i===hi}" data-pick="${n.id}">${dot(n.cat)}<span>${esc(n.label)}</span><small>${esc(CATS[n.cat].name)}</small></button>`).join(""):`<div style="padding:8px;color:var(--muted);font-size:14px">No matching terms</div>`;
+  const th=nodes.map(n=>[n,score(n,s)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]||a[0].label.localeCompare(b[0].label)).slice(0,MODE==="learn"?9:6).map(x=>({kind:"term",id:x[0].id,n:x[0]}));
+  const dh=MODE==="learn"?[]:dlHits(s);
+  hits=th.concat(dh);hi=0;
+  let html="",i=0;
+  if(th.length){html+=`<div class="res-kind">Terms</div>`+th.map(h=>`<button role="option" aria-selected="${i===hi}" data-hit="${i++}">${dot(h.n.cat)}<span>${esc(h.n.label)}</span><small>${esc(CATS[h.n.cat].name)}</small></button>`).join("")}
+  if(dh.length){html+=`<div class="res-kind">Deals</div>`+dh.map(h=>`<button role="option" aria-selected="${i===hi}" data-hit="${i++}"><span class="dot" style="background:${h.sig?DL_COL[h.sig]:"#0C2340"}"></span><span>${esc(h.label)}</span><small>${esc(h.sub)}</small></button>`).join("")}
+  res.innerHTML=html||`<div style="padding:8px;color:var(--muted);font-size:14px">No matching terms${MODE==="learn"?"":" or companies"}</div>`;
   res.classList.add("open");
 }
 q.addEventListener("input",search);
 q.addEventListener("keydown",e=>{
   if(!res.classList.contains("open")||!hits.length){if(e.key==="Escape")q.blur();return}
-  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();hi=(hi+(e.key==="ArrowDown"?1:-1)+hits.length)%hits.length;[...res.children].forEach((b,i)=>b.setAttribute("aria-selected",String(i===hi)))}
-  if(e.key==="Enter"){e.preventDefault();pick(hits[hi].id)}
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();hi=(hi+(e.key==="ArrowDown"?1:-1)+hits.length)%hits.length;res.querySelectorAll("[data-hit]").forEach(b=>b.setAttribute("aria-selected",String(+b.dataset.hit===hi)))}
+  if(e.key==="Enter"){e.preventDefault();pickHit(hits[hi])}
   if(e.key==="Escape")res.classList.remove("open");
 });
+function pickHit(h){if(!h)return;if(h.kind==="term")pick(h.id);else{res.classList.remove("open");q.blur();if(state.view!=="deals"){DS.sec="all";DS.reg="all"}if(h.id.startsWith("i:"))DS.tab="map";setView("deals");setHash("deals");dlSelect(h.id)}}
 function pick(id){res.classList.remove("open");q.blur();if(state.view==="chains")setView("graph");state.studyList=null;selectTerm(id)}
-res.addEventListener("mousedown",e=>{const b=e.target.closest("[data-pick]");if(b){e.preventDefault();pick(b.dataset.pick)}});
+res.addEventListener("mousedown",e=>{const b=e.target.closest("[data-hit]");if(b){e.preventDefault();pickHit(hits[+b.dataset.hit])}});
 q.addEventListener("blur",()=>setTimeout(()=>res.classList.remove("open"),120));
 q.addEventListener("focus",()=>{if(q.value.trim())search()});
 document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();q.focus();q.select()}});
@@ -1499,9 +1585,15 @@ function renderMarkets(){
 }
 function renderDir(){
   const el=document.getElementById("dir"),D=DESK,t=state.dirTab||"global",q=(state.dirQ||"").toLowerCase();
-  const tabs=[["global","Global top 15"],["india","India top 10"],["fo","Family offices"]];
+  const tabs=[["global","Global top 15"],["india","India top 10"],["fo","Family offices"],["backers","Deal backers"]];
   let rows="",head="";
-  if(t==="fo"){
+  if(t==="backers"){
+    if(!DS.data)dlLoad();
+    const list=Object.keys(DL_BYINV).filter(i=>DL_BYINV[i].length>=2&&(!q||i.toLowerCase().includes(q))).sort((a,b)=>DL_BYINV[b].length-DL_BYINV[a].length).slice(0,80);
+    head="<th>Backer</th><th>Companies</th><th>A · B · C · D</th><th>Links</th>";
+    rows=DS.data?list.map(i=>{const cs=DL_BYINV[i].map(id=>DEALS[id]);const m=["A","B","C","D"].map(x=>cs.filter(c=>c.sig===x).length).join(" · ");
+      return `<tr><td data-l="Backer"><button class="dl-rowbtn" data-dl-inv="${esc(i)}">${esc(i)}</button></td><td data-l="Companies" class="num">${cs.length}</td><td data-l="By signal" class="num">${m}</td><td data-l="Links"><span><button class="tlink" data-dl-inv="${esc(i)}">Show on map</button> ${ext(gnews('"'+i+'"'),"News","newslink")}</span></td></tr>`}).join(""):`<tr><td colspan="4" class="muted">Loading deals…</td></tr>`;
+  }else if(t==="fo"){
     const list=D.fo.filter(r=>!q||(r.name+" "+r.family+" "+r.hq).toLowerCase().includes(q));
     head="<th>Family office</th><th>Family / wealth source</th><th>HQ</th><th>Est. scale*</th><th>Links</th>";
     rows=list.map(r=>`<tr><td data-l="Family office"><b>${esc(r.name)}</b></td><td data-l="Family">${esc(r.family)}</td><td data-l="HQ">${esc(r.hq)}</td><td data-l="Scale" class="num">${esc(r.scale)}</td><td data-l="Links"><span>${r.site?ext(r.site,"Site")+" · ":""}${ext(gnews('"'+(r.q||r.name.split(" / ")[0])+'"'),"News","newslink")}</span></td></tr>`).join("");
@@ -1516,7 +1608,7 @@ function renderDir(){
     <div class="subtabs" role="group" aria-label="Directory">${tabs.map(x=>`<button data-dt="${x[0]}" aria-pressed="${t===x[0]}">${x[1]}</button>`).join("")}</div>
     <input class="dsearch" id="dq" type="search" placeholder="Search by name, family or region" value="${esc(state.dirQ||"")}" aria-label="Search directory">
     <div class="rtable"><table><thead><tr>${head}</tr></thead><tbody>${rows||`<tr><td colspan="6" class="muted">No matches.</td></tr>`}</tbody></table></div>
-    <p class="note">${t==="fo"?"*Indicative estimates of family wealth or managed assets from public rankings; family offices rarely disclose. ":"AUM figures are approximate latest-reported totals. "}"News" opens a live Google News search. ${tlink(byId["family-office"])} ${tlink(byId["lp"])}</p>`;
+    <p class="note">${t==="backers"?"Investors and grant bodies named in the Deals research, with at least two companies. A · B · C · D counts companies by funding signal. ":t==="fo"?"*Indicative estimates of family wealth or managed assets from public rankings; family offices rarely disclose. ":"AUM figures are approximate latest-reported totals. "}"News" opens a live Google News search. ${tlink(byId["family-office"])} ${tlink(byId["lp"])}</p>`;
   el.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{state.dirTab=b.dataset.dt;renderDir()});
   const inp=el.querySelector("#dq");inp.oninput=()=>{state.dirQ=inp.value;const p=inp.selectionStart;renderDir();const n=document.getElementById("dq");n.focus();n.setSelectionRange(p,p)};
 }
@@ -1526,6 +1618,242 @@ function renderLibrary(){
     <p class="lead">Standards bodies, regulators and reading. The Legal tab lists the specific laws and guidelines behind each rule.</p>
     <div class="lgrid">${DESK.library.map(g=>`<div class="box"><h3>${esc(g.g)}</h3>${g.l.map(l=>`<div class="lib">${ext(l[1],esc(l[0]))}</div>`).join("")}</div>`).join("")}</div>`;
 }
+
+/* ---------- Deals: pipeline, linkage map, coverage ---------- */
+const DL_SECTORS=[["health","Healthcare"],["deeptech","Deeptech"],["ai","AI"],["maritime","Maritime"],["aero","Aerospace"],["defence","Defence"]];
+const DL_REGIONS=[["eu","EU"],["uk","UK"],["weu","Switzerland & Norway"],["usa","USA"],["asia","Asia"],["apac","APAC"],["em","Emerging markets"],["mideast","Middle East"],["africa","Africa"]];
+const DL_SIG={A:"A · Actively raising",B:"B · Due to raise",C:"C · Recently funded",D:"D · Grant-funded"};
+const DL_SHORT={A:"A · Raising",B:"B · Due",C:"C · Funded",D:"D · Grant"};
+const DL_COL={A:"#2F6DB5",B:"#C2560C",C:"#2F7D55",D:"#6D4AA8"};
+const DS={data:null,loading:false,err:false,tab:["pipeline","map","coverage"].includes(QS.get("tab"))?QS.get("tab"):"pipeline",stage:"all",launch:false,sec:"all",reg:"all",sig:"all",q:"",checked:false,limit:50,sel:null,minDeg:6,graph:null,gkey:"",zoom:1,cx:550,cy:360};
+let DEALS=[],DL_BYINV={};
+function dlLoad(){
+  if(DS.data||DS.loading)return;DS.loading=true;
+  fetch("data/deals.json").then(r=>{if(!r.ok)throw new Error("deals");return r.json()}).then(d=>{
+    DS.data=d;DEALS=d.companies;DL_BYINV={};
+    DEALS.forEach(c=>c.inv.forEach(i=>{(DL_BYINV[i]=DL_BYINV[i]||[]).push(c.id)}));
+    DS.loading=false;if(state.view==="deals")renderDeals();if(state.view==="dir"&&state.dirTab==="backers")renderDir();if(state.selected&&state.view!=="deals")renderTerm(state.selected);
+  }).catch(()=>{DS.loading=false;DS.err=true;if(state.view==="deals")renderDeals()});
+}
+const dlName=(list,k)=>(list.find(x=>x[0]===k)||[k,k])[1];
+const dlIn=(c,sec,reg)=>(sec==="all"||c.sec===sec)&&(reg==="all"||c.reg.includes(reg));
+function dlBase(){return DEALS.filter(c=>dlIn(c,DS.sec,DS.reg))}
+function dlFiltered(){
+  const q=DS.q.trim().toLowerCase();
+  return dlBase().filter(c=>(DS.sig==="all"||c.sig===DS.sig)&&(DS.stage==="all"||(c.st||"Unknown")===DS.stage)&&(!DS.launch||c.pl)&&(!DS.checked||c.ck==="Confirmed"||c.ck==="Corrected")&&
+    (!q||(c.n+" "+c.ni+" "+c.s+" "+c.c+" "+c.inv.join(" ")).toLowerCase().includes(q)))
+    .sort((a,b)=>a.sig<b.sig?-1:a.sig>b.sig?1:(b.rd||"").localeCompare(a.rd||""));
+}
+const dlRound=c=>[c.rt,c.ra?"€"+c.ra+"m":"",c.rd].filter(Boolean).join(" · ")||"—";
+const dlSig=s=>`<span class="sig sig-${s}">${esc(DL_SIG[s])}</span>`;
+const DL_STAGE_TERM={"Pre-seed":"funding-stages","Seed":"funding-stages","Series A":"funding-stages","Series B":"funding-stages","Series C+":"funding-stages","Growth":"growth-equity","Grant-funded only":"non-dilutive-funding"};
+const DL_STAGES=["Pre-seed","Seed","Series A","Series B","Series C+","Growth","Grant-funded only","Unknown"];
+function dlScope(){return (DS.sec==="all"?"All sectors":dlName(DL_SECTORS,DS.sec))+" · "+(DS.reg==="all"?"All regions":dlName(DL_REGIONS,DS.reg))}
+
+function renderDeals(){
+  const el=document.getElementById("deals");
+  dlLoad();
+  const head=`<h2 class="sec-title">Deals</h2>
+    <p class="lead">Companies raising or due to raise, by sector and region, with a signal for how close they are to a round. Research so far: European healthcare, plus deeptech, AI, aerospace, maritime and defence across Europe, the USA, Asia-Pacific, the Middle East, Latin America and Africa (runs of 20 Nov 2026). Rows marked Not checked are leads until verified. Empty cells fill in as research runs cover them.</p>`;
+  if(!DS.data){el.innerHTML=head+`<p class="muted">${DS.err?"Could not load the deals data.":"Loading deals…"}</p>`;return}
+  const cnt=(sec,reg)=>DEALS.filter(c=>dlIn(c,sec,reg)).length;
+  const chips=(list,key,cur)=>[["all",key==="sec"?"All sectors":"All regions"]].concat(list).map(([k,l])=>{
+    const n=key==="sec"?cnt(k,DS.reg):cnt(DS.sec,k);
+    return `<button class="dl-chip${n?"":" empty"}" data-dl-${key}="${k}" aria-pressed="${cur===k}">${esc(l)}<small>${n}</small></button>`}).join("");
+  const tabs=[["pipeline","Pipeline"],["map","Linkage map"],["coverage","Coverage"]];
+  el.innerHTML=head+`
+    <div class="dl-filters">
+      <div class="dl-row" role="group" aria-label="Sector"><span>Sector</span>${chips(DL_SECTORS,"sec",DS.sec)}</div>
+      <div class="dl-row" role="group" aria-label="Region"><span>Region</span>${chips(DL_REGIONS,"reg",DS.reg)}</div>
+    </div>
+    <div class="subtabs" role="group" aria-label="Deals view">${tabs.map(t=>`<button data-dl-tab="${t[0]}" aria-pressed="${DS.tab===t[0]}">${t[1]}</button>`).join("")}</div>
+    <div id="dl-body"></div>`;
+  const body=document.getElementById("dl-body");
+  if(DS.tab==="coverage")dlCoverage(body);
+  else if(!dlBase().length)dlEmpty(body);
+  else if(DS.tab==="map")dlMap(body);
+  else dlPipeline(body);
+}
+function dlTermBox(id){
+  if(MODE==="learn")return"";
+  const rx={"convertible-note":/convertible/i,"bridge-round":/bridge/i,"venture-debt":/debt/i};
+  if(!["funding-stages","non-dilutive-funding","growth-equity"].includes(id)&&!rx[id])return"";
+  if(!DS.data){dlLoad();return""}
+  let rows=[];
+  if(id==="funding-stages")rows=DL_STAGES.filter(x=>x!=="Unknown"&&x!=="Grant-funded only").map(x=>[DEALS.filter(c=>c.st===x).length,`data-dl-stage="${esc(x)}"`,x]);
+  else if(id==="non-dilutive-funding")rows=[[DEALS.filter(c=>c.sig==="D").length,'data-dl-gosig="D"',"Grant-funded only"],[DEALS.filter(c=>c.inv.some(i=>/^EIC/.test(i))).length,'data-dl-goq="EIC"',"Backed by the EIC"]];
+  else if(id==="growth-equity")rows=[[DEALS.filter(c=>c.st==="Growth").length,'data-dl-stage="Growth"',"Growth stage"]];
+  else rows=[[DEALS.filter(c=>rx[id].test(c.rt)).length,`data-dl-goq="${id==="venture-debt"?"debt":id.split("-")[0]}"`,"Last round matches"]];
+  rows=rows.filter(r=>r[0]>0);if(!rows.length)return"";
+  return `<h3 style="margin-top:16px">In Deals</h3><div class="links">${rows.map(r=>`<button class="tlink" ${r[1]}>${esc(r[2])} · ${r[0]}</button>`).join("")}</div>`;
+}
+function dlGo(patch){Object.assign(DS,{tab:"pipeline",sig:"all",stage:"all",q:"",reg:"all",limit:50,sel:null},patch);closeSheet();setView("deals");setHash("deals")}
+function dlEmpty(body){
+  body.innerHTML=`<div class="dl-empty"><h3>${esc(dlScope())}: nothing researched yet</h3>
+    <p>This space is ready. When a research run covers it, companies land here with the same signals (actively raising, due to raise, recently funded, grant-funded), the same checks and the same links to their backers.</p>
+    <p>Open Coverage to see which sector and region pairs have data.</p>
+    <button class="btn primary" data-dl-tab="coverage">Open coverage</button></div>`;
+}
+function dlPipeline(body){
+  const base=dlBase(),list=dlFiltered();
+  const k={all:base.length,A:0,B:0,C:0,D:0};base.forEach(c=>k[c.sig]++);
+  const kp=[["all","All companies"],["A","Actively raising"],["B","Due to raise"],["C","Recently funded"],["D","Grant-funded"]];
+  body.innerHTML=`
+    <div class="dl-kpis">${kp.map(([s,l])=>`<button class="dl-kpi" data-dl-sig="${s}" aria-pressed="${DS.sig===s}"><b>${k[s].toLocaleString("en-GB")}</b><span>${l}</span></button>`).join("")}</div>
+    <div class="dl-tools">
+      <input class="dsearch" id="dl-q" type="search" placeholder="Search company, niche, country or investor" value="${esc(DS.q)}" aria-label="Search deals">
+      <label for="dl-st">Stage <select id="dl-st" class="dsearch" style="width:auto;margin:0;padding:6px 8px">${["all"].concat(DL_STAGES).map(x=>`<option value="${esc(x)}" ${DS.stage===x?"selected":""}>${x==="all"?"All stages":esc(x)}</option>`).join("")}</select></label>
+      <label><input type="checkbox" id="dl-ck" ${DS.checked?"checked":""}> Verified rows only</label>
+      <label><input type="checkbox" id="dl-pl" ${DS.launch?"checked":""}> Launched a product in 2026</label>
+      <span class="dl-sub">${list.length.toLocaleString("en-GB")} shown</span>
+    </div>
+    <div class="rtable"><table><thead><tr><th>Company</th><th>Country</th><th>Sector</th><th>Stage</th><th>Last round</th><th>Signal</th><th>Checked</th></tr></thead><tbody>
+    ${list.slice(0,DS.limit).map(c=>`<tr class="${DS.sel==="c:"+c.id?"on":""}">
+      <td data-l="Company"><button class="dl-rowbtn" data-dl-co="${c.id}">${esc(c.n)}</button><div class="dl-sub">${esc(c.ni||"")}${c.pl?` <span class="dl-launch" title="${esc(c.pl)}">New product</span>`:""}</div></td>
+      <td data-l="Country">${esc(c.c||"—")}</td>
+      <td data-l="Sector">${esc(dlName(DL_SECTORS,c.sec))}<div class="dl-sub">${esc(c.s)}</div></td>
+      <td data-l="Stage">${esc(c.st||"—")}</td>
+      <td data-l="Last round" class="num">${esc(dlRound(c))}</td>
+      <td data-l="Signal"><span class="sig sig-${c.sig}" title="${esc(DL_SIG[c.sig])}">${esc(DL_SHORT[c.sig])}</span></td>
+      <td data-l="Checked">${esc(c.ck)}</td></tr>`).join("")||`<tr><td colspan="7" class="muted">No matches.</td></tr>`}
+    </tbody></table></div>
+    ${list.length>DS.limit?`<p><button class="btn" id="dl-more">Show 50 more</button></p>`:""}
+    <p class="note">Signals come from the 20 Nov research run. Only rows marked Confirmed or Corrected were checked against sources; treat "Actively raising" rows marked Weak or Not checked as leads, not facts.</p>`;
+  const inp=document.getElementById("dl-q");
+  inp.oninput=()=>{DS.q=inp.value;DS.limit=50;const p=inp.selectionStart;renderDeals();const n=document.getElementById("dl-q");n.focus();n.setSelectionRange(p,p)};
+  document.getElementById("dl-st").onchange=e=>{DS.stage=e.target.value;DS.limit=50;renderDeals()};
+  document.getElementById("dl-pl").onchange=e=>{DS.launch=e.target.checked;DS.limit=50;renderDeals()};
+  document.getElementById("dl-ck").onchange=e=>{DS.checked=e.target.checked;DS.limit=50;renderDeals()};
+  const m=document.getElementById("dl-more");if(m)m.onclick=()=>{DS.limit+=50;renderDeals()};
+}
+function dlCoverage(body){
+  const rows=DL_SECTORS.map(([sk,sl])=>`<tr><th scope="row">${esc(sl)}</th>${DL_REGIONS.map(([rk,rl])=>{
+    const n=DEALS.filter(c=>dlIn(c,sk,rk)).length;
+    return `<td><button class="dl-cell${n?"":" none"}" data-dl-cell="${sk}|${rk}" aria-label="${esc(sl)} in ${esc(rl)}: ${n?n+" companies":"not researched yet"}"><b>${n?n:"—"}</b><span>${n?"companies":"not researched"}</span></button></td>`}).join("")}</tr>`).join("");
+  body.innerHTML=`<p class="lead" style="margin-top:0">Each cell is a sector in a region. Click one to open its pipeline. Empty cells are space waiting for a research run.</p>
+    <div class="rtable" style="overflow-x:auto"><table class="dl-mx"><thead><tr><th>Sector</th>${DL_REGIONS.map(r=>`<th>${esc(r[1])}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="note">Regions overlap: a company in India counts under Asia, APAC and Emerging markets; one in the UAE under Middle East and Emerging markets. Israel counts under Middle East only (MSCI classes it as developed). Poland, Hungary and Greece count under both EU and Emerging markets.</p>`;
+}
+
+/* Linkage map: companies joined to the investors and grant bodies behind them */
+function dlLayout(){
+  const key=[DS.sec,DS.reg,DS.minDeg].join("|");
+  if(DS.graph&&DS.gkey===key)return DS.graph;
+  const cs=dlBase(),deg={};
+  cs.forEach(c=>c.inv.forEach(i=>{deg[i]=(deg[i]||0)+1}));
+  const hubs=Object.keys(deg).filter(i=>deg[i]>=DS.minDeg),hubSet=new Set(hubs);
+  const nodes=[],idx={},edges=[],R=rng(11),W=1100,H=720;
+  hubs.forEach((h,k)=>{const a=k/Math.max(1,hubs.length)*Math.PI*2;idx["i:"+h]=nodes.length;nodes.push({key:"i:"+h,type:"inv",label:h,deg:deg[h],x:W/2+Math.cos(a)*260,y:H/2+Math.sin(a)*220,vx:0,vy:0})});
+  cs.forEach(c=>{const mine=c.inv.filter(i=>hubSet.has(i));if(!mine.length)return;const an=nodes[idx["i:"+mine[0]]];
+    idx["c:"+c.id]=nodes.length;nodes.push({key:"c:"+c.id,type:"co",cid:c.id,label:c.n,sig:c.sig,deg:mine.length,x:an.x+(R()-.5)*60,y:an.y+(R()-.5)*60,vx:0,vy:0});
+    mine.forEach(i=>edges.push([idx["i:"+i],nodes.length-1]))});
+  const n=nodes.length;
+  for(let it=0;it<260;it++){const t=1-it/260;
+    for(let a=0;a<n;a++){const A=nodes[a];for(let b=a+1;b<n;b++){const B=nodes[b];let dx=A.x-B.x,dy=A.y-B.y,d2=dx*dx+dy*dy;if(d2>40000)continue;if(d2<1){dx=R()-.5;dy=R()-.5;d2=1}
+      const f=90*(A.type==="inv"?3:1)*(B.type==="inv"?3:1)/d2;A.vx+=dx*f;A.vy+=dy*f;B.vx-=dx*f;B.vy-=dy*f}}
+    edges.forEach(([i,j])=>{const A=nodes[i],B=nodes[j],dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1,k=(d-34)*.02;A.vx+=dx/d*k*.3;A.vy+=dy/d*k*.3;B.vx-=dx/d*k;B.vy-=dy/d*k});
+    nodes.forEach(N=>{N.vx+=(W/2-N.x)*.004;N.vy+=(H/2-N.y)*.004;const cap=12*t+.5;N.vx=Math.max(-cap,Math.min(cap,N.vx));N.vy=Math.max(-cap,Math.min(cap,N.vy));N.x+=N.vx;N.y+=N.vy;N.vx*=.55;N.vy*=.55})}
+  const adj=nodes.map(()=>[]);edges.forEach(([i,j])=>{adj[i].push(j);adj[j].push(i)});
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;nodes.forEach(N=>{x0=Math.min(x0,N.x);y0=Math.min(y0,N.y);x1=Math.max(x1,N.x);y1=Math.max(y1,N.y)});
+  if(!nodes.length){x0=0;y0=0;x1=W;y1=H}
+  const pad=40,bw=Math.max(x1-x0+pad*2,400),bh=Math.max(y1-y0+pad*2,300),ar=W/H;
+  let vw=bw,vh=bh;if(vw/vh>ar)vh=vw/ar;else vw=vh*ar;
+  const box={cx:(x0+x1)/2,cy:(y0+y1)/2,w:vw,h:vh};
+  DS.graph={nodes,edges,adj,idx,box};DS.gkey=key;return DS.graph;
+}
+function dlMap(body){
+  const G=dlLayout(),selI=DS.sel!=null&&G.idx[DS.sel]!=null?G.idx[DS.sel]:-1,has=selI>=0,near={};
+  if(has){near[selI]=2;G.adj[selI].forEach(j=>near[j]=1)}
+  const sc=Math.max(1,G.box.w/1100/Math.sqrt(DS.zoom));
+  const rad=N=>(N.type==="inv"?5+Math.sqrt(N.deg)*2.2:3.6+(N.deg>1?1.4:0))*sc;
+  const ed=G.edges.map(([i,j])=>{const A=G.nodes[i],B=G.nodes[j],hot=has&&(i===selI||j===selI);
+    return `<line x1="${A.x.toFixed(1)}" y1="${A.y.toFixed(1)}" x2="${B.x.toFixed(1)}" y2="${B.y.toFixed(1)}" stroke="${hot?"#C5A059":"#9AA3AE"}" stroke-width="${((hot?1.8:.7)*sc).toFixed(2)}" opacity="${hot?.95:has?.06:.3}"/>`}).join("");
+  const nd=G.nodes.map((N,k)=>{const r=rad(N)+(near[k]===2?3*sc:0),inv=N.type==="inv";
+    return `<circle class="dl-node" data-dl-node="${esc(N.key)}" cx="${N.x.toFixed(1)}" cy="${N.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${inv?"#0C2340":DL_COL[N.sig]}" stroke="${near[k]===2?"#C5A059":inv?"#C5A059":"#fff"}" stroke-width="${((near[k]===2?3:1)*sc).toFixed(1)}" opacity="${has&&!near[k]?.12:1}"><title>${esc(N.label+(inv?" · "+N.deg+" companies":""))}</title></circle>`}).join("");
+  const lb=G.nodes.map((N,k)=>{const show=has?!!near[k]:(N.type==="inv"&&N.deg>=Math.max(DS.minDeg+4,10));if(!show)return"";const inv=N.type==="inv";
+    return `<text x="${N.x.toFixed(1)}" y="${(N.y-rad(N)-5).toFixed(1)}" text-anchor="middle" font-size="${((inv?12:10)*sc).toFixed(1)}" font-weight="${inv?700:500}" fill="#0C2340" stroke="#FCFBF8" stroke-width="${(3*sc).toFixed(1)}" paint-order="stroke" style="pointer-events:none;font-family:var(--body)">${esc(N.label.length>28?N.label.slice(0,27)+"…":N.label)}</text>`}).join("");
+  const w=G.box.w/DS.zoom,h=G.box.h/DS.zoom,cx=DS.zoom===1?G.box.cx:DS.cx,cy=DS.zoom===1?G.box.cy:DS.cy;
+  const invs=G.nodes.filter(N=>N.type==="inv").length;
+  body.innerHTML=`
+    <div class="dl-tools">
+      <label for="dl-deg">Investors with at least <b id="dl-degv">${DS.minDeg}</b> companies</label>
+      <input id="dl-deg" type="range" min="2" max="15" step="1" value="${DS.minDeg}" style="accent-color:var(--navy)">
+      <span class="dl-sub">${invs} backers · ${G.nodes.length-invs} companies · ${G.edges.length} links. Click a node; its details open in the panel.</span>
+    </div>
+    <div class="dl-mapwrap">
+      <svg viewBox="${(cx-w/2).toFixed(0)} ${(cy-h/2).toFixed(0)} ${w.toFixed(0)} ${h.toFixed(0)}" role="img" aria-label="Network of ${invs} investors and ${G.nodes.length-invs} companies. The panel and the pipeline list give the same information in text."><rect x="-4000" y="-4000" width="9000" height="9000" fill="#FCFBF8" data-dl-clear="1"/>${ed}${nd}${lb}</svg>
+      <div class="zoom"><button id="dl-zin" aria-label="Zoom in">+</button><button id="dl-zout" aria-label="Zoom out">–</button><button id="dl-zfit" aria-label="Reset view" style="font-size:12px">Fit</button></div>
+      <div class="dl-legend"><span><i style="background:#0C2340;box-shadow:0 0 0 1px #C5A059"></i>Investor / grant body</span>${["A","B","C","D"].map(s=>`<span><i style="background:${DL_COL[s]}"></i>${s}</span>`).join("")}</div>
+    </div>`;
+  const dg=document.getElementById("dl-deg");
+  dg.oninput=()=>{document.getElementById("dl-degv").textContent=dg.value};
+  dg.onchange=()=>{DS.minDeg=+dg.value;DS.sel=null;renderDeals()};
+  document.getElementById("dl-zin").onclick=()=>{if(DS.zoom===1){DS.cx=G.box.cx;DS.cy=G.box.cy}DS.zoom=Math.min(6,DS.zoom*1.5);renderDeals()};
+  document.getElementById("dl-zout").onclick=()=>{if(DS.zoom===1){DS.cx=G.box.cx;DS.cy=G.box.cy}DS.zoom=Math.max(.6,DS.zoom/1.5);renderDeals()};
+  document.getElementById("dl-zfit").onclick=()=>{DS.zoom=1;DS.sel=null;renderDeals();dlPanelTop()};
+  if(DS.sel==null)dlPanelTop();
+}
+function dlPanelTop(){
+  const G=dlLayout(),top=G.nodes.filter(N=>N.type==="inv").sort((a,b)=>b.deg-a.deg).slice(0,12);
+  document.getElementById("panel").innerHTML=`<p class="pill">Deals · linkage map</p><h2>Most connected backers</h2>
+    <p class="muted" style="font-size:14px">${esc(dlScope())}. Pick one to light up its portfolio.</p>
+    <div class="dl-list">${top.map(N=>`<button class="dl-li" data-dl-node="${esc(N.key)}"><span><b>${esc(N.label)}</b></span><small>${N.deg} companies</small></button>`).join("")||`<p class="muted">No backer reaches the threshold. Lower the slider.</p>`}</div>`;
+}
+function dlSelect(key,fromMap){
+  DS.sel=key;
+  const P=document.getElementById("panel");
+  if(key.startsWith("c:")){
+    const c=DEALS[+key.slice(2)];if(!c)return;
+    const lm={};c.inv.forEach(i=>(DL_BYINV[i]||[]).forEach(id=>{if(id!==c.id)(lm[id]=lm[id]||[]).push(i)}));
+    const lids=Object.keys(lm).sort((a,b)=>lm[b].length-lm[a].length);
+    const tids=[...new Set([DL_STAGE_TERM[c.st],c.sig==="D"?"non-dilutive-funding":"",/convertible/i.test(c.rt)?"convertible-note":"",/bridge/i.test(c.rt)?"bridge-round":"",/debt/i.test(c.rt)?"venture-debt":""].filter(Boolean))];
+    const term=tids.map(t=>tlink(byId[t])).join(" ");
+    const web=c.web?(c.web.startsWith("http")?c.web:"https://"+c.web):"";
+    P.innerHTML=`<p class="pill">Deals · ${esc(dlName(DL_SECTORS,c.sec))}</p><h2>${esc(c.n)}</h2>
+      <p style="margin:4px 0">${dlSig(c.sig)}</p>
+      <p class="muted" style="font-size:14px;margin:6px 0">${esc([c.city,c.c].filter(Boolean).join(", ")||"Location not recorded")}${c.ni?" · "+esc(c.ni):""}</p>
+      <div class="dl-facts"><div><small>Subsector</small><b>${esc(c.s)}</b></div><div><small>Stage</small><b>${esc(c.st||"Unknown")}</b></div>
+        <div><small>Last round</small><b>${esc(dlRound(c))}</b></div><div><small>Total raised</small><b>${c.tr?"€"+esc(c.tr)+"m":"Not recorded"}</b></div></div>
+      ${c.pl?`<div class="box" style="margin-bottom:10px"><h3>2026 product launch</h3><p style="margin:0;font-size:14px">${esc(c.pl)}</p></div>`:""}
+      <div class="box"><h3>Why this signal</h3><p style="margin:0;font-size:14px">${esc(c.ev||"No note recorded.")}</p><p class="muted" style="margin:6px 0 0;font-size:12.5px">Checked: ${esc(c.ck)}</p></div>
+      <div class="box" style="margin-top:10px"><h3>Backers</h3>${c.inv.length?`<div class="gchips">${c.inv.map(i=>`<button class="gchip" data-dl-inv="${esc(i)}">${esc(i)}</button>`).join("")}</div>`:`<p class="muted" style="margin:0">None recorded.</p>`}
+        <p class="muted" style="margin:6px 0 0;font-size:12.5px">CEO / founder: ${esc(c.ceo||"Not recorded")}</p></div>
+      <div class="box" style="margin-top:10px"><h3>${lids.length?lids.length+" companies share a backer":"No shared backers in the data"}</h3><div class="dl-list">${lids.slice(0,6).map(id=>{const o=DEALS[id];return `<button class="dl-li" data-dl-co="${o.id}"><span><b>${esc(o.n)}</b><small>via ${esc(lm[id].join(", "))}</small></span>${dlSig(o.sig)}</button>`}).join("")}</div></div>
+      ${term?`<div class="box" style="margin-top:10px"><h3>In the terms graph</h3>${term}</div>`:""}
+      <p style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px;font-size:14px">${ext(c.src,"Source")}${web?ext(web,"Website"):""}${ext(gnews('"'+c.n+'"'),"News","newslink")}</p>`;
+  }else{
+    const name=key.slice(2),ids=(DL_BYINV[name]||[]).filter(id=>dlIn(DEALS[id],DS.sec,DS.reg)),cos=ids.map(id=>DEALS[id]).sort((a,b)=>a.sig.localeCompare(b.sig));
+    const co={};cos.forEach(c=>c.inv.forEach(i=>{if(i!==name)co[i]=(co[i]||0)+1}));
+    const cob=Object.keys(co).sort((a,b)=>co[b]-co[a]).slice(0,4);
+    P.innerHTML=`<p class="pill">Deals · investor / grant body</p><h2>${esc(name)}</h2>
+      <p class="muted" style="font-size:14px">${cos.length} companies in ${esc(dlScope())}.${cob.length?" Most frequent co-backers: "+esc(cob.join(", "))+".":""}</p>
+      <div class="dl-mix">${["A","B","C","D"].map(s=>`<div class="sig-${s}"><b>${cos.filter(c=>c.sig===s).length}</b>${s}</div>`).join("")}</div>
+      <div class="dl-list">${cos.map(c=>`<button class="dl-li" data-dl-co="${c.id}"><span><b>${esc(c.n)}</b><small>${esc([c.c,c.s,c.st].filter(Boolean).join(" · "))}</small></span>${dlSig(c.sig)}</button>`).join("")}</div>
+      <p style="margin-top:12px;font-size:14px">${ext(gnews('"'+name+'"'),"News","newslink")}</p>`;
+  }
+  const G=DS.tab==="map"?dlLayout():null;
+  if(G&&G.idx[key]!=null&&DS.zoom>1){DS.cx=G.nodes[G.idx[key]].x;DS.cy=G.nodes[G.idx[key]].y}
+  if(state.view==="deals")renderDeals();
+  document.getElementById("panel").scrollTop=0;openSheet();
+}
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-dl-stage],[data-dl-gosig],[data-dl-goq]");
+  if(g){const d=g.dataset;if(d.dlStage)dlGo({stage:d.dlStage});else if(d.dlGosig)dlGo({sig:d.dlGosig});else dlGo({q:d.dlGoq});return}
+  const t=e.target.closest("[data-dl-sec],[data-dl-reg],[data-dl-tab],[data-dl-sig],[data-dl-cell],[data-dl-co],[data-dl-node],[data-dl-inv],[data-dl-clear]");
+  if(!t)return;const d=t.dataset;
+  if(d.dlSec){DS.sec=d.dlSec;DS.sel=null;DS.limit=50;DS.zoom=1;renderDeals();if(DS.tab==="map")dlPanelTop();return}
+  if(d.dlReg){DS.reg=d.dlReg;DS.sel=null;DS.limit=50;DS.zoom=1;renderDeals();if(DS.tab==="map")dlPanelTop();return}
+  if(d.dlTab){DS.tab=d.dlTab;renderDeals();return}
+  if(d.dlSig){DS.sig=d.dlSig;DS.limit=50;renderDeals();return}
+  if(d.dlCell){const [s,r]=d.dlCell.split("|");DS.sec=s;DS.reg=r;DS.tab="pipeline";DS.sel=null;DS.limit=50;renderDeals();return}
+  if(d.dlCo!=null){dlSelect("c:"+d.dlCo);return}
+  if(d.dlNode){dlSelect(d.dlNode,true);return}
+  if(d.dlInv){const k="i:"+d.dlInv;if(DS.tab!=="map")DS.tab="map";if(state.view!=="deals")setView("deals");dlSelect(k);return}
+  if(d.dlClear){DS.sel=null;renderDeals();dlPanelTop()}
+});
+
+window.addEventListener("message",e=>{if(e.origin!==location.origin||!e.data||!e.data.fdDealsTab)return;
+  if(!["pipeline","map","coverage"].includes(e.data.fdDealsTab))return;DS.tab=e.data.fdDealsTab;if(state.view!=="deals")setView("deals");else renderDeals()});
 
 /* ---------- Mobile sheet ---------- */
 const asideEl=document.querySelector("aside"),backdrop=document.getElementById("backdrop");
@@ -1576,6 +1904,7 @@ function fromHash(){
 window.addEventListener("hashchange",()=>{if(ready)fromHash()});
 renderIntro();
 load();
+if(MODE!=="learn")setTimeout(dlLoad,400);
 </script>
 </body>
 </html>
