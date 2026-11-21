@@ -1,5 +1,5 @@
 {
-"asof": "18 November 2026",
+"asof": "21 November 2026",
 "sources": [
 {"id":"credit","name":"PEI Private Credit","tag":"Private credit","url":"https://www.pei-privatecredit.com/news-analysis/","items":[
  {"t":"Bain holds first close on Asia special sits fund at $1.81bn","u":"https://www.pei-privatecredit.com/bain-holds-first-close-on-asia-special-sits-fund-at-1-81bn/","d":"16 Nov 2026","r":"asia"},
@@ -18,39 +18,53 @@
  {"t":"In for the long haul: Behind CVC's single-asset deal for RAC","u":"https://www.pei-secondariesinvestor.com/in-for-the-long-haul-behind-cvcs-single-asset-deal-for-rac/","d":"11 Nov 2026","r":"eu"}
 ]},
 {"id":"venture","name":"PEI Venture Capital","tag":"Venture","url":"https://www.privateequityinternational.com/venture-capital/news-analysis/","items":[
+ {"t":"Fundraising time on the road: The strategies and regions leading the pack","u":"https://www.privateequityinternational.com/fundraising-time-on-the-road-the-strategies-and-regions-leading-the-pack/","d":"19 Nov 2026"},
+ {"t":"Spark Capital poised to see about 12x return on $777m Anthropic bet","u":"https://www.privateequityinternational.com/spark-capital-poised-to-see-about-12x-return-on-777m-anthropic-bet/","d":"18 Nov 2026"},
+ {"t":"Rapid advance of AI prompts construction giant Taisei to team with Pegasus","u":"https://www.privateequityinternational.com/rapid-advance-of-ai-prompts-construction-giant-taisei-to-team-with-pegasus/","d":"18 Nov 2026","r":"asia"},
  {"t":"Serena Williams aims for $200m for new firm Starfire Ventures","u":"https://www.privateequityinternational.com/serena-williams-aims-for-200m-for-new-firm-starfire-ventures/","d":"17 Nov 2026"},
  {"t":"LP Better Society Capital looks to healthcare VC","u":"https://www.privateequityinternational.com/better-society-capital-looks-to-healthcare-vc/","d":"16 Nov 2026","r":"eu"},
- {"t":"Solar draws fresh capital as data centers strain the grid","u":"https://www.privateequityinternational.com/solar-draws-fresh-capital-as-data-centers-strain-the-grid/","d":"13 Nov 2026"},
- {"t":"Zacua's oversubscribed Fund II is all-in on automating construction worksites","u":"https://www.privateequityinternational.com/zacuas-oversubscribed-fund-ii-is-all-in-on-automating-construction-worksites/","d":"12 Nov 2026"},
- {"t":"NVP Capital holds first close on Fund III to back companies in critical industries","u":"https://www.privateequityinternational.com/nvp-capital-holds-first-close-on-fund-iii-to-back-companies-in-critical-industries/","d":"11 Nov 2026"},
- {"t":"First In's new partner brings CIA insights to defense tech","u":"https://www.privateequityinternational.com/first-ins-new-partner-brings-cia-insights-to-defense-tech/","d":"9 Nov 2026"}
+ {"t":"Brightmind’s secret sauce is active product engagement","u":"https://www.privateequityinternational.com/brightminds-secret-sauce-is-active-product-engagement/","d":"16 Nov 2026"},
+ {"t":"Zacua’s oversubscribed Fund II is all-in on automating construction worksites","u":"https://www.privateequityinternational.com/zacuas-oversubscribed-fund-ii-is-all-in-on-automating-construction-worksites/","d":"12 Nov 2026"},
+ {"t":"NVP Capital holds first close on Fund III to back companies in critical industries","u":"https://www.privateequityinternational.com/nvp-capital-holds-first-close-on-fund-iii-to-back-companies-in-critical-industries/","d":"11 Nov 2026"}
 ]},
 {"id":"pe","name":"Private Equity International","tag":"Private equity","url":"https://www.privateequityinternational.com/","items":[
- {"t":"Stacking up: How PE performs in each region","u":"https://www.privateequityinternational.com/stacking-up-how-pe-performs-in-each-region/","d":"10 Nov 2026"},
- {"t":"How secondaries are reshaping fund operations","u":"https://www.privateequityinternational.com/how-secondaries-are-reshaping-fund-operations/","d":"9 Nov 2026"},
- {"t":"Data snapshot: Top 10 funds as % of total fundraising","u":"https://www.privateequityinternational.com/the-largest-funds-take-a-growing-share-of-total-pe-fundraising/","d":"29 Oct 2026"},
- {"t":"Hamilton Lane's Hirsch: Private markets industry has too many GPs","u":"https://www.privateequityinternational.com/hamilton-lanes-hirsch-private-markets-industry-has-too-many-gps/","d":"22 Oct 2026"},
- {"t":"The Exit Playbook: Safe landings when exits stall","u":"https://www.privateequityinternational.com/the-exit-playbook-safe-landings-when-exits-stall/","d":"13 Oct 2026"}
+ {"t":"Nordic's re-hold of a smashing asset bucks the CV trend","u":"https://www.privateequityinternational.com/nordics-re-hold-of-a-smashing-asset-bucks-the-cv-trend/","d":"20 Nov 2026","r":"eu"},
+ {"t":"Side Letter: CV red flags","u":"https://www.privateequityinternational.com/side-letter-cv-red-flags/","d":"19 Nov 2026"},
+ {"t":"Charlesbank's former CEO, current managing partner emeritus, resigns","u":"https://www.privateequityinternational.com/charlesbanks-former-ceo-current-managing-partner-emeritus-resigns/","d":"18 Nov 2026"},
+ {"t":"Side Letter: Rainmakers beware","u":"https://www.privateequityinternational.com/side-letter-rainmakers-beware/","d":"18 Nov 2026"},
+ {"t":"Alecta, Schroders weigh defense funds and risks","u":"https://www.privateequityinternational.com/alecta-schroders-weigh-defense-funds-and-risks/","d":"17 Nov 2026","r":"eu"},
+ {"t":"'Don't let retail get the leftovers,' StepStone warns","u":"https://www.privateequityinternational.com/dont-let-retail-get-the-leftovers-stepstone-warns/","d":"17 Nov 2026"},
+ {"t":"Thoma Bravo establishes first APAC office in Hong Kong","u":"https://www.privateequityinternational.com/thoma-bravo-establishes-first-apac-office-in-hong-kong/","d":"17 Nov 2026","r":"asia"},
+ {"t":"Side Letter: Pay-to-play peril","u":"https://www.privateequityinternational.com/side-letter-pay-to-play-peril/","d":"16 Nov 2026"}
 ]},
 {"id":"impact","name":"New Private Markets","tag":"Impact & sustainability","url":"https://www.newprivatemarkets.com/","items":[
- {"t":"How forced labour has become a deals issue and how due diligence misses it","u":"https://www.newprivatemarkets.com/how-forced-labour-has-become-a-deals-issue-and-how-due-diligence-misses-it/","d":"18 Nov 2026"},
+ {"t":"New voices enter the value creation conversation","u":"https://www.newprivatemarkets.com/new-voices-enter-the-value-creation-conversation/","d":"20 Nov 2026"},
+ {"t":"In brief: Ownership Works makes first European hire","u":"https://www.newprivatemarkets.com/in-brief-ownership-works-makes-first-european-hire/","d":"18 Nov 2026","r":"eu"},
+ {"t":"Sustainability pros say they are satisfied, but paid less than deal teams","u":"https://www.newprivatemarkets.com/sustainability-pros-say-they-are-satisfied-but-paid-less-than-deal-teams/","d":"18 Nov 2026"},
  {"t":"GPs identify physical climate risk, people and localisation as overlooked areas","u":"https://www.newprivatemarkets.com/gps-identify-physical-climate-risk-people-and-localisation-as-overlooked-areas/","d":"18 Nov 2026"},
+ {"t":"How forced labour has become a deals issue and how due diligence misses it","u":"https://www.newprivatemarkets.com/how-forced-labour-has-become-a-deals-issue-and-how-due-diligence-misses-it/","d":"18 Nov 2026"},
  {"t":"Sustainability execs at European firms trade salary for carry","u":"https://www.newprivatemarkets.com/sustainability-execs-at-european-firms-trade-salary-for-carry/","d":"17 Nov 2026","r":"eu"},
  {"t":"Danish pension wants 'less metrics and more dialogue' from GPs","u":"https://www.newprivatemarkets.com/danish-pension-wants-less-metrics-and-more-dialogue-from-gps/","d":"17 Nov 2026","r":"eu"},
- {"t":"CGC commits to emerging managers through StepStone","u":"https://www.newprivatemarkets.com/cgc-commits-to-emerging-managers-through-stepstone/","d":"17 Nov 2026"},
- {"t":"PRI, ERM partner on healthcare sustainability value creation guidance","u":"https://www.newprivatemarkets.com/pri-erm-partner-on-healthcare-sustainability-value-creation-guidance/","d":"17 Nov 2026"}
+ {"t":"Data snapshot: Where sustainability professionals cut their teeth","u":"https://www.newprivatemarkets.com/data-snapshot-where-sustainability-professionals-cut-their-teeth/","d":"17 Nov 2026"}
 ]},
 {"id":"esma","name":"ESMA","tag":"Regulation","url":"https://www.esma.europa.eu/press-news/esma-news","items":[
  {"t":"EU seeks nominations for stakeholder group on tokenisation standards in finance","u":"https://www.esma.europa.eu/press-news/esma-news/eu-seeks-nominations-stakeholder-group-tokenisation-standards-finance","d":"9 Nov 2026","r":"eu"},
  {"t":"ESMA proposes simpler EU Taxonomy reporting","u":"https://www.esma.europa.eu/press-news/esma-news/esma-proposes-simpler-eu-taxonomy-reporting","d":"29 Oct 2026","r":"eu"},
  {"t":"ESMA streamlines several Q&As as part of simplification efforts","u":"https://www.esma.europa.eu/press-news/esma-news/esma-streamlines-several-qas-part-simplification-efforts","d":"22 Oct 2026","r":"eu"},
+ {"t":"ESMA specifies requirements to facilitate safe use of post-trade risk reduction services","u":"https://www.esma.europa.eu/press-news/esma-news/esma-specifies-requirements-facilitate-safe-use-post-trade-risk-reduction","d":"20 Oct 2026","r":"eu"},
  {"t":"ESMA finalises the review of guidelines on the delay in disclosure of inside information","u":"https://www.esma.europa.eu/press-news/esma-news/esma-finalises-review-guidelines-delay-disclosure-inside-information","d":"16 Oct 2026","r":"eu"},
- {"t":"One year to go for T+1 settlement: the regulatory framework is complete","u":"https://www.esma.europa.eu/press-news/esma-news/one-year-go-t1-settlement-regulatory-framework-complete-now-lets-make-it","d":"16 Oct 2026","r":"eu"}
+ {"t":"One year to go for T+1 settlement: the regulatory framework is complete, now let’s make it happen","u":"https://www.esma.europa.eu/press-news/esma-news/one-year-go-t1-settlement-regulatory-framework-complete-now-lets-make-it","d":"16 Oct 2026","r":"eu"},
+ {"t":"ESMA's third Sanctions Report highlights the need for greater convergence in enforcement","u":"https://www.esma.europa.eu/press-news/esma-news/esmas-third-sanctions-report-highlights-need-greater-convergence-enforcement","d":"15 Oct 2026","r":"eu"}
 ]},
 {"id":"cssf","name":"CSSF (Luxembourg)","tag":"Regulation","url":"https://www.cssf.lu/en/news/","items":[
- {"t":"Global situation of undertakings for collective investment at the end of September 2026","u":"https://www.cssf.lu/en/news/","d":"Nov 2026","r":"eu"},
- {"t":"Annex to Circular CSSF 22/822","u":"https://www.cssf.lu/en/news/","d":"Nov 2026","r":"eu"},
- {"t":"CSSF communication on Final Guidance on Money Market Fund Weekly Liquid Asset Levels","u":"https://www.cssf.lu/en/news/","d":"Nov 2026","r":"eu"}
+ {"t":"Critical Memory Corruption Vulnerability in OpenJDK Base64 Decoder (Java4Shell)","u":"https://www.cssf.lu/en/2026/11/critical-memory-corruption-vulnerability-in-openjdk-base64-decoder-java4shell/","d":"18 Nov 2026","r":"eu"},
+ {"t":"New eDesk procedure – Questionnaire on Artificial Intelligence","u":"https://www.cssf.lu/en/2026/11/new-edesk-procedure-questionnaire-on-artificial-intelligence/","d":"17 Nov 2026","r":"eu"},
+ {"t":"FAQ concerning SIFs and SICARs that do not qualify as AIFs","u":"https://www.cssf.lu/en/Document/faq-concerning-sifs-and-sicars-that-do-not-qualify-as-aifs/","d":"9 Nov 2026","r":"eu"},
+ {"t":"Circular letter 5 November 2026","u":"https://www.cssf.lu/en/Document/circular-letter-2026-11-05/","d":"5 Nov 2026","r":"eu"},
+ {"t":"Annex to Circular CSSF 22/822","u":"https://www.cssf.lu/en/Document/annex-to-circular-cssf-22-822/","d":"4 Nov 2026","r":"eu"},
+ {"t":"Global situation of undertakings for collective investment at the end of September 2026","u":"https://www.cssf.lu/en/2026/11/global-situation-of-undertakings-for-collective-investment-at-the-end-of-september-2026/","d":"4 Nov 2026","r":"eu"},
+ {"t":"Self-assessment questionnaire (revised Long Form Report)","u":"https://www.cssf.lu/en/2026/11/self-assessment-questionnaire-revised-long-form-report/","d":"3 Nov 2026","r":"eu"},
+ {"t":"CSSF communication on Final Guidance on Money Market Fund Weekly Liquid Asset Levels","u":"https://www.cssf.lu/en/2026/10/cssf-communication-on-final-guidance-on-money-market-fund-weekly-liquid-asset-levels/","d":"30 Oct 2026","r":"eu"}
 ]}
 ]
 }

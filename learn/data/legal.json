@@ -1,5 +1,5 @@
 {
-"asof": "18 November 2026",
+"asof": "21 November 2026",
 "note": "A study map of the main rules, not legal advice. Thresholds and dates change; confirm with counsel and the regulator's current text before acting.",
 "jurisdictions": [
 {
@@ -78,7 +78,7 @@
 "investors": "Minimum ₹1 crore per investor (₹25 lakh for employees and directors). Accredited investors exempt. Angel funds: accredited investors only. Up to 1,000 non-accredited investors per scheme.",
 "thresholds": [["Minimum corpus per scheme", "₹20 crore (₹10 crore angel funds)"], ["Minimum investment", "₹1 crore; ₹25 lakh employees/directors; accredited exempt"], ["Continuing interest Cat I/II", "Lower of 2.5% of corpus or ₹5 crore"], ["Continuing interest Cat III", "Lower of 5% or ₹10 crore"], ["Angel fund continuing interest", "Higher of 0.5% of each investment or ₹50,000"], ["LVF minimum per investor", "₹25 crore (was ₹70 crore)"], ["Single investee limit Cat I/II", "25% of investable funds (50% for LVFs)"], ["Liquidation period", "1 year after tenure"], ["Dissolution period", "75% investor consent; max original tenure"]],
 "ongoing": ["Quarterly reporting to SEBI", "Annual audit of PPM compliance", "Valuation by independent valuer", "Performance benchmarking through benchmarking agencies", "Investor charter and grievance redressal (SCORES)", "KYC/AML under PMLA"],
-"recent": [["16 Jun 2026", "SEBI circular sets conditions for retaining liquidation proceeds beyond fund life and an Inoperative Fund status."], ["18 Apr 2026", "AIF Regulations amended for flexibility in winding up and surrender of registration."], ["18 Nov 2025", "Third Amendment creates Accredited Investors only Funds; LVF threshold cut to ₹25 crore."], ["Sep 2025", "Angel fund framework revised; continuing interest moved to deal level."]],
+"recent": [["5 Nov 2026", "SEBI circular reworks accredited investor framework: AIF managers, PMS and SIF AMCs may assess accreditation themselves (valid three years, recognised group-wide); non-residents deemed accredited."], ["16 Jun 2026", "SEBI circular sets conditions for retaining liquidation proceeds beyond fund life and an Inoperative Fund status."], ["18 Apr 2026", "AIF Regulations amended for flexibility in winding up and surrender of registration."], ["18 Nov 2025", "Third Amendment creates Accredited Investors only Funds; LVF threshold cut to ₹25 crore."], ["Sep 2025", "Angel fund framework revised; continuing interest moved to deal level."]],
 "pitfalls": ["Meeting continuing interest through fee waivers (not allowed)", "Holding first close before minimum corpus", "Missing the liquidation period deadline at end of tenure"],
 "refs": ["SEBI AIF Regulations 2012 and Master Circular", "SEBI circular of 16 June 2026", "IVCA guidance", "Chambers Investment Funds 2026: India"]
 },

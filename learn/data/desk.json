@@ -1,10 +1,10 @@
 {
- "asof": "18 November 2026",
+ "asof": "21 November 2026",
  "global": [
   {
    "name": "Blackstone",
    "hq": "New York",
-   "aum": "~$1.2tn",
+   "aum": "~$1.4tn",
    "focus": "PE, credit, real assets",
    "site": "https://www.blackstone.com"
   },
@@ -18,28 +18,28 @@
   {
    "name": "Apollo Global Management",
    "hq": "New York",
-   "aum": "~$790bn",
+   "aum": "~$1.1tn",
    "focus": "Credit, PE, retirement",
    "site": "https://www.apollo.com"
   },
   {
    "name": "KKR",
    "hq": "New York",
-   "aum": "~$660bn",
+   "aum": "~$800bn",
    "focus": "PE, infra, credit",
    "site": "https://www.kkr.com"
   },
   {
    "name": "Ares Management",
    "hq": "Los Angeles",
-   "aum": "~$490bn",
+   "aum": "~$690bn",
    "focus": "Private credit",
    "site": "https://www.aresmgmt.com"
   },
   {
    "name": "The Carlyle Group",
    "hq": "Washington DC",
-   "aum": "~$450bn",
+   "aum": "~$480bn",
    "focus": "PE, credit, solutions",
    "site": "https://www.carlyle.com"
   },
@@ -53,7 +53,7 @@
   {
    "name": "TPG",
    "hq": "Fort Worth",
-   "aum": "~$260bn",
+   "aum": "~$345bn",
    "focus": "PE, growth, impact, credit",
    "site": "https://www.tpg.com"
   },
