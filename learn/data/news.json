@@ -1,5 +1,5 @@
 {
- "asof": "25 November 2026",
+ "asof": "26 November 2026",
  "sources": [
   {
    "id": "credit",
@@ -7,6 +7,16 @@
    "tag": "Private credit",
    "url": "https://www.pei-privatecredit.com/news-analysis/",
    "items": [
+    {
+     "t": "LCM CEO Burdell warns of leverage build-up",
+     "u": "https://www.pei-privatecredit.com/lcm-ceo-burdell-warns-of-leverage-build-up/",
+     "d": "25 Nov 2026"
+    },
+    {
+     "t": "Future Standard, Liberty Mutual target over $1bn for digital infra strategy",
+     "u": "https://www.pei-privatecredit.com/future-standard-liberty-mutual-target-over-1bn-for-digital-infra-strategy/",
+     "d": "25 Nov 2026"
+    },
     {
      "t": "No 'magic' liquidity, says Julius Baer's Demaria-Bengochéa",
      "u": "https://www.pei-privatecredit.com/no-magic-liquidity-says-julius-baers-demaria-bengochea/",
@@ -39,16 +49,6 @@
      "u": "https://www.pei-privatecredit.com/loan-note-growing-appetite-for-asia-credit-placement-agents-target-insurance-solutions/",
      "d": "19 Nov 2026",
      "r": "asia"
-    },
-    {
-     "t": "Regulation: Some overdue, some overshooting",
-     "u": "https://www.pei-privatecredit.com/regulation-some-overdue-some-overshooting/",
-     "d": "19 Nov 2026"
-    },
-    {
-     "t": "Private credit's latest deals: 18 November 2026",
-     "u": "https://www.pei-privatecredit.com/private-credits-latest-deals-18-november-2026/",
-     "d": "18 Nov 2026"
     }
    ]
   },
@@ -159,10 +159,25 @@
    "url": "https://www.privateequityinternational.com/",
    "items": [
     {
+     "t": "Sheridan's Jonathan Lewis: 2027 to be 'a really productive year' for healthcare M&A; Sentinel to buy GSI Group from L Squared",
+     "u": "https://www.privateequityinternational.com/sheridans-jonathan-lewis-2027-to-be-a-really-productive-year-for-healthcare-m-sentinel-to-buy-gsi-group-from-l-squared/",
+     "d": "24 Nov 2026"
+    },
+    {
+     "t": "Tikehau eyes UK expansion for Sigma Components; Peak Rock completes pre-Fund IV software exits with Seagull sale",
+     "u": "https://www.privateequityinternational.com/tikehau-eyes-uk-expansion-for-sigma-components-peak-rock-completes-pre-fund-iv-software-exits-with-seagull-sale/",
+     "d": "23 Nov 2026"
+    },
+    {
      "t": "Nordic's re-hold of a smashing asset bucks the CV trend",
      "u": "https://www.privateequityinternational.com/nordics-re-hold-of-a-smashing-asset-bucks-the-cv-trend/",
      "d": "20 Nov 2026",
      "r": "eu"
+    },
+    {
+     "t": "Asset servicing AI opportunity appeals despite normalizing growth levels; 65 Equity invests in hypercar biz Koenigsegg Automotive",
+     "u": "https://www.privateequityinternational.com/asset-servicing-ai-opportunity-appeals-despite-normalizing-growth-levels-65-equity-invests-in-hypercar-biz-koenigsegg-automotive/",
+     "d": "19 Nov 2026"
     },
     {
      "t": "Side Letter: CV red flags",
@@ -183,23 +198,6 @@
      "t": "Charlesbank's former CEO, current managing partner emeritus, resigns",
      "u": "https://www.privateequityinternational.com/charlesbanks-former-ceo-current-managing-partner-emeritus-resigns/",
      "d": "18 Nov 2026"
-    },
-    {
-     "t": "Alecta, Schroders weigh defense funds and risks",
-     "u": "https://www.privateequityinternational.com/alecta-schroders-weigh-defense-funds-and-risks/",
-     "d": "17 Nov 2026",
-     "r": "eu"
-    },
-    {
-     "t": "'Don't let retail get the leftovers,' StepStone warns",
-     "u": "https://www.privateequityinternational.com/dont-let-retail-get-the-leftovers-stepstone-warns/",
-     "d": "17 Nov 2026"
-    },
-    {
-     "t": "Thoma Bravo establishes first APAC office in Hong Kong",
-     "u": "https://www.privateequityinternational.com/thoma-bravo-establishes-first-apac-office-in-hong-kong/",
-     "d": "17 Nov 2026",
-     "r": "asia"
     }
    ]
   },
@@ -209,6 +207,17 @@
    "tag": "Impact & sustainability",
    "url": "https://www.newprivatemarkets.com/",
    "items": [
+    {
+     "t": "How sustainability is shaping secondaries deals, from diligence to exit",
+     "u": "https://www.newprivatemarkets.com/how-sustainability-is-shaping-secondaries-deals-from-diligence-to-exit/",
+     "d": "25 Nov 2026"
+    },
+    {
+     "t": "Actionable intelligence from Responsible Investment Forum: Europe",
+     "u": "https://www.newprivatemarkets.com/actionable-intelligence-from-responsible-investment-forum-europe/",
+     "d": "23 Nov 2026",
+     "r": "eu"
+    },
     {
      "t": "How LPPI and PPF are growing their sustainable infra allocations",
      "u": "https://www.newprivatemarkets.com/how-lppi-and-ppf-are-growing-their-sustainable-infra-allocations/",
@@ -240,18 +249,6 @@
      "t": "How forced labour has become a deals issue and how due diligence misses it",
      "u": "https://www.newprivatemarkets.com/how-forced-labour-has-become-a-deals-issue-and-how-due-diligence-misses-it/",
      "d": "18 Nov 2026"
-    },
-    {
-     "t": "Sustainability execs at European firms trade salary for carry",
-     "u": "https://www.newprivatemarkets.com/sustainability-execs-at-european-firms-trade-salary-for-carry/",
-     "d": "17 Nov 2026",
-     "r": "eu"
-    },
-    {
-     "t": "Danish pension wants 'less metrics and more dialogue' from GPs",
-     "u": "https://www.newprivatemarkets.com/danish-pension-wants-less-metrics-and-more-dialogue-from-gps/",
-     "d": "17 Nov 2026",
-     "r": "eu"
     }
    ]
   },
@@ -318,15 +315,15 @@
      "r": "eu"
     },
     {
-     "t": "FAQ concerning SIFs and SICARs that do not qualify as AIFs",
-     "u": "https://www.cssf.lu/en/Document/faq-concerning-sifs-and-sicars-that-do-not-qualify-as-aifs/",
-     "d": "9 Nov 2026",
+     "t": "Issuers of securities whose home Member State is Luxembourg pursuant to the Law of 11 January 2008",
+     "u": "https://www.cssf.lu/en/2026/11/issuers-of-securities-whose-home-member-state-is-luxembourg-pursuant-to-the-law-of-11-january-2008/",
+     "d": "16 Nov 2026",
      "r": "eu"
     },
     {
-     "t": "Circular letter 5 November 2026",
-     "u": "https://www.cssf.lu/en/Document/circular-letter-2026-11-05/",
-     "d": "5 Nov 2026",
+     "t": "FAQ concerning SIFs and SICARs that do not qualify as AIFs",
+     "u": "https://www.cssf.lu/en/Document/faq-concerning-sifs-and-sicars-that-do-not-qualify-as-aifs/",
+     "d": "9 Nov 2026",
      "r": "eu"
     }
    ]
